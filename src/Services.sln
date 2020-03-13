@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway", "ApiGateway\Ap
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{12251254-C14D-472C-954B-A38ADF875A89}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Api", "Services\Identity\Identity.Api\Identity.Api.csproj", "{FB902B55-6765-451F-8594-B1BC71FEA552}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{12251254-C14D-472C-954B-A38ADF875A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12251254-C14D-472C-954B-A38ADF875A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12251254-C14D-472C-954B-A38ADF875A89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB902B55-6765-451F-8594-B1BC71FEA552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB902B55-6765-451F-8594-B1BC71FEA552}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB902B55-6765-451F-8594-B1BC71FEA552}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB902B55-6765-451F-8594-B1BC71FEA552}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

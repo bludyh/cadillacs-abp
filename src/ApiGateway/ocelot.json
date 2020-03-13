@@ -1,19 +1,17 @@
 ﻿{
     "ReRoutes": [
         {
-        "DownstreamPathTemplate": "/todos/{id}",
-        "DownstreamScheme": "https",
+        "DownstreamPathTemplate": "/weatherforecast",
+        "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
             {
-                "Host": "jsonplaceholder.typicode.com",
-                "Port": 443
+                "Host": "identity.api",
+                "Port": 80
             }
         ],
-        "UpstreamPathTemplate": "/todos/{id}",
+        "UpstreamPathTemplate": "/api/identity",
         "UpstreamHttpMethod": [ "Get" ]
         }
     ],
-    "GlobalConfiguration": {
-        "BaseUrl": "https://localhost:443"
-    }
+    "GlobalConfiguration": { }
 }
