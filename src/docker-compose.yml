@@ -1,11 +1,13 @@
 version: '3.4'
 
 services:
+
   apigateway:
     image: ${DOCKER_REGISTRY-}apigateway
     build:
       context: .
       dockerfile: ApiGateway/Dockerfile
+
 
   identity.api:
     image: ${DOCKER_REGISTRY-}identityapi
@@ -19,4 +21,60 @@ services:
     build:
       context: .
       dockerfile: Services/Identity/Identity.EventHandler/Dockerfile
+
+
+  course.api:
+    image: ${DOCKER_REGISTRY-}courseapi
+    build:
+      context: .
+      dockerfile: Services/Course/Course.Api/Dockerfile
+
+
+  course.eventhandler:
+    image: ${DOCKER_REGISTRY-}courseeventhandler
+    build:
+      context: .
+      dockerfile: Services/Course/Course.EventHandler/Dockerfile
+
+
+  studyprogress.api:
+    image: ${DOCKER_REGISTRY-}studyprogressapi
+    build:
+      context: .
+      dockerfile: Services/StudyProgress/StudyProgress.Api/Dockerfile
+
+
+  studyprogress.eventhandler:
+    image: ${DOCKER_REGISTRY-}studyprogresseventhandler
+    build:
+      context: .
+      dockerfile: Services/StudyProgress/StudyProgress.EventHandler/Dockerfile
+
+
+  schedule.api:
+    image: ${DOCKER_REGISTRY-}scheduleapi
+    build:
+      context: .
+      dockerfile: Services/Schedule/Schedule.Api/Dockerfile
+
+
+  schedule.eventhandler:
+    image: ${DOCKER_REGISTRY-}scheduleeventhandler
+    build:
+      context: .
+      dockerfile: Services/Schedule/Schedule.EventHandler/Dockerfile
+
+
+  announcement.api:
+    image: ${DOCKER_REGISTRY-}announcementapi
+    build:
+      context: .
+      dockerfile: Services/Announcement/Announcement.Api/Dockerfile
+
+
+  announcement.eventhandler:
+    image: ${DOCKER_REGISTRY-}announcementeventhandler
+    build:
+      context: .
+      dockerfile: Services/Announcement/Announcement.EventHandler/Dockerfile
 

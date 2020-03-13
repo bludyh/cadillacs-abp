@@ -1,17 +1,65 @@
 ﻿{
     "ReRoutes": [
-        {
+      {
         "DownstreamPathTemplate": "/weatherforecast",
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
-            {
-                "Host": "identity.api",
-                "Port": 80
-            }
+          {
+            "Host": "identity.api",
+            "Port": 80
+          }
         ],
         "UpstreamPathTemplate": "/api/identity",
         "UpstreamHttpMethod": [ "Get" ]
-        }
+      },
+      {
+        "DownstreamPathTemplate": "/weatherforecast",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "course.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/course",
+        "UpstreamHttpMethod": [ "Get" ]
+      },
+      {
+        "DownstreamPathTemplate": "/weatherforecast",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "studyprogress.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/progress",
+        "UpstreamHttpMethod": [ "Get" ]
+      },
+      {
+        "DownstreamPathTemplate": "/weatherforecast",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "schedule.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/schedule",
+        "UpstreamHttpMethod": [ "Get" ]
+      },
+      {
+        "DownstreamPathTemplate": "/weatherforecast",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "announcement.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/announcement",
+        "UpstreamHttpMethod": [ "Get" ]
+      }
     ],
     "GlobalConfiguration": { }
 }

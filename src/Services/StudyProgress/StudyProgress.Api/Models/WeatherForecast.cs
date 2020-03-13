@@ -1,6 +1,6 @@
 using System;
 
-namespace Identity.Api.Models {
+namespace StudyProgress.Api.Models {
     public class WeatherForecast {
         public DateTime Date { get; set; }
 

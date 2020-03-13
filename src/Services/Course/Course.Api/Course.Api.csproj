@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>35a4c740-f150-4794-a703-28a522fbafc4</UserSecretsId>
+    <UserSecretsId>f241a933-bdd6-4ee2-ba7c-132139ea57a5</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
     <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
@@ -14,8 +14,7 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="Events\" />
-    <Folder Include="Models\" />
   </ItemGroup>
+
 
 </Project>
