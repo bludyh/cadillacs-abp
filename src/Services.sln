@@ -11,31 +11,37 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Api", "Services\Id
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{188110EB-71AD-49F0-9708-EFA87463E6C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.EventHandler", "Services\Identity\Identity.EventHandler\Identity.EventHandler.csproj", "{8ACB62A5-B47A-48D7-9CF9-FB43895CA942}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.EventHandler", "Services\Identity\Identity.EventHandler\Identity.EventHandler.csproj", "{8ACB62A5-B47A-48D7-9CF9-FB43895CA942}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Course", "Course", "{2C0E8CEE-F377-4AB1-B8C0-73A7B6930E94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Course.Api", "Services\Course\Course.Api\Course.Api.csproj", "{70E2F796-98C0-4D94-A663-2EDA68E9CBC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Course.Api", "Services\Course\Course.Api\Course.Api.csproj", "{70E2F796-98C0-4D94-A663-2EDA68E9CBC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Course.EventHandler", "Services\Course\Course.EventHandler\Course.EventHandler.csproj", "{4B977CCB-3E17-48C0-8191-BD6D81C3AC0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Course.EventHandler", "Services\Course\Course.EventHandler\Course.EventHandler.csproj", "{4B977CCB-3E17-48C0-8191-BD6D81C3AC0A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StudyProgress", "StudyProgress", "{B19C2708-85EE-4E2F-84FF-9F8B6D7F358F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyProgress.Api", "Services\StudyProgress\StudyProgress.Api\StudyProgress.Api.csproj", "{9AF076E4-57BB-4607-A0CA-919607211642}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyProgress.Api", "Services\StudyProgress\StudyProgress.Api\StudyProgress.Api.csproj", "{9AF076E4-57BB-4607-A0CA-919607211642}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyProgress.EventHandler", "Services\StudyProgress\StudyProgress.EventHandler\StudyProgress.EventHandler.csproj", "{52D1C79C-AEBF-44F4-870D-AC4E7BE36FFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyProgress.EventHandler", "Services\StudyProgress\StudyProgress.EventHandler\StudyProgress.EventHandler.csproj", "{52D1C79C-AEBF-44F4-870D-AC4E7BE36FFF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Schedule", "Schedule", "{F7653D72-8255-482A-813D-8447640BB528}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedule.Api", "Services\Schedule\Schedule.Api\Schedule.Api.csproj", "{594EDDA3-4D9D-4878-BE83-387B679205AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schedule.Api", "Services\Schedule\Schedule.Api\Schedule.Api.csproj", "{594EDDA3-4D9D-4878-BE83-387B679205AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedule.EventHandler", "Services\Schedule\Schedule.EventHandler\Schedule.EventHandler.csproj", "{0843FD93-110A-4FA3-9500-3FC32F1EBC45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schedule.EventHandler", "Services\Schedule\Schedule.EventHandler\Schedule.EventHandler.csproj", "{0843FD93-110A-4FA3-9500-3FC32F1EBC45}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Announcement", "Announcement", "{BAE5ACB0-F931-48AF-9ABA-F06D8FBC707F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Announcement.Api", "Services\Announcement\Announcement.Api\Announcement.Api.csproj", "{4648BF88-9EF6-4365-A96F-CA1980E52030}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Announcement.Api", "Services\Announcement\Announcement.Api\Announcement.Api.csproj", "{4648BF88-9EF6-4365-A96F-CA1980E52030}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Announcement.EventHandler", "Services\Announcement\Announcement.EventHandler\Announcement.EventHandler.csproj", "{AC90EA21-D870-40F5-8EBF-3D799F6E374E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Announcement.EventHandler", "Services\Announcement\Announcement.EventHandler\Announcement.EventHandler.csproj", "{AC90EA21-D870-40F5-8EBF-3D799F6E374E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{8F3500DD-8CEC-4101-A19E-81AFD9792CAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Messaging", "Infrastructure\Infrastructure.Messaging\Infrastructure.Messaging.csproj", "{9FD96ED1-C2A1-4D70-9B91-FD346DDCAD3F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{791B794C-CD79-4D20-8886-B54F890562FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,21 +97,31 @@ Global
 		{AC90EA21-D870-40F5-8EBF-3D799F6E374E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC90EA21-D870-40F5-8EBF-3D799F6E374E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC90EA21-D870-40F5-8EBF-3D799F6E374E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FD96ED1-C2A1-4D70-9B91-FD346DDCAD3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FD96ED1-C2A1-4D70-9B91-FD346DDCAD3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FD96ED1-C2A1-4D70-9B91-FD346DDCAD3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FD96ED1-C2A1-4D70-9B91-FD346DDCAD3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FB902B55-6765-451F-8594-B1BC71FEA552} = {188110EB-71AD-49F0-9708-EFA87463E6C9}
+		{188110EB-71AD-49F0-9708-EFA87463E6C9} = {791B794C-CD79-4D20-8886-B54F890562FA}
 		{8ACB62A5-B47A-48D7-9CF9-FB43895CA942} = {188110EB-71AD-49F0-9708-EFA87463E6C9}
+		{2C0E8CEE-F377-4AB1-B8C0-73A7B6930E94} = {791B794C-CD79-4D20-8886-B54F890562FA}
 		{70E2F796-98C0-4D94-A663-2EDA68E9CBC8} = {2C0E8CEE-F377-4AB1-B8C0-73A7B6930E94}
 		{4B977CCB-3E17-48C0-8191-BD6D81C3AC0A} = {2C0E8CEE-F377-4AB1-B8C0-73A7B6930E94}
+		{B19C2708-85EE-4E2F-84FF-9F8B6D7F358F} = {791B794C-CD79-4D20-8886-B54F890562FA}
 		{9AF076E4-57BB-4607-A0CA-919607211642} = {B19C2708-85EE-4E2F-84FF-9F8B6D7F358F}
 		{52D1C79C-AEBF-44F4-870D-AC4E7BE36FFF} = {B19C2708-85EE-4E2F-84FF-9F8B6D7F358F}
+		{F7653D72-8255-482A-813D-8447640BB528} = {791B794C-CD79-4D20-8886-B54F890562FA}
 		{594EDDA3-4D9D-4878-BE83-387B679205AF} = {F7653D72-8255-482A-813D-8447640BB528}
 		{0843FD93-110A-4FA3-9500-3FC32F1EBC45} = {F7653D72-8255-482A-813D-8447640BB528}
+		{BAE5ACB0-F931-48AF-9ABA-F06D8FBC707F} = {791B794C-CD79-4D20-8886-B54F890562FA}
 		{4648BF88-9EF6-4365-A96F-CA1980E52030} = {BAE5ACB0-F931-48AF-9ABA-F06D8FBC707F}
 		{AC90EA21-D870-40F5-8EBF-3D799F6E374E} = {BAE5ACB0-F931-48AF-9ABA-F06D8FBC707F}
+		{9FD96ED1-C2A1-4D70-9B91-FD346DDCAD3F} = {8F3500DD-8CEC-4101-A19E-81AFD9792CAB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8012AA5F-35FB-40BC-BB2A-7A125025CEF4}
