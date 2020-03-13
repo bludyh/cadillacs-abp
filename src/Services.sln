@@ -7,7 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway", "ApiGateway\Ap
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{12251254-C14D-472C-954B-A38ADF875A89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Api", "Services\Identity\Identity.Api\Identity.Api.csproj", "{FB902B55-6765-451F-8594-B1BC71FEA552}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Api", "Services\Identity\Identity.Api\Identity.Api.csproj", "{FB902B55-6765-451F-8594-B1BC71FEA552}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{188110EB-71AD-49F0-9708-EFA87463E6C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.EventHandler", "Services\Identity\Identity.EventHandler\Identity.EventHandler.csproj", "{8ACB62A5-B47A-48D7-9CF9-FB43895CA942}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +31,17 @@ Global
 		{FB902B55-6765-451F-8594-B1BC71FEA552}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB902B55-6765-451F-8594-B1BC71FEA552}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB902B55-6765-451F-8594-B1BC71FEA552}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ACB62A5-B47A-48D7-9CF9-FB43895CA942}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ACB62A5-B47A-48D7-9CF9-FB43895CA942}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ACB62A5-B47A-48D7-9CF9-FB43895CA942}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ACB62A5-B47A-48D7-9CF9-FB43895CA942}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FB902B55-6765-451F-8594-B1BC71FEA552} = {188110EB-71AD-49F0-9708-EFA87463E6C9}
+		{8ACB62A5-B47A-48D7-9CF9-FB43895CA942} = {188110EB-71AD-49F0-9708-EFA87463E6C9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8012AA5F-35FB-40BC-BB2A-7A125025CEF4}
