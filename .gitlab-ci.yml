@@ -69,6 +69,6 @@ build_apigateway_img:
         entrypoint: [""]
     script:
         - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(echo -n $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" > /kaniko/.docker/config.json
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$APIGATEWAY_DIR/Dockerfile --destination i360147/apigateway --cache=true --target=production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$APIGATEWAY_DIR/Dockerfile --destination i360147/apigateway --target production
     dependencies:
         - build_services
