@@ -23,23 +23,23 @@ build_services:
     image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
     script:
         - cd src/
-        - dotnet restore --verbosity normal Services.sln
-        - dotnet build --no-restore -c Release --verbosity normal Services.sln
+        - dotnet restore Services.sln --verbosity normal
+        - dotnet publish Services.sln -c Release --no-restore --verbosity normal
     artifacts:
         expire_in: 1 day
         paths:
-            - $APIGATEWAY_DIR/bin/Release/netcoreapp3.1/
-            - $EVENTBUS_DIR/bin/Release/netstandard2.0/
-            - $ANNOUNCEMENT_API_DIR/bin/Release/netcoreapp3.1/
-            - $ANNOUNCEMENT_EVENTHANDLER_DIR/bin/Release/netcoreapp3.1/
-            - $COURSE_API_DIR/bin/Release/netcoreapp3.1/
-            - $COURSE_EVENTHANDLER_DIR/bin/Release/netcoreapp3.1/
-            - $IDENTITY_API_DIR/bin/Release/netcoreapp3.1/
-            - $IDENTITY_EVENTHANDLER_DIR/bin/Release/netcoreapp3.1/
-            - $SCHEDULE_API_DIR/bin/Release/netcoreapp3.1/
-            - $SCHEDULE_EVENTHANDLER_DIR/bin/Release/netcoreapp3.1/
-            - $STUDYPROGRESS_API_DIR/bin/Release/netcoreapp3.1/
-            - $STUDYPROGRESS_EVENTHANDLER_DIR/bin/Release/netcoreapp3.1/
+            - $APIGATEWAY_DIR/bin/
+            - $EVENTBUS_DIR/bin/
+            - $ANNOUNCEMENT_API_DIR/bin/
+            - $ANNOUNCEMENT_EVENTHANDLER_DIR/bin/
+            - $COURSE_API_DIR/bin/
+            - $COURSE_EVENTHANDLER_DIR/bin/
+            - $IDENTITY_API_DIR/bin/
+            - $IDENTITY_EVENTHANDLER_DIR/bin/
+            - $SCHEDULE_API_DIR/bin/
+            - $SCHEDULE_EVENTHANDLER_DIR/bin/
+            - $STUDYPROGRESS_API_DIR/bin/
+            - $STUDYPROGRESS_EVENTHANDLER_DIR/bin/
 
 build_webspa:
     stage: build
@@ -58,6 +58,20 @@ test_services:
     image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
     script:
         - cd src/
-        - dotnet test --no-build -c Release --verbosity normal Services.sln
+        - dotnet test Services.sln -c Release --no-build --verbosity normal
+    dependencies:
+        - build_services
+
+build_apigateway_img:
+    stage: deploy
+    image: docker:19.03.8-dind
+    before_script:
+        - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+    script:
+        - cd $APIGATEWAY_DIR/
+        - docker pull i360147/apigateway:latest || true
+        - docker build --cache-from i360147/apigateway:latest -t i360147/apigateway:$CI_COMMIT_SHA -t i360147/apigateway:latest --target production .
+        - docker push i360147/apigateway:$CI_COMMIT_SHA
+        - docker push i360147/apigateway:latest
     dependencies:
         - build_services
