@@ -10,20 +10,37 @@ cache:
 
 variables:
     APIGATEWAY_DIR: "./src/ApiGateway"
+    EVENTBUS_DIR: "./src/Infrastructure/Infrastructure.Messaging"
+    ANNOUNCEMENT_API_DIR: "./src/Services/Announcement/Announcement.Api"
+    ANNOUNCEMENT_EVENTHANDLER_DIR: "./src/Services/Announcement/Announcement.EventHandler"
+    COURSE_API_DIR: "./src/Services/Course/Course.Api"
+    COURSE_EVENTHANDLER_DIR: "./src/Services/Course/Course.EventHandler"
+    IDENTITY_API_DIR: "./src/Services/Identity/Identity.Api"
+    IDENTITY_EVENTHANDLER_DIR: "./src/Services/Identity/Identity.EventHandler"
+    SCHEDULE_API_DIR: "./src/Services/Schedule/Schedule.Api"
+    SCHEDULE_EVENTHANDLER_DIR: "./src/Services/Schedule/Schedule.EventHandler"
+    STUDYPROGRESS_API_DIR: "./src/Services/StudyProgress/StudyProgress.Api"
+    STUDYPROGRESS_EVENTHANDLER_DIR: "./src/Services/StudyProgress/StudyProgress.EventHandler"
+    WEBSPA_DIR: "./src/Web/Spa"
 
-.build_dotnetcore: &build_dotnetcore
+build_services:
     stage: build
     image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
     script:
-        - dotnet restore --packages ./.nuget/ --verbosity normal
-        - dotnet build --no-restore -c Release --verbosity normal
-
-build_apigateway:
-    <<: *build_dotnetcore
-    before_script:
-        - cd $APIGATEWAY_DIR/
+        - dotnet restore --packages ./.nuget/ --verbosity normal ./src/Services.sln
+        - dotnet build --no-restore -c Release --verbosity normal ./src/Services.sln
     artifacts:
-        name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
         expire_in: 1 day
         paths:
             - $APIGATEWAY_DIR/bin/Release/netcoreapp3.1/
+            - $EVENTBUS_DIR/bin/Release/netstandard2.0/
+            - $ANNOUNCEMENT_API_DIR/bin/Release/netcoreapp3.1/
+            - $ANNOUNCEMENT_EVENTHANDLER_DIR/bin/Release/netcoreapp3.1/
+            - $COURSE_API_DIR/bin/Release/netcoreapp3.1/
+            - $COURSE_EVENTHANDLER_DIR/bin/Release/netcoreapp3.1/
+            - $IDENTITY_API_DIR/bin/Release/netcoreapp3.1/
+            - $IDENTITY_EVENTHANDLER_DIR/bin/Release/netcoreapp3.1/
+            - $SCHEDULE_API_DIR/bin/Release/netcoreapp3.1/
+            - $SCHEDULE_EVENTHANDLER_DIR/bin/Release/netcoreapp3.1/
+            - $STUDYPROGRESS_API_DIR/bin/Release/netcoreapp3.1/
+            - $STUDYPROGRESS_EVENTHANDLER_DIR/bin/Release/netcoreapp3.1/
