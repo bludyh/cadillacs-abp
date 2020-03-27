@@ -3,32 +3,33 @@ stages:
     - test
     - deploy
 
+variables:
+    APIGATEWAY_DIR: "src/ApiGateway"
+    EVENTBUS_DIR: "src/Infrastructure/Infrastructure.Messaging"
+    ANNOUNCEMENT_API_DIR: "src/Services/Announcement/Announcement.Api"
+    ANNOUNCEMENT_EVENTHANDLER_DIR: "src/Services/Announcement/Announcement.EventHandler"
+    COURSE_API_DIR: "src/Services/Course/Course.Api"
+    COURSE_EVENTHANDLER_DIR: "src/Services/Course/Course.EventHandler"
+    IDENTITY_API_DIR: "src/Services/Identity/Identity.Api"
+    IDENTITY_EVENTHANDLER_DIR: "src/Services/Identity/Identity.EventHandler"
+    SCHEDULE_API_DIR: "src/Services/Schedule/Schedule.Api"
+    SCHEDULE_EVENTHANDLER_DIR: "src/Services/Schedule/Schedule.EventHandler"
+    STUDYPROGRESS_API_DIR: "src/Services/StudyProgress/StudyProgress.Api"
+    STUDYPROGRESS_EVENTHANDLER_DIR: "src/Services/StudyProgress/StudyProgress.EventHandler"
+    WEBSPA_DIR: "src/Web/Spa"
+
 cache:
     key: "$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME"
     paths:
-        - .nuget/
-
-variables:
-    APIGATEWAY_DIR: "./src/ApiGateway"
-    EVENTBUS_DIR: "./src/Infrastructure/Infrastructure.Messaging"
-    ANNOUNCEMENT_API_DIR: "./src/Services/Announcement/Announcement.Api"
-    ANNOUNCEMENT_EVENTHANDLER_DIR: "./src/Services/Announcement/Announcement.EventHandler"
-    COURSE_API_DIR: "./src/Services/Course/Course.Api"
-    COURSE_EVENTHANDLER_DIR: "./src/Services/Course/Course.EventHandler"
-    IDENTITY_API_DIR: "./src/Services/Identity/Identity.Api"
-    IDENTITY_EVENTHANDLER_DIR: "./src/Services/Identity/Identity.EventHandler"
-    SCHEDULE_API_DIR: "./src/Services/Schedule/Schedule.Api"
-    SCHEDULE_EVENTHANDLER_DIR: "./src/Services/Schedule/Schedule.EventHandler"
-    STUDYPROGRESS_API_DIR: "./src/Services/StudyProgress/StudyProgress.Api"
-    STUDYPROGRESS_EVENTHANDLER_DIR: "./src/Services/StudyProgress/StudyProgress.EventHandler"
-    WEBSPA_DIR: "./src/Web/Spa"
+        - src/.nuget/
 
 build_services:
     stage: build
     image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
     script:
-        - dotnet restore --packages ./.nuget/ --verbosity normal ./src/Services.sln
-        - dotnet build --no-restore -c Release --verbosity normal ./src/Services.sln
+        - cd src/
+        - dotnet restore --packages .nuget/ --verbosity normal Services.sln
+        - dotnet build --no-restore -c Release --verbosity normal Services.sln
     artifacts:
         expire_in: 1 day
         paths:
@@ -44,3 +45,15 @@ build_services:
             - $SCHEDULE_EVENTHANDLER_DIR/bin/Release/netcoreapp3.1/
             - $STUDYPROGRESS_API_DIR/bin/Release/netcoreapp3.1/
             - $STUDYPROGRESS_EVENTHANDLER_DIR/bin/Release/netcoreapp3.1/
+
+build_webspa:
+    stage: build
+    image: node:13.10.1-alpine
+    script:
+        - cd $WEBSPA_DIR/
+        - npm ci
+        - npm run build -- --prod
+    artifacts:
+        expire_in: 1 day
+        paths:
+            - $WEBSPA_DIR/dist/Spa/
