@@ -52,3 +52,12 @@ build_webspa:
         expire_in: 1 day
         paths:
             - $WEBSPA_DIR/dist/Spa/
+
+test_services:
+    stage: test
+    image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
+    script:
+        - cd src/
+        - dotnet test --no-build -c Release --verbosity normal Services.sln
+    dependencies:
+        - build_services
