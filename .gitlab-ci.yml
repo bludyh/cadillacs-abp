@@ -18,17 +18,12 @@ variables:
     STUDYPROGRESS_EVENTHANDLER_DIR: "src/Services/StudyProgress/StudyProgress.EventHandler"
     WEBSPA_DIR: "src/Web/Spa"
 
-cache:
-    key: "$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME"
-    paths:
-        - src/.nuget/
-
 build_services:
     stage: build
     image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
     script:
         - cd src/
-        - dotnet restore --packages .nuget/ --verbosity normal Services.sln
+        - dotnet restore --verbosity normal Services.sln
         - dotnet build --no-restore -c Release --verbosity normal Services.sln
     artifacts:
         expire_in: 1 day
