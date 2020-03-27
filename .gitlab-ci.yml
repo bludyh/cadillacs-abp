@@ -64,7 +64,7 @@ test_services:
 
 build_apigateway_img:
     stage: deploy
-    image: docker:19.03.8-dind
+    image: docker:18.09.8-dind
     variables:
         DOCKER_HOST: tcp://localhost:2375
     before_script:
