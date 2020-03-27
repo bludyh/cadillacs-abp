@@ -1,0 +1,21 @@
+stages:
+    - build
+    - test
+    - deploy
+
+cache:
+    key: "$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME"
+    paths:
+        - .nuget/
+
+build_apigateway:
+    stage: build
+    image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
+    artifacts:
+        name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+        expire_in: 1 day
+        paths:
+            - ./src/ApiGateway/bin/Release/netcoreapp3.1/
+    script:
+        - dotnet restore --packages ./.nuget/ --verbosity normal ./src/ApiGateway/ApiGateway.csproj
+        - dotnet build --no-restore -c Release --verbosity normal ./src/ApiGateway/ApiGateway.csproj
