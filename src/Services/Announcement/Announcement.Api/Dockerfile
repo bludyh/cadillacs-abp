@@ -5,6 +5,11 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+FROM base AS production
+WORKDIR /app
+COPY Services/Announcement/Announcement.Api/bin/Release/netcoreapp3.1/publish .
+ENTRYPOINT ["dotnet", "Announcement.Api.dll"]
+
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["Services/Announcement/Announcement.Api/Announcement.Api.csproj", "Services/Announcement/Announcement.Api/"]
@@ -16,7 +21,7 @@ RUN dotnet build "Announcement.Api.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "Announcement.Api.csproj" -c Release -o /app/publish
 
-FROM base AS final
+FROM base AS development
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Announcement.Api.dll"]

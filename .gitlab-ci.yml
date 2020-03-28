@@ -21,10 +21,6 @@ variables:
 build_services:
     stage: build
     image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
-    script:
-        - cd src/
-        - dotnet restore Services.sln --verbosity normal
-        - dotnet publish Services.sln -c Release --no-restore --verbosity normal
     artifacts:
         expire_in: 1 day
         paths:
@@ -40,35 +36,104 @@ build_services:
             - $SCHEDULE_EVENTHANDLER_DIR/bin/
             - $STUDYPROGRESS_API_DIR/bin/
             - $STUDYPROGRESS_EVENTHANDLER_DIR/bin/
+    script:
+        - cd src/
+        - dotnet restore Services.sln --verbosity normal
+        - dotnet publish Services.sln -c Release --no-restore --verbosity normal
 
 build_webspa:
     stage: build
     image: node:13.10.1-alpine
-    script:
-        - cd $WEBSPA_DIR/
-        - npm ci
-        - npm run build -- --prod
     artifacts:
         expire_in: 1 day
         paths:
             - $WEBSPA_DIR/dist/Spa/
+    script:
+        - cd $WEBSPA_DIR/
+        - npm ci
+        - npm run build -- --prod
 
 test_services:
     stage: test
     image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
+    dependencies:
+        - build_services
     script:
         - cd src/
         - dotnet test Services.sln -c Release --no-build --verbosity normal
-    dependencies:
-        - build_services
 
-build_apigateway_img:
+.build_service_img: &build_service_img
     stage: deploy
     image:
         name: gcr.io/kaniko-project/executor:debug
         entrypoint: [""]
-    script:
-        - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(echo -n $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" > /kaniko/.docker/config.json
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$APIGATEWAY_DIR/Dockerfile --destination i360147/apigateway --target production
     dependencies:
         - build_services
+    before_script:
+        - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(echo -n $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" > /kaniko/.docker/config.json
+
+build_apigateway_img:
+    <<: *build_service_img
+    script:
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$APIGATEWAY_DIR/Dockerfile --destination i360147/apigateway --target production
+
+build_identity_api_img:
+    <<: *build_service_img
+    script:
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_API_DIR/Dockerfile --destination i360147/identityapi --target production
+
+build_identity_eventhandler_img:
+    <<: *build_service_img
+    script:
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_EVENTHANDLER_DIR/Dockerfile --destination i360147/identityeventhandler --target production
+
+build_course_api_img:
+    <<: *build_service_img
+    script:
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$COURSE_API_DIR/Dockerfile --destination i360147/courseapi --target production
+
+build_course_eventhandler_img:
+    <<: *build_service_img
+    script:
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$COURSE_EVENTHANDLER_DIR/Dockerfile --destination i360147/courseeventhandler --target production
+
+build_studyprogress_api_img:
+    <<: *build_service_img
+    script:
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$STUDYPROGRESS_API_DIR/Dockerfile --destination i360147/studyprogressapi --target production
+
+build_studyprogress_eventhandler_img:
+    <<: *build_service_img
+    script:
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$STUDYPROGRESS_EVENTHANDLER_DIR/Dockerfile --destination i360147/studyprogresseventhandler --target production
+
+build_schedule_api_img:
+    <<: *build_service_img
+    script:
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$SCHEDULE_API_DIR/Dockerfile --destination i360147/scheduleapi --target production
+
+build_schedule_eventhandler_img:
+    <<: *build_service_img
+    script:
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$SCHEDULE_EVENTHANDLER_DIR/Dockerfile --destination i360147/scheduleeventhandler --target production
+
+build_announcement_api_img:
+    <<: *build_service_img
+    script:
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$ANNOUNCEMENT_API_DIR/Dockerfile --destination i360147/announcementapi --target production
+
+build_announcement_eventhandler_img:
+    <<: *build_service_img
+    script:
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$ANNOUNCEMENT_EVENTHANDLER_DIR/Dockerfile --destination i360147/announcementeventhandler --target production
+
+build_webspa_img:
+    stage: deploy
+    image:
+        name: gcr.io/kaniko-project/executor:debug
+        entrypoint: [""]
+    dependencies:
+        - build_webspa
+    script:
+        - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(echo -n $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" > /kaniko/.docker/config.json
+        - /kaniko/executor --context $CI_PROJECT_DIR/$WEBSPA_DIR/ --dockerfile $CI_PROJECT_DIR/$WEBSPA_DIR/Dockerfile --destination i360147/webspa --target production
