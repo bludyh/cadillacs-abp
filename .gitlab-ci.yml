@@ -42,6 +42,7 @@ build_services:
         - dotnet publish Services.sln -c Release --no-restore --verbosity normal
     only:
         refs:
+            - /^ABP-[0-9]+.*$/i
             - develop
             - master
         kubernetes: active
@@ -59,6 +60,7 @@ build_webspa:
         - npm run build -- --prod
     only:
         refs:
+            - /^ABP-[0-9]+.*$/i
             - develop
             - master
         kubernetes: active
@@ -73,6 +75,7 @@ test_services:
         - dotnet test Services.sln -c Release --no-build --verbosity normal
     only:
         refs:
+            - /^ABP-[0-9]+.*$/i
             - develop
             - master
         kubernetes: active
