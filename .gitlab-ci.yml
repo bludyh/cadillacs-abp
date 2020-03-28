@@ -40,6 +40,10 @@ build_services:
         - cd src/
         - dotnet restore Services.sln --verbosity normal
         - dotnet publish Services.sln -c Release --no-restore --verbosity normal
+    only:
+        - develop
+        - master
+
 
 build_webspa:
     stage: build
@@ -52,6 +56,9 @@ build_webspa:
         - cd $WEBSPA_DIR/
         - npm ci
         - npm run build -- --prod
+    only:
+        - develop
+        - master
 
 test_services:
     stage: test
@@ -61,6 +68,9 @@ test_services:
     script:
         - cd src/
         - dotnet test Services.sln -c Release --no-build --verbosity normal
+    only:
+        - develop
+        - master
 
 .build_service_img: &build_service_img
     stage: deploy
@@ -71,6 +81,8 @@ test_services:
         - build_services
     before_script:
         - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(echo -n $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" > /kaniko/.docker/config.json
+    only:
+        - master
 
 build_apigateway_img:
     <<: *build_service_img
@@ -137,3 +149,5 @@ build_webspa_img:
     script:
         - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(echo -n $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" > /kaniko/.docker/config.json
         - /kaniko/executor --context $CI_PROJECT_DIR/$WEBSPA_DIR/ --dockerfile $CI_PROJECT_DIR/$WEBSPA_DIR/Dockerfile --destination i360147/webspa --target production
+    only:
+        - master
