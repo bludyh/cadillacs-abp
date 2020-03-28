@@ -38,6 +38,21 @@ The technologies we use are:
 - Install [Docker Desktop](https://www.docker.com/products/docker-desktop) following this [guide](https://docs.docker.com/docker-for-windows/install/)
 - Verify **Docker** is installed and running
 
+<div class="panel panel-danger">
+**Important**
+{: .panel-heading}
+<div class="panel-body">
+
+This project uses multi-stage `Dockerfile` to build **Docker** images for different environments: `development` and `production`. Therefore, **BUILDKIT** must be enabled to support multi-stage build, otherwise using `docker` or `docker-compose` may fail. To enable **BUILDKIT**, add the following to the environment variables:
+
+- `DOCKER_BUILDKIT=1`
+- `COMPOSE_DOCKER_CLI_BUILD=1`
+
+  ![Environment variables](/images/setup/env.png)
+
+</div>
+</div>
+
 ### 4. Angular (for front-end development)
 
 - Install [Node.js LTS version](https://nodejs.org/en/)
@@ -46,11 +61,15 @@ The technologies we use are:
 ### 5. Clone A Better Portal Project
 
 - Clone this project to local machine
-- Checkout `develop` branch
+- Checkout `develop` branch if not yet
 
 ### 6. Build & Run Project
 
 #### Back-end
+
+The best way to build and run back-end services is by using **Visual Studio 2019**. Another faster way, using `docker-compose`, can also be used. Both methods will build and start all services inside **Docker Containers**. Be sure to enable **BUILDKIT** as mentioned [above](#3-docker-desktop) , and only use one method at a time.
+
+Using **Visual Studio 2019**:
 
 - Open `cadillacs-abp/src/Services.sln` with **Visual Studio 2019**
 - Set `docker-compose` as startup project if not yet
@@ -77,7 +96,7 @@ The technologies we use are:
   10. Publish the project to **publish** container
   11. Copy published files from the **publish** container to the **base** container
   12. Instruct the container to start the **ASP.NET Core** app
-    
+
   ![Dockerfile](/images/setup/dockerfile.png)
 
   After building all project's images, `docker-compose` starts up all the applications in their container.
@@ -86,13 +105,13 @@ The technologies we use are:
 
   ![docker ps](/images/setup/dockerps.png)
 
-- Verify `ApiGateway` is working by going to
+- Verify services are working by going to:
 
-  - `http://localhost:5000/api/identity`
-  - `http://localhost:5000/api/course`
-  - `http://localhost:5000/api/progress`
-  - `http://localhost:5000/api/schedule`
-  - `http://localhost:5000/api/announcement`
+  - [http://localhost:5000/api/identity](http://localhost:5000/api/identity)
+  - [http://localhost:5000/api/course](http://localhost:5000/api/course)
+  - [http://localhost:5000/api/progress](http://localhost:5000/api/progress)
+  - [http://localhost:5000/api/schedule](http://localhost:5000/api/schedule)
+  - [http://localhost:5000/api/announcement](http://localhost:5000/api/announcement)
 
   ![Verify ApiGateway](/images/setup/browser-1.png)
 
@@ -100,7 +119,25 @@ The technologies we use are:
 
   ![Change port](/images/setup/ports.png)
 
+All back-end service images can also be started without using **Visual Studio 2019** by:
+
+- Navigate to `cadillacs-abp/src/`
+- Run `docker-compose up` from **Powershell**
+- Stop by pressing **Ctrl** + **C**, then run `docker-compose down`
+
 #### Front-end
 
+To start the web application without **Docker Container**:
+
 - Navigate to `cadillacs-abp/src/Web/Spa`
-- Run `ng serve --open`
+- Run `ng serve --open` from **Powershell**
+
+  ![Web SPA](/images/setup/browser-2.png)
+
+To start the web application in a **Docker Container**:
+
+- Navigate to `cadillacs-abp/src/Web/Spa`
+- Run `docker build -t webspa --target development .` from **Powershell** to build the web application image
+- Run `docker run --name webspa -d -p 5100:80 webspa` to run the application container. Change `5100` to another port in case it is used
+- Verify the web application is working by going to [http://localhost:5100](http://localhost:5100)
+- Stop by running `docker container stop webspa`
