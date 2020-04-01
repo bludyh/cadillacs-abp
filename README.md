@@ -1,6 +1,8 @@
 # A Better Portal
 
-[![pipeline status](https://git.fhict.nl/I360147/cadillacs-abp/badges/master/pipeline.svg)](https://git.fhict.nl/I360147/cadillacs-abp/-/commits/master)
+`master`: [![pipeline status](https://git.fhict.nl/I360147/cadillacs-abp/badges/master/pipeline.svg)](https://git.fhict.nl/I360147/cadillacs-abp/-/commits/master)
+
+`develop`: [![pipeline status](https://git.fhict.nl/I360147/cadillacs-abp/badges/develop/pipeline.svg)](https://git.fhict.nl/I360147/cadillacs-abp/-/commits/develop)
 
 ## Overview
 
