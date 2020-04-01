@@ -1,6 +1,7 @@
 stages:
     - build
     - test
+    - publish
     - deploy
 
 variables:
@@ -45,7 +46,6 @@ build_services:
             - /^ABP-[0-9]+.*$/i
             - develop
             - master
-        kubernetes: active
 
 build_webspa:
     stage: build
@@ -63,7 +63,6 @@ build_webspa:
             - /^ABP-[0-9]+.*$/i
             - develop
             - master
-        kubernetes: active
 
 test_services:
     stage: test
@@ -78,10 +77,9 @@ test_services:
             - /^ABP-[0-9]+.*$/i
             - develop
             - master
-        kubernetes: active
 
-.build_service_img: &build_service_img
-    stage: deploy
+.publish_service_img: &publish_service_img
+    stage: publish
     image:
         name: gcr.io/kaniko-project/executor:debug
         entrypoint: [""]
@@ -92,65 +90,64 @@ test_services:
     only:
         refs:
             - master
-        kubernetes: active
 
-build_apigateway_img:
-    <<: *build_service_img
+publish_apigateway_img:
+    <<: *publish_service_img
     script:
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$APIGATEWAY_DIR/Dockerfile --destination i360147/apigateway --target production
 
-build_identity_api_img:
-    <<: *build_service_img
+publish_identity_api_img:
+    <<: *publish_service_img
     script:
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_API_DIR/Dockerfile --destination i360147/identityapi --target production
 
-build_identity_eventhandler_img:
-    <<: *build_service_img
+publish_identity_eventhandler_img:
+    <<: *publish_service_img
     script:
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_EVENTHANDLER_DIR/Dockerfile --destination i360147/identityeventhandler --target production
 
-build_course_api_img:
-    <<: *build_service_img
+publish_course_api_img:
+    <<: *publish_service_img
     script:
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$COURSE_API_DIR/Dockerfile --destination i360147/courseapi --target production
 
-build_course_eventhandler_img:
-    <<: *build_service_img
+publish_course_eventhandler_img:
+    <<: *publish_service_img
     script:
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$COURSE_EVENTHANDLER_DIR/Dockerfile --destination i360147/courseeventhandler --target production
 
-build_studyprogress_api_img:
-    <<: *build_service_img
+publish_studyprogress_api_img:
+    <<: *publish_service_img
     script:
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$STUDYPROGRESS_API_DIR/Dockerfile --destination i360147/studyprogressapi --target production
 
-build_studyprogress_eventhandler_img:
-    <<: *build_service_img
+publish_studyprogress_eventhandler_img:
+    <<: *publish_service_img
     script:
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$STUDYPROGRESS_EVENTHANDLER_DIR/Dockerfile --destination i360147/studyprogresseventhandler --target production
 
-build_schedule_api_img:
-    <<: *build_service_img
+publish_schedule_api_img:
+    <<: *publish_service_img
     script:
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$SCHEDULE_API_DIR/Dockerfile --destination i360147/scheduleapi --target production
 
-build_schedule_eventhandler_img:
-    <<: *build_service_img
+publish_schedule_eventhandler_img:
+    <<: *publish_service_img
     script:
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$SCHEDULE_EVENTHANDLER_DIR/Dockerfile --destination i360147/scheduleeventhandler --target production
 
-build_announcement_api_img:
-    <<: *build_service_img
+publish_announcement_api_img:
+    <<: *publish_service_img
     script:
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$ANNOUNCEMENT_API_DIR/Dockerfile --destination i360147/announcementapi --target production
 
-build_announcement_eventhandler_img:
-    <<: *build_service_img
+publish_announcement_eventhandler_img:
+    <<: *publish_service_img
     script:
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$ANNOUNCEMENT_EVENTHANDLER_DIR/Dockerfile --destination i360147/announcementeventhandler --target production
 
-build_webspa_img:
-    stage: deploy
+publish_webspa_img:
+    stage: publish
     image:
         name: gcr.io/kaniko-project/executor:debug
         entrypoint: [""]
@@ -162,4 +159,3 @@ build_webspa_img:
     only:
         refs:
             - master
-        kubernetes: active
