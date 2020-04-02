@@ -78,83 +78,27 @@ test_services:
             - develop
             - master
 
-.publish_service_img: &publish_service_img
+publish_images:
     stage: publish
     image:
         name: gcr.io/kaniko-project/executor:debug
         entrypoint: [""]
     dependencies:
         - build_services
-    before_script:
-        - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(echo -n $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" > /kaniko/.docker/config.json
-    only:
-        refs:
-            - master
-
-publish_apigateway_img:
-    <<: *publish_service_img
-    script:
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$APIGATEWAY_DIR/Dockerfile --destination i360147/apigateway --target production
-
-publish_identity_api_img:
-    <<: *publish_service_img
-    script:
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_API_DIR/Dockerfile --destination i360147/identityapi --target production
-
-publish_identity_eventhandler_img:
-    <<: *publish_service_img
-    script:
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_EVENTHANDLER_DIR/Dockerfile --destination i360147/identityeventhandler --target production
-
-publish_course_api_img:
-    <<: *publish_service_img
-    script:
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$COURSE_API_DIR/Dockerfile --destination i360147/courseapi --target production
-
-publish_course_eventhandler_img:
-    <<: *publish_service_img
-    script:
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$COURSE_EVENTHANDLER_DIR/Dockerfile --destination i360147/courseeventhandler --target production
-
-publish_studyprogress_api_img:
-    <<: *publish_service_img
-    script:
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$STUDYPROGRESS_API_DIR/Dockerfile --destination i360147/studyprogressapi --target production
-
-publish_studyprogress_eventhandler_img:
-    <<: *publish_service_img
-    script:
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$STUDYPROGRESS_EVENTHANDLER_DIR/Dockerfile --destination i360147/studyprogresseventhandler --target production
-
-publish_schedule_api_img:
-    <<: *publish_service_img
-    script:
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$SCHEDULE_API_DIR/Dockerfile --destination i360147/scheduleapi --target production
-
-publish_schedule_eventhandler_img:
-    <<: *publish_service_img
-    script:
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$SCHEDULE_EVENTHANDLER_DIR/Dockerfile --destination i360147/scheduleeventhandler --target production
-
-publish_announcement_api_img:
-    <<: *publish_service_img
-    script:
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$ANNOUNCEMENT_API_DIR/Dockerfile --destination i360147/announcementapi --target production
-
-publish_announcement_eventhandler_img:
-    <<: *publish_service_img
-    script:
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$ANNOUNCEMENT_EVENTHANDLER_DIR/Dockerfile --destination i360147/announcementeventhandler --target production
-
-publish_webspa_img:
-    stage: publish
-    image:
-        name: gcr.io/kaniko-project/executor:debug
-        entrypoint: [""]
-    dependencies:
         - build_webspa
     script:
         - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(echo -n $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" > /kaniko/.docker/config.json
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$APIGATEWAY_DIR/Dockerfile --destination i360147/apigateway --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_API_DIR/Dockerfile --destination i360147/identityapi --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_EVENTHANDLER_DIR/Dockerfile --destination i360147/identityeventhandler --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$COURSE_API_DIR/Dockerfile --destination i360147/courseapi --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$COURSE_EVENTHANDLER_DIR/Dockerfile --destination i360147/courseeventhandler --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$STUDYPROGRESS_API_DIR/Dockerfile --destination i360147/studyprogressapi --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$STUDYPROGRESS_EVENTHANDLER_DIR/Dockerfile --destination i360147/studyprogresseventhandler --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$SCHEDULE_API_DIR/Dockerfile --destination i360147/scheduleapi --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$SCHEDULE_EVENTHANDLER_DIR/Dockerfile --destination i360147/scheduleeventhandler --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$ANNOUNCEMENT_API_DIR/Dockerfile --destination i360147/announcementapi --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$ANNOUNCEMENT_EVENTHANDLER_DIR/Dockerfile --destination i360147/announcementeventhandler --target production
         - /kaniko/executor --context $CI_PROJECT_DIR/$WEBSPA_DIR/ --dockerfile $CI_PROJECT_DIR/$WEBSPA_DIR/Dockerfile --destination i360147/webspa --target production
     only:
         refs:
