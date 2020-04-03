@@ -10,7 +10,7 @@ services:
       dockerfile: ApiGateway/Dockerfile
 
 
-  identity.api:
+  identityapi:
     image: ${DOCKER_REGISTRY-}identityapi
     build:
       context: .
@@ -18,7 +18,7 @@ services:
       dockerfile: Services/Identity/Identity.Api/Dockerfile
 
 
-  identity.eventhandler:
+  identityeventhandler:
     image: ${DOCKER_REGISTRY-}identityeventhandler
     build:
       context: .
@@ -26,7 +26,7 @@ services:
       dockerfile: Services/Identity/Identity.EventHandler/Dockerfile
 
 
-  course.api:
+  courseapi:
     image: ${DOCKER_REGISTRY-}courseapi
     build:
       context: .
@@ -34,7 +34,7 @@ services:
       dockerfile: Services/Course/Course.Api/Dockerfile
 
 
-  course.eventhandler:
+  courseeventhandler:
     image: ${DOCKER_REGISTRY-}courseeventhandler
     build:
       context: .
@@ -42,7 +42,7 @@ services:
       dockerfile: Services/Course/Course.EventHandler/Dockerfile
 
 
-  studyprogress.api:
+  studyprogressapi:
     image: ${DOCKER_REGISTRY-}studyprogressapi
     build:
       context: .
@@ -50,7 +50,7 @@ services:
       dockerfile: Services/StudyProgress/StudyProgress.Api/Dockerfile
 
 
-  studyprogress.eventhandler:
+  studyprogresseventhandler:
     image: ${DOCKER_REGISTRY-}studyprogresseventhandler
     build:
       context: .
@@ -58,7 +58,7 @@ services:
       dockerfile: Services/StudyProgress/StudyProgress.EventHandler/Dockerfile
 
 
-  schedule.api:
+  scheduleapi:
     image: ${DOCKER_REGISTRY-}scheduleapi
     build:
       context: .
@@ -66,7 +66,7 @@ services:
       dockerfile: Services/Schedule/Schedule.Api/Dockerfile
 
 
-  schedule.eventhandler:
+  scheduleeventhandler:
     image: ${DOCKER_REGISTRY-}scheduleeventhandler
     build:
       context: .
@@ -74,7 +74,7 @@ services:
       dockerfile: Services/Schedule/Schedule.EventHandler/Dockerfile
 
 
-  announcement.api:
+  announcementapi:
     image: ${DOCKER_REGISTRY-}announcementapi
     build:
       context: .
@@ -82,7 +82,7 @@ services:
       dockerfile: Services/Announcement/Announcement.Api/Dockerfile
 
 
-  announcement.eventhandler:
+  announcementeventhandler:
     image: ${DOCKER_REGISTRY-}announcementeventhandler
     build:
       context: .
