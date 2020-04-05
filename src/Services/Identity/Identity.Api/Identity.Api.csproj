@@ -9,11 +9,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200404212858_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200404212858_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200404222318_DisableUserRoleIdGeneratedValue.cs" />
+    <Compile Remove="Migrations\20200404222318_DisableUserRoleIdGeneratedValue.Designer.cs" />
+    <Compile Remove="Migrations\20200404223204_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200404223204_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200405101225_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200405101225_InitialCreate.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bogus" Version="29.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 
