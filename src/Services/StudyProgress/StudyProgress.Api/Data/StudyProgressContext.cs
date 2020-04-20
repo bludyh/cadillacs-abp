@@ -9,10 +9,7 @@ namespace StudyProgress.Api.Data
 {
     public class StudyProgressContext : DbContext
     {
-        public StudyProgressContext()
-        {
-
-        }
+        public StudyProgressContext(DbContextOptions<StudyProgressContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -27,8 +24,7 @@ namespace StudyProgress.Api.Data
 
             modelBuilder.Entity<ProgramCourse>().HasKey(pc => new { pc.ProgramId, pc.CourseId });
 
-            modelBuilder.Entity<Course>()
-                .HasMany(c => c.RequiredCourses);
+            //modelBuilder.Entity<Requirement>().HasKey(r => new { r.CourseId, r.RequiredCourseId });
 
             modelBuilder.Entity<Class>()
                 .HasOne<Course>(cl => cl.Course)

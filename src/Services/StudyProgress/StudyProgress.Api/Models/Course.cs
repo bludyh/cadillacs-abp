@@ -12,7 +12,7 @@ namespace StudyProgress.Api.Models
         public string Description { get; set; }
         public int Credit { get; set; }
 
-        public List<Course> RequiredCourses { get; set; }
+        //public List<Requirement> Requirements { get; set; }
         public List<ProgramCourse> ProgramCourses { get; set; }
         public List<Class> Classes { get; set; }
     }
