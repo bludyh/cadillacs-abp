@@ -45,7 +45,7 @@ build_services:
             - $STUDYPROGRESS_EVENTHANDLER_DIR/bin/
     script:
         - cd src/
-        - dotnet restore --packages .nuget/
+        - dotnet restore Services.sln --packages .nuget/
         - dotnet publish Services.sln -c Release --no-restore
     only:
         refs:
