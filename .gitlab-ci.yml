@@ -39,8 +39,7 @@ build_services:
             - $STUDYPROGRESS_EVENTHANDLER_DIR/bin/
     script:
         - cd src/
-        - dotnet restore Services.sln --verbosity normal
-        - dotnet publish Services.sln -c Release --no-restore --verbosity normal
+        - dotnet publish Services.sln -c Release
     only:
         refs:
             - /^ABP-[0-9]+.*$/i
@@ -71,7 +70,7 @@ test_services:
         - build_services
     script:
         - cd src/
-        - dotnet test Services.sln -c Release --no-build --verbosity normal
+        - dotnet test Services.sln
     only:
         refs:
             - /^ABP-[0-9]+.*$/i

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Identity.Api.Models {
-    public class School {
+namespace Identity.Api.Dtos {
+    public class SchoolDto {
 
         public string Id { get; set; }
         public string Name { get; set; }
@@ -13,10 +13,6 @@ namespace Identity.Api.Models {
         public string PostalCode { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
-
-        public List<User> Users { get; set; }
-        public List<Program> Programs { get; set; }
-        public List<SchoolBuilding> SchoolBuildings { get; set; }
 
     }
 }
