@@ -81,7 +81,7 @@ test_services:
         - build_services
     script:
         - cd src/
-        - dotnet test Services.sln --no-build
+        - dotnet test Services.sln -c Release --no-build
     only:
         refs:
             - /^ABP-[0-9]+.*$/i
