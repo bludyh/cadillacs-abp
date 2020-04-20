@@ -13,6 +13,7 @@ variables:
     COURSE_EVENTHANDLER_DIR: "src/Services/Course/Course.EventHandler"
     IDENTITY_API_DIR: "src/Services/Identity/Identity.Api"
     IDENTITY_EVENTHANDLER_DIR: "src/Services/Identity/Identity.EventHandler"
+    IDENTITY_UNITTESTS_DIR: "src/Services/Identity/Identity.UnitTests"
     SCHEDULE_API_DIR: "src/Services/Schedule/Schedule.Api"
     SCHEDULE_EVENTHANDLER_DIR: "src/Services/Schedule/Schedule.EventHandler"
     STUDYPROGRESS_API_DIR: "src/Services/StudyProgress/StudyProgress.Api"
@@ -82,15 +83,16 @@ test_services:
     artifacts:
         when: always
         paths:
-            - ./**/TestResults.xml
+            - $IDENTITY_UNITTESTS_DIR/TestResults/
         reports:
             junit:
-                - ./**/TestResults.xml
+                - $IDENTITY_UNITTESTS_DIR/TestResults/
     dependencies:
         - build_services
     script:
         - cd src/
-        - dotnet test Services.sln -c Release --verbosity normal --test-adapter-path:. --logger:"junit;MethodFormat=Class;FailureBodyFormat=Verbose"
+        - dotnet restore Services.sln --packages .nuget/
+        - dotnet test Services.sln -c Release --no-restore --test-adapter-path:. --logger:"junit;MethodFormat=Class;FailureBodyFormat=Verbose"
     only:
         refs:
             - /^ABP-[0-9]+.*$/i
