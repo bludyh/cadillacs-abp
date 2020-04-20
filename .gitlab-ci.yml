@@ -24,7 +24,7 @@ build_services:
     stage: build
     image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
     cache:
-        key: ${CI_JOB_NAME}
+        key: services_cache
         paths:
             - src/.nuget/
     artifacts:
@@ -57,7 +57,7 @@ build_webspa:
     stage: build
     image: node:13.10.1-alpine
     cache:
-        key: ${CI_JOB_NAME}
+        key: webspa_cache
         paths:
             - $WEBSPA_DIR/.npm/
     artifacts:
@@ -77,11 +77,22 @@ build_webspa:
 test_services:
     stage: test
     image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
+    cache:
+        key: services_cache
+        paths:
+            - src/.nuget/
+    artifacts:
+        when: always
+        paths:
+            - ./**/TestResults.xml
+        reports:
+            junit:
+                - ./**/TestResults.xml
     dependencies:
         - build_services
     script:
         - cd src/
-        - dotnet test Services.sln
+        - dotnet test Services.sln -c Release --no-build --verbosity normal --test-adapter-path:. --logger:"junit;MethodFormat=Class;FailureBodyFormat=Verbose"
     only:
         refs:
             - /^ABP-[0-9]+.*$/i
