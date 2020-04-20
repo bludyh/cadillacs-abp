@@ -33,11 +33,15 @@ namespace StudyProgress.Api.Data
             });
 
             modelBuilder.Entity<Class>()
+                .HasKey(c => new { c.Id, c.Semester, c.Year, c.CourseId });
+
+            modelBuilder.Entity<Class>()
                 .HasOne<Course>(cl => cl.Course)
                 .WithMany(co => co.Classes)
                 .HasForeignKey(cl => cl.CourseId);
 
-            modelBuilder.Entity<Enrollment>().HasKey(e => new { e.ClassId, e.StudentId });
+            modelBuilder.Entity<Enrollment>().HasKey(e => 
+                new { e.ClassId, e.ClassSemester, e.ClassYear, e.ClassCourseId, e.StudentId });
         }
 
         //entities
@@ -45,7 +49,7 @@ namespace StudyProgress.Api.Data
         public DbSet<Models.Program> Programs { get; set; }
         public DbSet<ProgramCourse> ProgramCourses{ get; set; }
         public DbSet<Course> Courses { get; set; }
-        //public DbSet<Requirement> Requirements { get; set; }
+        public DbSet<Requirement> Requirements { get; set; }
         public DbSet<Class> Classes { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Student> Students { get; set; }

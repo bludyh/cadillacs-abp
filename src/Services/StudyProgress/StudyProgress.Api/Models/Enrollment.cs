@@ -9,8 +9,13 @@ namespace StudyProgress.Api.Models
     {
         public int StudentId { get; set; }
         public Student Student { get; set; }
-        public int ClassId { get; set; }
+        
+        public string ClassId { get; set; }
+        public int ClassSemester { get; set; }
+        public int ClassYear { get; set; }
+        public int ClassCourseId { get; set; }
         public Class Class { get; set; }
+
         public double FinalGrade { get; set; }
     }
 }

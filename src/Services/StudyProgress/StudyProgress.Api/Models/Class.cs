@@ -7,7 +7,7 @@ namespace StudyProgress.Api.Models
 {
     public class Class
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public int Semester { get; set; }
         public int Year { get; set; }
         public DateTime StartDate { get; set; }
