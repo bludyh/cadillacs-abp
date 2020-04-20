@@ -9,19 +9,28 @@ variables:
     EVENTBUS_DIR: "src/Infrastructure/Infrastructure.Messaging"
     ANNOUNCEMENT_API_DIR: "src/Services/Announcement/Announcement.Api"
     ANNOUNCEMENT_EVENTHANDLER_DIR: "src/Services/Announcement/Announcement.EventHandler"
+    ANNOUNCEMENT_UNITTESTS_DIR: "src/Services/Announcement/Announcement.UnitTests"
     COURSE_API_DIR: "src/Services/Course/Course.Api"
     COURSE_EVENTHANDLER_DIR: "src/Services/Course/Course.EventHandler"
+    COURSE_UNITTESTS_DIR: "src/Services/Course/Course.UnitTests"
     IDENTITY_API_DIR: "src/Services/Identity/Identity.Api"
     IDENTITY_EVENTHANDLER_DIR: "src/Services/Identity/Identity.EventHandler"
+    IDENTITY_UNITTESTS_DIR: "src/Services/Identity/Identity.UnitTests"
     SCHEDULE_API_DIR: "src/Services/Schedule/Schedule.Api"
     SCHEDULE_EVENTHANDLER_DIR: "src/Services/Schedule/Schedule.EventHandler"
+    SCHEDULE_UNITTESTS_DIR: "src/Services/Schedule/Schedule.UnitTests"
     STUDYPROGRESS_API_DIR: "src/Services/StudyProgress/StudyProgress.Api"
     STUDYPROGRESS_EVENTHANDLER_DIR: "src/Services/StudyProgress/StudyProgress.EventHandler"
+    STUDYPROGRESS_UNITTESTS_DIR: "src/Services/StudyProgress/StudyProgress.UnitTests"
     WEBSPA_DIR: "src/Web/Spa"
 
 build_services:
     stage: build
     image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
+    cache:
+        key: services_cache
+        paths:
+            - src/.nuget/
     artifacts:
         expire_in: 1 day
         paths:
@@ -39,8 +48,8 @@ build_services:
             - $STUDYPROGRESS_EVENTHANDLER_DIR/bin/
     script:
         - cd src/
-        - dotnet restore Services.sln --verbosity normal
-        - dotnet publish Services.sln -c Release --no-restore --verbosity normal
+        - dotnet restore Services.sln --packages .nuget/
+        - dotnet publish Services.sln -c Release --no-restore
     only:
         refs:
             - /^ABP-[0-9]+.*$/i
@@ -50,13 +59,17 @@ build_services:
 build_webspa:
     stage: build
     image: node:13.10.1-alpine
+    cache:
+        key: webspa_cache
+        paths:
+            - $WEBSPA_DIR/.npm/
     artifacts:
         expire_in: 1 day
         paths:
-            - $WEBSPA_DIR/dist/Spa/
+            - $WEBSPA_DIR/dist/
     script:
         - cd $WEBSPA_DIR/
-        - npm ci
+        - npm ci --cache .npm/ --prefer-offline
         - npm run build -- --prod
     only:
         refs:
@@ -67,11 +80,31 @@ build_webspa:
 test_services:
     stage: test
     image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
+    cache:
+        key: services_cache
+        paths:
+            - src/.nuget/
+    artifacts:
+        when: always
+        paths:
+            - $ANNOUNCEMENT_UNITTESTS_DIR/TestResults/TestResults.xml
+            - $COURSE_UNITTESTS_DIR/TestResults/TestResults.xml
+            - $IDENTITY_UNITTESTS_DIR/TestResults/TestResults.xml
+            - $SCHEDULE_UNITTESTS_DIR/TestResults/TestResults.xml
+            - $STUDYPROGRESS_UNITTESTS_DIR/TestResults/TestResults.xml
+        reports:
+            junit:
+                - $ANNOUNCEMENT_UNITTESTS_DIR/TestResults/TestResults.xml
+                - $COURSE_UNITTESTS_DIR/TestResults/TestResults.xml
+                - $IDENTITY_UNITTESTS_DIR/TestResults/TestResults.xml
+                - $SCHEDULE_UNITTESTS_DIR/TestResults/TestResults.xml
+                - $STUDYPROGRESS_UNITTESTS_DIR/TestResults/TestResults.xml
     dependencies:
         - build_services
     script:
         - cd src/
-        - dotnet test Services.sln -c Release --no-build --verbosity normal
+        - dotnet restore Services.sln --packages .nuget/
+        - dotnet test Services.sln -c Release --no-restore --test-adapter-path:. --logger:"junit;MethodFormat=Class;FailureBodyFormat=Verbose"
     only:
         refs:
             - /^ABP-[0-9]+.*$/i
