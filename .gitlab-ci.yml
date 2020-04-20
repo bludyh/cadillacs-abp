@@ -83,10 +83,10 @@ test_services:
     artifacts:
         when: always
         paths:
-            - $IDENTITY_UNITTESTS_DIR/TestResults/
+            - $IDENTITY_UNITTESTS_DIR/TestResults/TestResults.xml
         reports:
             junit:
-                - $IDENTITY_UNITTESTS_DIR/TestResults/
+                - $IDENTITY_UNITTESTS_DIR/TestResults/TestResults.xml
     dependencies:
         - build_services
     script:
