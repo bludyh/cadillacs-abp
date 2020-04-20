@@ -9,15 +9,19 @@ variables:
     EVENTBUS_DIR: "src/Infrastructure/Infrastructure.Messaging"
     ANNOUNCEMENT_API_DIR: "src/Services/Announcement/Announcement.Api"
     ANNOUNCEMENT_EVENTHANDLER_DIR: "src/Services/Announcement/Announcement.EventHandler"
+    ANNOUNCEMENT_UNITTESTS_DIR: "src/Services/Announcement/Announcement.UnitTests"
     COURSE_API_DIR: "src/Services/Course/Course.Api"
     COURSE_EVENTHANDLER_DIR: "src/Services/Course/Course.EventHandler"
+    COURSE_UNITTESTS_DIR: "src/Services/Course/Course.UnitTests"
     IDENTITY_API_DIR: "src/Services/Identity/Identity.Api"
     IDENTITY_EVENTHANDLER_DIR: "src/Services/Identity/Identity.EventHandler"
     IDENTITY_UNITTESTS_DIR: "src/Services/Identity/Identity.UnitTests"
     SCHEDULE_API_DIR: "src/Services/Schedule/Schedule.Api"
     SCHEDULE_EVENTHANDLER_DIR: "src/Services/Schedule/Schedule.EventHandler"
+    SCHEDULE_UNITTESTS_DIR: "src/Services/Schedule/Schedule.UnitTests"
     STUDYPROGRESS_API_DIR: "src/Services/StudyProgress/StudyProgress.Api"
     STUDYPROGRESS_EVENTHANDLER_DIR: "src/Services/StudyProgress/StudyProgress.EventHandler"
+    STUDYPROGRESS_UNITTESTS_DIR: "src/Services/StudyProgress/StudyProgress.UnitTests"
     WEBSPA_DIR: "src/Web/Spa"
 
 build_services:
@@ -83,10 +87,18 @@ test_services:
     artifacts:
         when: always
         paths:
+            - $ANNOUNCEMENT_UNITTESTS_DIR/TestResults/TestResults.xml
+            - $COURSE_UNITTESTS_DIR/TestResults/TestResults.xml
             - $IDENTITY_UNITTESTS_DIR/TestResults/TestResults.xml
+            - $SCHEDULE_UNITTESTS_DIR/TestResults/TestResults.xml
+            - $STUDYPROGRESS_UNITTESTS_DIR/TestResults/TestResults.xml
         reports:
             junit:
+                - $ANNOUNCEMENT_UNITTESTS_DIR/TestResults/TestResults.xml
+                - $COURSE_UNITTESTS_DIR/TestResults/TestResults.xml
                 - $IDENTITY_UNITTESTS_DIR/TestResults/TestResults.xml
+                - $SCHEDULE_UNITTESTS_DIR/TestResults/TestResults.xml
+                - $STUDYPROGRESS_UNITTESTS_DIR/TestResults/TestResults.xml
     dependencies:
         - build_services
     script:
