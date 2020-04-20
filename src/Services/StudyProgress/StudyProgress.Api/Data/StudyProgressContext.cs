@@ -24,7 +24,13 @@ namespace StudyProgress.Api.Data
 
             modelBuilder.Entity<ProgramCourse>().HasKey(pc => new { pc.ProgramId, pc.CourseId });
 
-            //modelBuilder.Entity<Requirement>().HasKey(r => new { r.CourseId, r.RequiredCourseId });
+            modelBuilder.Entity<Requirement>(r => {
+                r.HasKey(r => new { r.CourseId, r.RequiredCourseId });
+                r.HasOne(r => r.RequiredCourse)
+                .WithMany(c => c.Requirements)
+                .HasForeignKey(r => r.RequiredCourseId)
+                .OnDelete(DeleteBehavior.Restrict);
+            });
 
             modelBuilder.Entity<Class>()
                 .HasOne<Course>(cl => cl.Course)
