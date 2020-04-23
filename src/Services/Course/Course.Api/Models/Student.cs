@@ -15,7 +15,5 @@ namespace Course.Api.Models
         public string Phone { get; set; }
 
         public List<Enrollment> Enrollments { get; set; }
-        // TODO: Discuss with group about Class Group and Student.
-        public List<StudentGroup> StudentGroups { get; set; }
     }
 }

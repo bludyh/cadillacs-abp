@@ -18,6 +18,7 @@ namespace Course.Api.Models
         public string Name { get; set; }
         public int MaxSize { get; set; }
 
-        public List<StudentGroup> StudentGroups { get; set; }
+
+        public List<Enrollment> Enrollments { get; set; }
     }
 }

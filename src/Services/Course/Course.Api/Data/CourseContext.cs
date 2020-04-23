@@ -1,5 +1,6 @@
 ﻿using Course.Api.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,10 +30,12 @@ namespace Course.Api.Data
                 new { e.ClassId, e.ClassSemester, e.ClassYear, e.ClassCourseId, e.StudentId });
 
             modelBuilder.Entity<ClassSchedule>().HasKey(cs =>
-                new { cs.Day, cs.StartTime, cs.EndTime });
+                new { cs.StartTime, cs.ClassId, cs.ClassSemester, cs.ClassYear, cs.ClassCourseId });
 
-            modelBuilder.Entity<StudentGroup>().HasKey(sg =>
-                new { sg.StudentId, sg.GroupId });
+            modelBuilder.Entity<Assignment>(a => {
+                a.Property(a => a.Type)
+                    .HasConversion(new EnumToStringConverter<AssignmentType>());
+            });
 
             modelBuilder.Entity<Lecturer>().HasKey(l =>
                 new { l.TeacherId, l.ClassId, l.ClassSemester, l.ClassYear, l.ClassCourseId });
@@ -52,21 +55,20 @@ namespace Course.Api.Data
 
         //entities
         public DbSet<Assignment> Assignments { get; set; }
-        //public DbSet<AssignmentAttachment> AssignmentAttachments { get; set; }
+        public DbSet<AssignmentAttachment> AssignmentAttachments { get; set; }
         public DbSet<Class> Classes { get; set; }
         public DbSet<ClassSchedule> ClassSchedules { get; set; }
         public DbSet<Models.Course> Courses { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
-        //public DbSet<Evaluation> Evaluations { get; set; }
-        //public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Evaluation> Evaluations { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Group> Groups { get; set; }
-        //public DbSet<GroupEvaluation> GroupEvaluations { get; set; }
+        public DbSet<GroupEvaluation> GroupEvaluations { get; set; }
         public DbSet<Lecturer> Lecturers { get; set; }
         public DbSet<Student> Students { get; set; }
-        //public DbSet<StudentEvaluation> StudentEvaluations { get; set; }
-        public DbSet<StudentGroup> StudentGroups { get; set; }
+        public DbSet<StudentEvaluation> StudentEvaluations { get; set; }
         public DbSet<StudyMaterial> StudyMaterials { get; set; }
-        //public DbSet<StudyMaterialAttachment> StudyMaterialAttachments { get; set; }
-        //public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<StudyMaterialAttachment> StudyMaterialAttachments { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
     }
 }

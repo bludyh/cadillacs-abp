@@ -15,12 +15,20 @@ namespace StudyProgress.Api {
         public static void Main(string[] args) {
             var host = CreateHostBuilder(args).Build();
 
-            CreateDbIfNotExists(host);
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            var env = services.GetRequiredService<IWebHostEnvironment>();
+            if (env.IsDevelopment())
+            {
+                CreateDb(host);
+
+                // TODO: Add Seed.
+            }
 
             host.Run();
         }
 
-        private static void CreateDbIfNotExists(IHost host)
+        private static void CreateDb(IHost host)
         {
             using (var scope = host.Services.CreateScope())
             {
@@ -29,6 +37,7 @@ namespace StudyProgress.Api {
                 try
                 {
                     var context = services.GetRequiredService<StudyProgressContext>();
+                    context.Database.EnsureDeleted();
                     context.Database.EnsureCreated();
                 }
                 catch (Exception ex)

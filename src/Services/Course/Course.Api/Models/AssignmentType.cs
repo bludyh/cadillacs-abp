@@ -7,8 +7,9 @@ namespace Course.Api.Models
 {
     public enum AssignmentType
     {
-        Report,
-        Portfolio,
-        Code
+        // TODO: Complete the types
+        REPORT,
+        PORTFOLIO,
+        CODE
     }
 }
