@@ -1,0 +1,14 @@
+#profilePicture{
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    background-size: cover;
+    padding-bottom: -1pc;
+}
+        
+@media (min-width: 820px){
+    .navbar li {
+        margin-left : 1pc;
+        margin-right : 1pc;
+    }
+}
