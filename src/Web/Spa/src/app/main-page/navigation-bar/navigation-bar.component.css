@@ -6,9 +6,14 @@
     padding-bottom: -1pc;
 }
         
-@media (min-width: 820px){
+@media (min-width: 1020px){
     .navbar li {
         margin-left : 1pc;
         margin-right : 1pc;
     }
 }
+
+.active-purple-4 input[type=text]:focus:not([readonly]) {
+    border: 1px solid #44345e;
+    box-shadow: 0 0 0 1px #85508f;
+  }
