@@ -7,6 +7,10 @@ import { SideBarComponent } from './main-page/side-bar/side-bar.component';
 import { MainContentComponent } from './main-page/main-content/main-content.component';
 import { NotificationBarComponent } from './main-page/notification-bar/notification-bar.component';
 import { NavigationBarComponent } from './main-page/navigation-bar/navigation-bar.component';
+import { AppRoutingModule } from './app-routing.module';
+import { SettingsComponent } from './main-page/settingsPage/settings.component';
+import { ProfileComponent } from './main-page/profile/profile.component';
+import { LogoutComponent } from './main-page/logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -16,9 +20,13 @@ import { NavigationBarComponent } from './main-page/navigation-bar/navigation-ba
     MainContentComponent,
     NotificationBarComponent,
     NavigationBarComponent,
+    SettingsComponent,
+    ProfileComponent,
+    LogoutComponent,
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
