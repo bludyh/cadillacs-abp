@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Identity.Api.Data;
+using Identity.Api.Mappings;
 using Identity.Api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,9 +29,14 @@ namespace Identity.Api {
         public void ConfigureServices(IServiceCollection services) {
             services.AddDbContext<IdentityContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Identity")));
 
+            // Add Identity
             // https://stackoverflow.com/questions/43224177/how-to-add-asp-net-identity-to-asp-net-core-when-webapi-template-is-selected
-            services.AddIdentity<User, IdentityRole<int>>()
-                .AddEntityFrameworkStores<IdentityContext>();
+            services.AddIdentity<User, IdentityRole<int>>(options => {
+                options.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<IdentityContext>();
+
+            // Add AutoMapper
+            services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);

@@ -1,6 +1,8 @@
 ﻿using Bogus;
 using Identity.Api.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -73,36 +75,34 @@ namespace Identity.Api.Data {
             context.Schools.AddRange(schools);
 
             var roles = new List<IdentityRole<int>> {
-                new IdentityRole<int> { Name = "Secretariat" },
-                new IdentityRole<int> { Name = "Teacher" },
-                new IdentityRole<int> { Name = "Student" }
+                new IdentityRole<int>("Secretariat"),
+                new IdentityRole<int>("Teacher"),
+                new IdentityRole<int>("Student")
             };
             roles.ForEach(r => { roleManager.CreateAsync(r).Wait(); });
 
             var employees = new Faker<Employee>("nl")
-                .RuleFor(e => e.UserName, f => f.Random.Replace("######"))
+                .RuleFor(e => e.UserName, f => GetNextPcn(context))
                 .RuleFor(e => e.FirstName, f => f.Name.FirstName())
                 .RuleFor(e => e.LastName, f => f.Name.LastName())
                 .RuleFor(e => e.Initials, f => f.Random.Replace("?.?."))
-                .RuleFor(e => e.Email, (f, s) => f.Internet.Email(s.FirstName, s.LastName, "uni.com"))
+                .RuleFor(e => e.Email, (f, e) => e.Initials.ToLower() + e.LastName.ToLower() + "@uni.com")
                 .RuleFor(e => e.PhoneNumber, f => f.Phone.PhoneNumber("06 ########"))
-                .RuleFor(e => e.AccountStatus, f => AccountStatus.ACTIVE)
                 .RuleFor(e => e.School, f => f.PickRandom(schools))
                 .RuleFor(e => e.Room, (f, e) => f.PickRandom(f.PickRandom(e.School.SchoolBuildings).Building.Rooms))
                 .Generate(5);
             employees.ForEach(e => { 
-                userManager.CreateAsync(e, "@Test123").Wait();
+                userManager.CreateAsync(e).Wait();
                 userManager.AddToRoleAsync(e, "Secretariat").Wait();
             });
 
             var teachers = new Faker<Teacher>("nl")
-                .RuleFor(t => t.UserName, f => f.Random.Replace("######"))
+                .RuleFor(t => t.UserName, f => GetNextPcn(context))
                 .RuleFor(t => t.FirstName, f => f.Name.FirstName())
                 .RuleFor(t => t.LastName, f => f.Name.LastName())
                 .RuleFor(t => t.Initials, f => f.Random.Replace("?.?."))
-                .RuleFor(t => t.Email, (f, s) => f.Internet.Email(s.FirstName, s.LastName, "uni.com"))
+                .RuleFor(t => t.Email, (f, t) => t.Initials.ToLower() + t.LastName.ToLower() + "@uni.com")
                 .RuleFor(t => t.PhoneNumber, f => f.Phone.PhoneNumber("06 ########"))
-                .RuleFor(t => t.AccountStatus, f => AccountStatus.ACTIVE)
                 .RuleFor(t => t.School, f => f.PickRandom(schools))
                 .RuleFor(t => t.Room, (f, t) => f.PickRandom(f.PickRandom(t.School.SchoolBuildings).Building.Rooms))
                 .RuleFor(t => t.EmployeePrograms, (f, t) => new List<EmployeeProgram> {
@@ -110,19 +110,17 @@ namespace Identity.Api.Data {
                 })
                 .Generate(20);
             teachers.ForEach(t => { 
-                userManager.CreateAsync(t, "@Test123").Wait();
+                userManager.CreateAsync(t).Wait();
                 userManager.AddToRoleAsync(t, "Teacher").Wait();
             });
 
             var students = new Faker<Student>("nl")
-                .RuleFor(s => s.UserName, f => f.Random.Replace("######"))
+                .RuleFor(s => s.UserName, f => GetNextPcn(context))
                 .RuleFor(s => s.FirstName, f => f.Name.FirstName())
                 .RuleFor(s => s.LastName, f => f.Name.LastName())
                 .RuleFor(s => s.Initials, f => f.Random.Replace("?.?."))
-                .RuleFor(s => s.Email, (f, s) => f.Internet.Email(s.FirstName, s.LastName, "uni.com"))
+                .RuleFor(s => s.Email, (f, s) => s.Initials.ToLower() + s.LastName.ToLower() + "@student.uni.com")
                 .RuleFor(s => s.PhoneNumber, f => f.Phone.PhoneNumber("06 ########"))
-                .RuleFor(s => s.AccountStatus, f => AccountStatus.ACTIVE)
-                .RuleFor(s => s.School, f => f.PickRandom(schools))
                 .RuleFor(s => s.DateOfBirth, f => f.Date.Between(DateTime.Parse("01-01-1990"), DateTime.Parse("01-01-2000")))
                 .RuleFor(s => s.Nationality, f => "Netherlands")
                 .RuleFor(s => s.StreetName, f => f.Address.StreetName())
@@ -130,7 +128,7 @@ namespace Identity.Api.Data {
                 .RuleFor(s => s.PostalCode, f => f.Address.ZipCode("#### ??"))
                 .RuleFor(s => s.City, f => f.Address.City())
                 .RuleFor(s => s.Country, f => "Netherlands")
-                .RuleFor(s => s.Program, (f, s) => f.PickRandom(s.School.Programs))
+                .RuleFor(s => s.Program, (f, s) => f.PickRandom(f.PickRandom(schools).Programs))
                 .RuleFor(s => s.Mentors, (f, s) => new List<Mentor> {
                     new Mentor {
                         MentorType = MentorType.STUDY,
@@ -139,13 +137,24 @@ namespace Identity.Api.Data {
                 })
                 .Generate(20);
             students.ForEach(s => { 
-                userManager.CreateAsync(s, "@Test123").Wait();
+                userManager.CreateAsync(s).Wait();
                 userManager.AddToRoleAsync(s, "Student").Wait();
             });
 
             context.SaveChanges();
 
             return host;
+        }
+
+        private static string GetNextPcn(IdentityContext context) {
+            var result = new SqlParameter { 
+                SqlDbType = System.Data.SqlDbType.Int,
+                Direction = System.Data.ParameterDirection.Output
+            };
+
+            context.Database.ExecuteSqlInterpolated($"set {result} = next value for dbo.Pcn");
+
+            return result.Value.ToString();
         }
 
     }

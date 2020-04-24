@@ -14,8 +14,8 @@ namespace Identity.Api.Models {
         public string City { get; set; }
         public string Country { get; set; }
 
-        public List<User> Users { get; set; }
         public List<Program> Programs { get; set; }
+        public List<Employee> Employees { get; set; }
         public List<SchoolBuilding> SchoolBuildings { get; set; }
 
     }

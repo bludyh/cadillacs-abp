@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Identity.Api.Models {
-    public class Student : User {
+namespace Identity.Api.Dtos {
+    public class StudentCreateDto {
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Initials { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+
+        // Picture
 
         public DateTime DateOfBirth { get; set; }
         public string Nationality { get; set; }
@@ -16,9 +23,6 @@ namespace Identity.Api.Models {
         public string Country { get; set; }
 
         public string ProgramId { get; set; }
-        public Program Program { get; set; }
-
-        public List<Mentor> Mentors { get; set; }
 
     }
 }

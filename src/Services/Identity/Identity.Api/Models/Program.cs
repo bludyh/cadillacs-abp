@@ -13,7 +13,6 @@ namespace Identity.Api.Models {
         public School School { get; set; }
 
         public List<Student> Students { get; set; }
-
         public List<EmployeeProgram> EmployeePrograms { get; set; }
 
     }
