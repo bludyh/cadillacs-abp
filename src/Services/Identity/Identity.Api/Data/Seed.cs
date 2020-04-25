@@ -75,14 +75,14 @@ namespace Identity.Api.Data {
             context.Schools.AddRange(schools);
 
             var roles = new List<IdentityRole<int>> {
-                new IdentityRole<int>("Secretariat"),
+                new IdentityRole<int>("Employee"),
                 new IdentityRole<int>("Teacher"),
                 new IdentityRole<int>("Student")
             };
             roles.ForEach(r => { roleManager.CreateAsync(r).Wait(); });
 
             var employees = new Faker<Employee>("nl")
-                .RuleFor(e => e.UserName, f => GetNextPcn(context))
+                .RuleFor(e => e.UserName, f => context.GetNextPcn().Result)
                 .RuleFor(e => e.FirstName, f => f.Name.FirstName())
                 .RuleFor(e => e.LastName, f => f.Name.LastName())
                 .RuleFor(e => e.Initials, f => f.Random.Replace("?.?."))
@@ -93,11 +93,11 @@ namespace Identity.Api.Data {
                 .Generate(5);
             employees.ForEach(e => { 
                 userManager.CreateAsync(e).Wait();
-                userManager.AddToRoleAsync(e, "Secretariat").Wait();
+                userManager.AddToRoleAsync(e, "Employee").Wait();
             });
 
             var teachers = new Faker<Teacher>("nl")
-                .RuleFor(t => t.UserName, f => GetNextPcn(context))
+                .RuleFor(t => t.UserName, f => context.GetNextPcn().Result)
                 .RuleFor(t => t.FirstName, f => f.Name.FirstName())
                 .RuleFor(t => t.LastName, f => f.Name.LastName())
                 .RuleFor(t => t.Initials, f => f.Random.Replace("?.?."))
@@ -111,11 +111,12 @@ namespace Identity.Api.Data {
                 .Generate(20);
             teachers.ForEach(t => { 
                 userManager.CreateAsync(t).Wait();
+                userManager.AddToRoleAsync(t, "Employee").Wait();
                 userManager.AddToRoleAsync(t, "Teacher").Wait();
             });
 
             var students = new Faker<Student>("nl")
-                .RuleFor(s => s.UserName, f => GetNextPcn(context))
+                .RuleFor(s => s.UserName, f => context.GetNextPcn().Result)
                 .RuleFor(s => s.FirstName, f => f.Name.FirstName())
                 .RuleFor(s => s.LastName, f => f.Name.LastName())
                 .RuleFor(s => s.Initials, f => f.Random.Replace("?.?."))
@@ -144,17 +145,6 @@ namespace Identity.Api.Data {
             context.SaveChanges();
 
             return host;
-        }
-
-        private static string GetNextPcn(IdentityContext context) {
-            var result = new SqlParameter { 
-                SqlDbType = System.Data.SqlDbType.Int,
-                Direction = System.Data.ParameterDirection.Output
-            };
-
-            context.Database.ExecuteSqlInterpolated($"set {result} = next value for dbo.Pcn");
-
-            return result.Value.ToString();
         }
 
     }

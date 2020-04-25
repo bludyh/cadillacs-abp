@@ -17,6 +17,12 @@ namespace Identity.Api.Mappings {
             CreateMap<StudentCreateDto, Student>(MemberList.Source);
             CreateMap<StudentUpdateDto, Student>(MemberList.Source);
             CreateMap<Models.Program, ProgramDto>();
+            CreateMap<Employee, EmployeeReadDto>()
+                .ForMember(dest => dest.Pcn, opt => opt.MapFrom(src => src.UserName));
+            CreateMap<EmployeeUpdateDto, Employee>(MemberList.Source);
+            CreateMap<EmployeeCreateDto, Employee>(MemberList.Source);
+            CreateMap<Room, RoomDto>();
+            CreateMap<Building, BuildingDto>();
         }
 
     }
