@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Identity.Api.Data;
 using Identity.Api.Models;
 using Identity.Api.Dtos;
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Api.Controllers
 {
@@ -16,78 +18,46 @@ namespace Identity.Api.Controllers
     public class SchoolsController : ControllerBase
     {
         private readonly IdentityContext _context;
+        private readonly IMapper _mapper;
 
-        public SchoolsController(IdentityContext context)
+        public SchoolsController(IdentityContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Schools
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SchoolDto>>> GetSchools()
+        public async Task<ActionResult<IEnumerable<SchoolCreateReadDto>>> GetSchools()
         {
-            return await _context.Schools
-                .Select(s => new SchoolDto {
-                    Id = s.Id,
-                    Name = s.Name,
-                    StreetName = s.StreetName,
-                    HouseNumber = s.HouseNumber,
-                    PostalCode = s.PostalCode,
-                    City = s.City,
-                    Country = s.Country
-                })
-                .ToListAsync();
+            return await _mapper.ProjectTo<SchoolCreateReadDto>(_context.Schools).ToListAsync();
         }
 
         // GET: api/Schools/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<SchoolDto>> GetSchool(string id)
+        public async Task<ActionResult<SchoolCreateReadDto>> GetSchool(string id)
         {
-            var school = await _context.Schools.FindAsync(id);
-
-            if (school == null)
-            {
+            if (!(await _context.FindAsync<School>(id) is School school))
                 return NotFound();
-            }
 
-            var result = new SchoolDto { 
-                Id = school.Id,
-                Name = school.Name,
-                StreetName = school.StreetName,
-                HouseNumber = school.HouseNumber,
-                PostalCode = school.PostalCode,
-                City = school.City,
-                Country = school.Country
-            };
-
-            return result;
+            return _mapper.Map<SchoolCreateReadDto>(school);
         }
 
         // PUT: api/Schools/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSchool(string id, SchoolDto schoolDto)
+        public async Task<IActionResult> PutSchool(string id, SchoolUpdateDto dto)
         {
-            if (id != schoolDto.Id)
-            {
+            if (dto.Name == null)
                 return BadRequest();
-            }
 
-            var school = await _context.Schools.FindAsync(id);
-
-            if (school == null) {
+            if (!(await _context.FindAsync<School>(id) is School school))
                 return NotFound();
-            }
 
-            school.Name = schoolDto.Name;
-            school.StreetName = schoolDto.StreetName;
-            school.HouseNumber = schoolDto.HouseNumber;
-            school.PostalCode = schoolDto.PostalCode;
-            school.City = schoolDto.City;
-            school.Country = schoolDto.Country;
-            _context.Entry(school).State = EntityState.Modified;
+            _mapper.Map(dto, school);
 
+            _context.Update(school);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -97,23 +67,18 @@ namespace Identity.Api.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<School>> PostSchool(SchoolDto schoolDto)
+        public async Task<ActionResult<School>> PostSchool(SchoolCreateReadDto dto)
         {
-            var school = await _context.Schools.FindAsync(schoolDto.Id);
-            if (school != null)
+            if (dto.Id == null
+                || dto.Name == null)
+                return BadRequest();
+
+            if (await _context.FindAsync<School>(dto.Id) != null)
                 return Conflict();
 
-            school = new School {
-                Id = schoolDto.Id,
-                Name = schoolDto.Name,
-                StreetName = schoolDto.StreetName,
-                HouseNumber = schoolDto.HouseNumber,
-                PostalCode = schoolDto.PostalCode,
-                City = schoolDto.City,
-                Country = schoolDto.Country
-            };
+            var school = _mapper.Map<School>(dto);
 
-            _context.Schools.Add(school);
+            await _context.Schools.AddAsync(school);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetSchool", new { id = school.Id }, school);
@@ -123,11 +88,8 @@ namespace Identity.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<School>> DeleteSchool(string id)
         {
-            var school = await _context.Schools.FindAsync(id);
-            if (school == null)
-            {
+            if (!(await _context.FindAsync<School>(id) is School school))
                 return NotFound();
-            }
 
             _context.Schools.Remove(school);
             await _context.SaveChangesAsync();

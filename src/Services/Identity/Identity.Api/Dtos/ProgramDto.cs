@@ -9,7 +9,7 @@ namespace Identity.Api.Dtos {
         public string Id { get; set; }
         public string Name { get; set; }
 
-        public SchoolDto School { get; set; }
+        public SchoolCreateReadDto School { get; set; }
 
     }
 }

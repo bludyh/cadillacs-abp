@@ -4,9 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Identity.Api.Dtos {
-    public class SchoolDto {
+    public class SchoolUpdateDto {
 
-        public string Id { get; set; }
         public string Name { get; set; }
         public string StreetName { get; set; }
         public int? HouseNumber { get; set; }

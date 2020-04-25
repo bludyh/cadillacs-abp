@@ -71,7 +71,7 @@ namespace Identity.Api.Controllers
                 || await _context.FindAsync<Models.Program>(dto.ProgramId) == null)
                 return NotFound();
 
-            _ = _mapper.Map(dto, student);
+            _mapper.Map(dto, student);
 
             await _userManager.UpdateAsync(student);
 
