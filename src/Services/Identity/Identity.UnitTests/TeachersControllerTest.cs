@@ -13,16 +13,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Identity.UnitTests {
-
+namespace Identity.UnitTests
+{
     [Collection("Tests")]
-    public class EmployeesControllerTest : IDisposable {
+    public class TeachersControllerTest : IDisposable {
 
         private readonly TestFixture _fixture;
 
         // Setup 
         // Runs before each test in this test class
-        public EmployeesControllerTest(TestFixture fixture) {
+        public TeachersControllerTest(TestFixture fixture) {
             _fixture = fixture;
         }
 
@@ -34,16 +34,16 @@ namespace Identity.UnitTests {
         }
 
         [Fact]
-        public async Task GetEmployee_WithInvalidId_ShouldReturnNotFoundResult() {
+        public async Task GetTeacher_WithInvalidId_ShouldReturnNotFoundResult() {
             // Arrange
             using var context = new IdentityContext(_fixture.DbContextOptions);
             var userManager = _fixture.CreateUserManagerMock();
             userManager.Setup(um => um.FindByIdAsync(It.IsNotNull<string>()))
-                .ReturnsAsync((string id) => context.FindAsync<Employee>(int.Parse(id)).Result);
+                .ReturnsAsync((string id) => context.FindAsync<Teacher>(int.Parse(id)).Result);
 
             // Act
-            var sut = new EmployeesController(context, _fixture.Mapper, userManager.Object);
-            var result = await sut.GetEmployee(1);
+            var sut = new TeachersController(context, _fixture.Mapper, userManager.Object);
+            var result = await sut.GetTeacher(1);
 
             // Assert
             userManager.Verify(um => um.FindByIdAsync($"{1}"), Times.Once);
@@ -51,11 +51,11 @@ namespace Identity.UnitTests {
         }
 
         [Fact]
-        public async Task GetEmployee_WithValidId_ShouldReturnEmployee() {
+        public async Task GetTeacher_WithValidId_ShouldReturnTeacher() {
             // Arrange
             // Insert seed data into the database using one instance of the context
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
-                context.Employees.Add(new Employee { Id = 1, SchoolId = "school1", RoomId = "1", BuildingId = "A" });
+                context.Teachers.Add(new Teacher { Id = 1, SchoolId = "school1", RoomId = "1", BuildingId = "A" });
                 context.Schools.Add(new School { Id = "school1" });
                 context.Rooms.Add(new Room { Id = "1", BuildingId = "A" });
                 context.Buildings.Add(new Building { Id = "A" });
@@ -68,23 +68,23 @@ namespace Identity.UnitTests {
             // Use a clean instance of the context to run the test
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
                 userManager.Setup(um => um.FindByIdAsync(It.IsNotNull<string>()))
-                    .ReturnsAsync((string id) => context.FindAsync<Employee>(int.Parse(id)).Result);
+                    .ReturnsAsync((string id) => context.FindAsync<Teacher>(int.Parse(id)).Result);
 
                 // Act
-                var sut = new EmployeesController(context, _fixture.Mapper, userManager.Object);
-                result = await sut.GetEmployee(1);
+                var sut = new TeachersController(context, _fixture.Mapper, userManager.Object);
+                result = await sut.GetTeacher(1);
             }
 
             // Assert
             userManager.Verify(um => um.FindByIdAsync($"{1}"), Times.Once);
-            var employee = Assert.IsAssignableFrom<EmployeeReadDto>(result.Value);
-            Assert.NotNull(employee);
-            Assert.NotNull(employee.School); // Test if explicit loading is working
-            Assert.NotNull(employee.Room); // Test if explicit loading is working
-            Assert.Equal(1, employee.Id);
+            var teacher = Assert.IsAssignableFrom<EmployeeReadDto>(result.Value);
+            Assert.NotNull(teacher);
+            Assert.NotNull(teacher.School); // Test if explicit loading is working
+            Assert.NotNull(teacher.Room); // Test if explicit loading is working
+            Assert.Equal(1, teacher.Id);
         }
 
-        public static IEnumerable<object[]> Generate_PutEmployee_InvalidRequests() {
+        public static IEnumerable<object[]> Generate_PutTeacher_InvalidRequests() {
             return new List<object[]> { 
                 new object[] { new EmployeeUpdateDto() }, // Missing required fields
                 new object[] { new EmployeeUpdateDto { FirstName = "test", LastName = "test", Initials = "test", RoomId = "1" } }, // Incomplete Room foreign key
@@ -93,23 +93,23 @@ namespace Identity.UnitTests {
         }
 
         [Theory]
-        [MemberData(nameof(Generate_PutEmployee_InvalidRequests))]
-        public async Task PutEmployee_WithInvalidRequest_ShouldReturnBadRequestResult(EmployeeUpdateDto dto) {
+        [MemberData(nameof(Generate_PutTeacher_InvalidRequests))]
+        public async Task PutTeacher_WithInvalidRequest_ShouldReturnBadRequestResult(EmployeeUpdateDto dto) {
             // Arrange
             using var context = new IdentityContext(_fixture.DbContextOptions);
             var userManager = _fixture.CreateUserManagerMock();
 
             // Act
-            var sut = new EmployeesController(context, _fixture.Mapper, userManager.Object);
-            var result = await sut.PutEmployee(1, dto);
+            var sut = new TeachersController(context, _fixture.Mapper, userManager.Object);
+            var result = await sut.PutTeacher(1, dto);
 
             // Assert
             userManager.Verify(um => um.FindByIdAsync($"{1}"), Times.Never);
-            userManager.Verify(um => um.UpdateAsync(It.IsNotNull<Employee>()), Times.Never);
+            userManager.Verify(um => um.UpdateAsync(It.IsNotNull<Teacher>()), Times.Never);
             Assert.IsType<BadRequestResult>(result);
         }
 
-        public static IEnumerable<object[]> Generate_PutEmployee_RequestsThatResultInNotFound() {
+        public static IEnumerable<object[]> Generate_PutTeacher_RequestsThatResultInNotFound() {
             return new List<object[]> {
                 new object[] { 2, new EmployeeUpdateDto { FirstName = "test", LastName = "test", Initials = "test" } }, // Invalid Id
                 new object[] { 1, new EmployeeUpdateDto { FirstName = "test", LastName = "test", Initials = "test", SchoolId = "school1" } }, // Invalid School foreign key
@@ -118,11 +118,11 @@ namespace Identity.UnitTests {
         }
 
         [Theory]
-        [MemberData(nameof(Generate_PutEmployee_RequestsThatResultInNotFound))]
-        public async Task PutEmployee_WithRequestThatResultsInNotFound_ShouldReturnNotFoundResult(int employeeId, EmployeeUpdateDto dto) {
+        [MemberData(nameof(Generate_PutTeacher_RequestsThatResultInNotFound))]
+        public async Task PutTeacher_WithRequestThatResultsInNotFound_ShouldReturnNotFoundResult(int teacherId, EmployeeUpdateDto dto) {
             // Arrange
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
-                context.Employees.Add(new Employee { Id = 1 });
+                context.Teachers.Add(new Teacher { Id = 1 });
                 context.SaveChanges();
             }
 
@@ -131,35 +131,35 @@ namespace Identity.UnitTests {
 
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
                 userManager.Setup(um => um.FindByIdAsync(It.IsNotNull<string>()))
-                    .ReturnsAsync((string id) => context.FindAsync<Employee>(int.Parse(id)).Result);
+                    .ReturnsAsync((string id) => context.FindAsync<Teacher>(int.Parse(id)).Result);
 
                 // Act
-                var sut = new EmployeesController(context, _fixture.Mapper, userManager.Object);
-                result = await sut.PutEmployee(employeeId, dto);
+                var sut = new TeachersController(context, _fixture.Mapper, userManager.Object);
+                result = await sut.PutTeacher(teacherId, dto);
             }
 
             // Assert
-            userManager.Verify(um => um.FindByIdAsync(employeeId.ToString()), Times.Once);
-            userManager.Verify(um => um.UpdateAsync(It.IsNotNull<Employee>()), Times.Never);
+            userManager.Verify(um => um.FindByIdAsync(teacherId.ToString()), Times.Once);
+            userManager.Verify(um => um.UpdateAsync(It.IsNotNull<Teacher>()), Times.Never);
             Assert.IsType<NotFoundResult>(result);
         }
 
-        public static IEnumerable<object[]> Generate_PutEmployee_ValidRequests() {
+        public static IEnumerable<object[]> Generate_PutTeacher_ValidRequests() {
             return new List<object[]> { 
-                new object[] { new EmployeeUpdateDto { FirstName = "test", LastName = "test", Initials = "test" } }, // Employee who is not in any schools and does not have a room
-                new object[] { new EmployeeUpdateDto { FirstName = "test", LastName = "test", Initials = "test", SchoolId = "school1" } }, // Employee who does not have a room
-                new object[] { new EmployeeUpdateDto { FirstName = "test", LastName = "test", Initials = "test", RoomId = "1", BuildingId = "A" } }, // Employee who is not in any schools
-                new object[] { new EmployeeUpdateDto { FirstName = "test", LastName = "test", Initials = "test", SchoolId = "school1", RoomId = "1", BuildingId = "A" } }, // Employee who is not in any schools
+                new object[] { new EmployeeUpdateDto { FirstName = "test", LastName = "test", Initials = "test" } }, // Teacher who is not in any schools and does not have a room
+                new object[] { new EmployeeUpdateDto { FirstName = "test", LastName = "test", Initials = "test", SchoolId = "school1" } }, // Teacher who does not have a room
+                new object[] { new EmployeeUpdateDto { FirstName = "test", LastName = "test", Initials = "test", RoomId = "1", BuildingId = "A" } }, // Teacher who is not in any schools
+                new object[] { new EmployeeUpdateDto { FirstName = "test", LastName = "test", Initials = "test", SchoolId = "school1", RoomId = "1", BuildingId = "A" } }, // Teacher who is not in any schools
             };
         }
 
         [Theory]
-        [MemberData(nameof(Generate_PutEmployee_ValidRequests))]
-        public async Task PutEmployee_WithValidRequest_ShouldUpdateEmployeeAndReturnNoContentResult(EmployeeUpdateDto dto) {
+        [MemberData(nameof(Generate_PutTeacher_ValidRequests))]
+        public async Task PutTeacher_WithValidRequest_ShouldUpdateTeacherAndReturnNoContentResult(EmployeeUpdateDto dto) {
             // Arrange
             // Insert seed data into the database using one instance of the context
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
-                context.Employees.Add(new Employee { Id = 1 });
+                context.Teachers.Add(new Teacher { Id = 1 });
                 context.Schools.Add(new School { Id = "school1" });
                 context.Rooms.Add(new Room { Id = "1", BuildingId = "A" });
                 context.SaveChanges();
@@ -171,8 +171,8 @@ namespace Identity.UnitTests {
             // Use a clean instance of the context to run the test
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
                 userManager.Setup(um => um.FindByIdAsync(It.IsNotNull<string>()))
-                    .ReturnsAsync((string id) => context.FindAsync<Employee>(int.Parse(id)).Result);
-                userManager.Setup(um => um.UpdateAsync(It.IsNotNull<Employee>()))
+                    .ReturnsAsync((string id) => context.FindAsync<Teacher>(int.Parse(id)).Result);
+                userManager.Setup(um => um.UpdateAsync(It.IsNotNull<Teacher>()))
                     .ReturnsAsync(IdentityResult.Success)
                     .Callback<User>(u => {
                         context.Update(u);
@@ -180,27 +180,27 @@ namespace Identity.UnitTests {
                     });
 
                 // Act
-                var sut = new EmployeesController(context, _fixture.Mapper, userManager.Object);
-                result = await sut.PutEmployee(1, dto);
+                var sut = new TeachersController(context, _fixture.Mapper, userManager.Object);
+                result = await sut.PutTeacher(1, dto);
             }
 
             // Use a separate instance of the context to verify test
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
                 // Assert
                 userManager.Verify(um => um.FindByIdAsync($"{1}"), Times.Once);
-                userManager.Verify(um => um.UpdateAsync(It.IsNotNull<Employee>()), Times.Once);
-                var employee = await context.FindAsync<Employee>(1);
-                Assert.Equal(dto.FirstName, employee.FirstName);
-                Assert.Equal(dto.LastName, employee.LastName);
-                Assert.Equal(dto.Initials, employee.Initials);
-                Assert.Equal(dto.SchoolId, employee.SchoolId);
-                Assert.Equal(dto.RoomId, employee.RoomId);
-                Assert.Equal(dto.BuildingId, employee.BuildingId);
+                userManager.Verify(um => um.UpdateAsync(It.IsNotNull<Teacher>()), Times.Once);
+                var teacher = await context.FindAsync<Teacher>(1);
+                Assert.Equal(dto.FirstName, teacher.FirstName);
+                Assert.Equal(dto.LastName, teacher.LastName);
+                Assert.Equal(dto.Initials, teacher.Initials);
+                Assert.Equal(dto.SchoolId, teacher.SchoolId);
+                Assert.Equal(dto.RoomId, teacher.RoomId);
+                Assert.Equal(dto.BuildingId, teacher.BuildingId);
                 Assert.IsType<NoContentResult>(result);
             }
         }
 
-        public static IEnumerable<object[]> Generate_PostEmployee_InvalidRequests() {
+        public static IEnumerable<object[]> Generate_PostTeacher_InvalidRequests() {
             return new List<object[]> { 
                 new object[] { new EmployeeCreateDto() },
                 new object[] { new EmployeeCreateDto { FirstName = "test", LastName = "test", Initials = "test", Email = "test@gmail.com", RoomId = "1" } },
@@ -209,28 +209,28 @@ namespace Identity.UnitTests {
         }
 
         [Theory]
-        [MemberData(nameof(Generate_PostEmployee_InvalidRequests))]
-        public async Task PostEmployee_WithInvalidRequest_ShouldReturnBadRequest(EmployeeCreateDto dto) {
+        [MemberData(nameof(Generate_PostTeacher_InvalidRequests))]
+        public async Task PostTeacher_WithInvalidRequest_ShouldReturnBadRequest(EmployeeCreateDto dto) {
             // Arrange
             using var context = new IdentityContext(_fixture.DbContextOptions);
             var userManager = _fixture.CreateUserManagerMock();
 
             // Act
-            var sut = new EmployeesController(context, _fixture.Mapper, userManager.Object);
-            var result = await sut.PostEmployee(dto);
+            var sut = new TeachersController(context, _fixture.Mapper, userManager.Object);
+            var result = await sut.PostTeacher(dto);
 
             // Assert
             userManager.Verify(um => um.FindByEmailAsync(dto.Email), Times.Never);
-            userManager.Verify(um => um.CreateAsync(It.IsNotNull<Employee>()), Times.Never);
-            userManager.Verify(um => um.AddToRoleAsync(It.IsNotNull<Employee>(), "Employee"), Times.Never);
+            userManager.Verify(um => um.CreateAsync(It.IsNotNull<Teacher>()), Times.Never);
+            userManager.Verify(um => um.AddToRoleAsync(It.IsNotNull<Teacher>(), It.IsNotNull<string>()), Times.Never);
             Assert.IsType<BadRequestResult>(result.Result);
         }
 
         [Fact]
-        public async Task PostEmployee_WithExistingInfo_ShouldReturnConflictResult() {
+        public async Task PostTeacher_WithExistingInfo_ShouldReturnConflictResult() {
             // Arrange
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
-                context.Employees.Add(new Employee { Email = "test@gmail.com" });
+                context.Teachers.Add(new Teacher { Email = "test@gmail.com" });
                 context.SaveChanges();
             }
 
@@ -241,25 +241,25 @@ namespace Identity.UnitTests {
                 Initials = "test",
                 Email = "test@gmail.com"
             };
-            ActionResult<Employee> result;
+            ActionResult<Teacher> result;
 
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
                 userManager.Setup(um => um.FindByEmailAsync(It.IsNotNull<string>()))
                     .ReturnsAsync((string email) => context.Users.SingleOrDefaultAsync(u => u.Email == email).Result);
 
                 // Act
-                var sut = new EmployeesController(context, _fixture.Mapper, userManager.Object);
-                result = await sut.PostEmployee(dto);
+                var sut = new TeachersController(context, _fixture.Mapper, userManager.Object);
+                result = await sut.PostTeacher(dto);
             }
 
             // Assert
             userManager.Verify(um => um.FindByEmailAsync(dto.Email), Times.Once);
-            userManager.Verify(um => um.CreateAsync(It.IsNotNull<Employee>()), Times.Never);
-            userManager.Verify(um => um.AddToRoleAsync(It.IsNotNull<Employee>(), It.IsNotNull<string>()), Times.Never);
+            userManager.Verify(um => um.CreateAsync(It.IsNotNull<Teacher>()), Times.Never);
+            userManager.Verify(um => um.AddToRoleAsync(It.IsNotNull<Teacher>(), It.IsNotNull<string>()), Times.Never);
             Assert.IsType<ConflictResult>(result.Result);
         }
 
-        public static IEnumerable<object[]> Generate_PostEmployee_RequestsWithInvalidForeignKeys() {
+        public static IEnumerable<object[]> Generate_PostTeacher_RequestsWithInvalidForeignKeys() {
             return new List<object[]> { 
                 new object[] { new EmployeeCreateDto { FirstName = "test", LastName = "test", Initials = "test", Email = "test@gmail.com", SchoolId = "school1" } },
                 new object[] { new EmployeeCreateDto { FirstName = "test", LastName = "test", Initials = "test", Email = "test@gmail.com", RoomId = "1", BuildingId = "A" } }
@@ -267,8 +267,8 @@ namespace Identity.UnitTests {
         }
 
         [Theory]
-        [MemberData(nameof(Generate_PostEmployee_RequestsWithInvalidForeignKeys))]
-        public async Task PostEmployee_WithNonExistentProgram_ShouldReturnNotFoundResult(EmployeeCreateDto dto) {
+        [MemberData(nameof(Generate_PostTeacher_RequestsWithInvalidForeignKeys))]
+        public async Task PostStudent_WithNonExistentProgram_ShouldReturnNotFoundResult(EmployeeCreateDto dto) {
             // Arrange
             using var context = new IdentityContext(_fixture.DbContextOptions);
             var userManager = _fixture.CreateUserManagerMock();
@@ -277,17 +277,17 @@ namespace Identity.UnitTests {
             userManager.Setup(um => um.FindByEmailAsync(It.IsNotNull<string>()))
                 .ReturnsAsync((string email) => context.Users.SingleOrDefaultAsync(u => u.Email == email).Result);
 
-            var sut = new EmployeesController(context, _fixture.Mapper, userManager.Object);
-            var result = await sut.PostEmployee(dto);
+            var sut = new TeachersController(context, _fixture.Mapper, userManager.Object);
+            var result = await sut.PostTeacher(dto);
 
             // Assert
             userManager.Verify(um => um.FindByEmailAsync(dto.Email), Times.Once);
-            userManager.Verify(um => um.CreateAsync(It.IsNotNull<Employee>()), Times.Never);
-            userManager.Verify(um => um.AddToRoleAsync(It.IsNotNull<Employee>(), "Employee"), Times.Never);
+            userManager.Verify(um => um.CreateAsync(It.IsNotNull<Teacher>()), Times.Never);
+            userManager.Verify(um => um.AddToRoleAsync(It.IsNotNull<Teacher>(), It.IsNotNull<string>()), Times.Never);
             Assert.IsType<NotFoundResult>(result.Result);
         }
 
-        public static IEnumerable<object[]> Generate_PostEmployee_ValidRequests() {
+        public static IEnumerable<object[]> Generate_PostTeacher_ValidRequests() {
             return new List<object[]> { 
                 new object[] { new EmployeeCreateDto { FirstName = "test", LastName = "test", Initials = "test", Email = "test@gmail.com" } },
                 new object[] { new EmployeeCreateDto { FirstName = "test", LastName = "test", Initials = "test", Email = "test@gmail.com", SchoolId = "school1" } },
@@ -297,20 +297,21 @@ namespace Identity.UnitTests {
         }
 
         [Theory]
-        [MemberData(nameof(Generate_PostEmployee_ValidRequests))]
-        public async Task PostEmployee_WithValidInfo_ShouldAddEmployeeAndReturnCreatedAtActionResult(EmployeeCreateDto dto) {
+        [MemberData(nameof(Generate_PostTeacher_ValidRequests))]
+        public async Task PostTeacher_WithValidInfo_ShouldAddTeacherAndReturnCreatedAtActionResult(EmployeeCreateDto dto) {
             // Arrange
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
                 context.Schools.Add(new School { Id = "school1" });
                 context.Rooms.Add(new Room { Id = "1", BuildingId = "A" });
                 context.Buildings.Add(new Building { Id = "A" });
                 context.Roles.Add(new IdentityRole<int> { Id = 1, Name = "Employee" });
+                context.Roles.Add(new IdentityRole<int> { Id = 2, Name = "Teacher" });
                 context.SaveChanges();
             }
 
             var userManager = _fixture.CreateUserManagerMock();
             var mockedContext = new Mock<IdentityContext>();
-            ActionResult<Employee> result;
+            ActionResult<Teacher> result;
 
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
                 mockedContext.Setup(c => c.FindAsync<School>(It.IsNotNull<string>()))
@@ -321,72 +322,79 @@ namespace Identity.UnitTests {
 
                 userManager.Setup(um => um.FindByEmailAsync(It.IsAny<string>()))
                     .ReturnsAsync((string email) => context.Users.SingleOrDefaultAsync(u => u.Email == email).Result);
-                userManager.Setup(um => um.CreateAsync(It.IsNotNull<Employee>()))
+                userManager.Setup(um => um.CreateAsync(It.IsNotNull<Teacher>()))
                     .ReturnsAsync(IdentityResult.Success)
                     .Callback<User>(u => {
                         context.Add(u);
                         context.SaveChanges();
                     });
-                userManager.Setup(um => um.AddToRoleAsync(It.IsNotNull<Employee>(), "Employee"))
+                userManager.Setup(um => um.AddToRoleAsync(It.IsNotNull<Teacher>(), "Employee"))
                     .ReturnsAsync(IdentityResult.Success)
                     .Callback<User, string>((u, r) => {
                         context.Add(new IdentityUserRole<int> { UserId = u.Id, RoleId = 1 });
                         context.SaveChanges();
                     });
+                userManager.Setup(um => um.AddToRoleAsync(It.IsNotNull<Teacher>(), "Teacher"))
+                    .ReturnsAsync(IdentityResult.Success)
+                    .Callback<User, string>((u, r) => {
+                        context.Add(new IdentityUserRole<int> { UserId = u.Id, RoleId = 2 });
+                        context.SaveChanges();
+                    });
 
                 // Act
-                var sut = new EmployeesController(mockedContext.Object, _fixture.Mapper, userManager.Object);
-                result = await sut.PostEmployee(dto);
+                var sut = new TeachersController(mockedContext.Object, _fixture.Mapper, userManager.Object);
+                result = await sut.PostTeacher(dto);
             }
 
             // Assert
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
                 userManager.Verify(um => um.FindByEmailAsync(dto.Email), Times.Once);
-                userManager.Verify(um => um.CreateAsync(It.IsNotNull<Employee>()), Times.Once);
-                userManager.Verify(um => um.AddToRoleAsync(It.IsNotNull<Employee>(), "Employee"), Times.Once);
+                userManager.Verify(um => um.CreateAsync(It.IsNotNull<Teacher>()), Times.Once);
+                userManager.Verify(um => um.AddToRoleAsync(It.IsNotNull<Teacher>(), "Employee"), Times.Once);
+                userManager.Verify(um => um.AddToRoleAsync(It.IsNotNull<Teacher>(), "Teacher"), Times.Once);
                 mockedContext.Verify(c => c.FindAsync<School>(dto.SchoolId), Times.AtMostOnce);
                 mockedContext.Verify(c => c.FindAsync<Room>(dto.RoomId), Times.AtMostOnce);
                 mockedContext.Verify(c => c.GetNextPcn(), Times.Once);
-                Assert.Equal(1, context.Employees.Count());
+                Assert.Equal(1, context.Teachers.Count());
                 var res = Assert.IsType<CreatedAtActionResult>(result.Result);
-                var employee = Assert.IsAssignableFrom<Employee>(res.Value);
-                Assert.NotNull(employee);
+                var teacher = Assert.IsAssignableFrom<Teacher>(res.Value);
+                Assert.NotNull(teacher);
             }
         }
 
         [Fact]
-        public async Task DeleteEmployee_WithInvalidId_ShouldReturnNotFoundResult() {
+        public async Task DeleteTeacher_WithInvalidId_ShouldReturnNotFoundResult() {
             // Arrange
             using var context = new IdentityContext(_fixture.DbContextOptions);
             var userManager = _fixture.CreateUserManagerMock();
             userManager.Setup(um => um.FindByIdAsync(It.IsNotNull<string>()))
-                .ReturnsAsync((string id) => context.FindAsync<Employee>(int.Parse(id)).Result);
+                .ReturnsAsync((string id) => context.FindAsync<Teacher>(int.Parse(id)).Result);
 
             // Act
-            var sut = new EmployeesController(context, _fixture.Mapper, userManager.Object);
-            var result = await sut.DeleteEmployee(1);
+            var sut = new TeachersController(context, _fixture.Mapper, userManager.Object);
+            var result = await sut.DeleteTeacher(1);
 
             // Assert
             userManager.Verify(um => um.FindByIdAsync($"{1}"), Times.Once);
-            userManager.Verify(um => um.DeleteAsync(It.IsNotNull<Employee>()), Times.Never);
+            userManager.Verify(um => um.DeleteAsync(It.IsNotNull<Teacher>()), Times.Never);
             Assert.IsType<NotFoundResult>(result.Result);
         }
 
         [Fact]
-        public async Task DeleteEmployee_WithValidId_ShouldDeleteAndReturnEmployee() {
+        public async Task DeleteTeacher_WithValidId_ShouldDeleteAndReturnTeacher() {
             // Arrange
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
-                context.Employees.Add(new Employee { Id = 1 });
+                context.Teachers.Add(new Teacher { Id = 1 });
                 context.SaveChanges();
             }
 
             var userManager = _fixture.CreateUserManagerMock();
-            ActionResult<Employee> result;
+            ActionResult<Teacher> result;
 
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
                 userManager.Setup(um => um.FindByIdAsync(It.IsNotNull<string>()))
-                    .ReturnsAsync((string id) => context.FindAsync<Employee>(int.Parse(id)).Result);
-                userManager.Setup(um => um.DeleteAsync(It.IsNotNull<Employee>()))
+                    .ReturnsAsync((string id) => context.FindAsync<Teacher>(int.Parse(id)).Result);
+                userManager.Setup(um => um.DeleteAsync(It.IsNotNull<Teacher>()))
                     .ReturnsAsync(IdentityResult.Success)
                     .Callback<User>(u => {
                         context.Remove(u);
@@ -394,20 +402,21 @@ namespace Identity.UnitTests {
                     });
 
                 // Act
-                var sut = new EmployeesController(context, _fixture.Mapper, userManager.Object);
-                result = await sut.DeleteEmployee(1);
+                var sut = new TeachersController(context, _fixture.Mapper, userManager.Object);
+                result = await sut.DeleteTeacher(1);
             }
 
             // Assert
             using (var context = new IdentityContext(_fixture.DbContextOptions)) {
                 userManager.Verify(um => um.FindByIdAsync($"{1}"), Times.Once);
-                userManager.Verify(um => um.DeleteAsync(It.IsNotNull<Employee>()), Times.Once);
-                Assert.Empty(context.Employees);
-                var employee = Assert.IsAssignableFrom<Employee>(result.Value);
-                Assert.NotNull(employee);
-                Assert.Equal(1, employee.Id);
+                userManager.Verify(um => um.DeleteAsync(It.IsNotNull<Teacher>()), Times.Once);
+                Assert.Empty(context.Teachers);
+                var teacher = Assert.IsAssignableFrom<Teacher>(result.Value);
+                Assert.NotNull(teacher);
+                Assert.Equal(1, teacher.Id);
             }
         }
+
 
     }
 }
