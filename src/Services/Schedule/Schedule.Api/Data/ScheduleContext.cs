@@ -34,19 +34,19 @@ namespace Schedule.Api.Data
                     .WithOne(us => us.User);
             });
 
-            modelBuilder.Entity<Student>(s => {
-                s.HasKey(s => new { s.Id });
+            //modelBuilder.Entity<Student>(s => {
+            //    s.HasKey(s => new { s.Id });
 
-                s.HasMany(s => s.Enrollments)
-                    .WithOne(e => e.Student);
-            });
+            //    s.HasMany(s => s.Enrollments)
+            //        .WithOne(e => e.Student);
+            //});
 
-            modelBuilder.Entity<Teacher>(t => {
-                t.HasKey(t => new { t.Id });
+            //modelBuilder.Entity<Teacher>(t => {
+            //    t.HasKey(t => new { t.Id });
 
-                t.HasMany(t => t.Lecturers)
-                    .WithOne(l => l.Teacher);
-            });
+            //    t.HasMany(t => t.Lecturers)
+            //        .WithOne(l => l.Teacher);
+            //});
 
             modelBuilder.Entity<Enrollment>(e => {
                 e.HasKey(e => new { e.StudentId, e.ClassId, e.Semester, e.Year, e.CourseId });
