@@ -13,10 +13,10 @@ namespace Announcement.Api.Data
 
         public AnnouncementContext(DbContextOptions<AnnouncementContext> options) : base(options) { }
         
-        public DbSet<Models.Announcement> announcements{ get; set; }
-        public DbSet<Class> classes { get; set; }
-        public DbSet<ClassAnnouncement> classAnnouncements { get; set; }
-        public DbSet<Employee> employees { get; set; }
+        public DbSet<Models.Announcement> Announcements{ get; set; }
+        public DbSet<Class> Classes { get; set; }
+        public DbSet<ClassAnnouncement> ClassAnnouncements { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

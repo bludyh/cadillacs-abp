@@ -27,10 +27,6 @@ namespace Announcement.Api {
         public void ConfigureServices(IServiceCollection services) {
             services.AddDbContext<AnnouncementContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Announcement")));
 
-            // https://stackoverflow.com/questions/43224177/how-to-add-asp-net-identity-to-asp-net-core-when-webapi-template-is-selected
-            //services.AddIdentity<Employee, IdentityRole<int>>()
-            //   .AddEntityFrameworkStores<AnnouncementContext>();
-
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
@@ -44,7 +40,7 @@ namespace Announcement.Api {
 
             app.UseRouting();
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

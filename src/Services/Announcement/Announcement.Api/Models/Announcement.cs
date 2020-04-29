@@ -7,7 +7,7 @@ namespace Announcement.Api.Models
 {
     public class Announcement
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string EmployeeId { get; set; }
 

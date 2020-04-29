@@ -24,10 +24,8 @@ namespace Announcement.Api {
             if (env.IsDevelopment())
             {
                 var context = services.GetRequiredService<AnnouncementContext>();
-                var userManager = services.GetRequiredService<UserManager<Employee>>();
-                var roleManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
 
-                //host.Seed(context, userManager, roleManager);
+                //host.Seed(context);
             }
 
             host.Run();
