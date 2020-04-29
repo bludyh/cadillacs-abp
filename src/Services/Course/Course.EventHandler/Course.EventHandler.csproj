@@ -18,8 +18,4 @@
     <Folder Include="Models\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.Messaging\Infrastructure.Messaging.csproj" />
-  </ItemGroup>
-
 </Project>

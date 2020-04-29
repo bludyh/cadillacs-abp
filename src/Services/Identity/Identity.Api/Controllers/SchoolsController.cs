@@ -10,6 +10,8 @@ using Identity.Api.Models;
 using Identity.Api.Dtos;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Infrastructure.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace Identity.Api.Controllers
 {
@@ -30,7 +32,9 @@ namespace Identity.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SchoolCreateReadDto>>> GetSchools()
         {
-            return await _mapper.ProjectTo<SchoolCreateReadDto>(_context.Schools).ToListAsync();
+            // Use ToListAsyncFallback extension method from Infrastructure.Common to support IQueryable that does not implement IAsyncEnumerable
+            // https://github.com/dotnet/efcore/issues/9179#issuecomment-479863685
+            return await _mapper.ProjectTo<SchoolCreateReadDto>(_context.Schools).ToListAsyncFallback();
         }
 
         // GET: api/Schools/5
@@ -49,9 +53,6 @@ namespace Identity.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSchool(string id, SchoolUpdateDto dto)
         {
-            if (dto.Name == null)
-                return BadRequest();
-
             if (!(await _context.FindAsync<School>(id) is School school))
                 return NotFound();
 
@@ -69,10 +70,6 @@ namespace Identity.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<School>> PostSchool(SchoolCreateReadDto dto)
         {
-            if (dto.Id == null
-                || dto.Name == null)
-                return BadRequest();
-
             if (await _context.FindAsync<School>(dto.Id) != null)
                 return Conflict();
 
@@ -95,6 +92,55 @@ namespace Identity.Api.Controllers
             await _context.SaveChangesAsync();
 
             return school;
+        }
+
+        // Buildings
+
+        [HttpGet("{id}/buildings")]
+        public async Task<ActionResult<IEnumerable<BuildingDto>>> GetBuildings(string id)
+        {
+            if (!(await _context.FindAsync<School>(id) is School school))
+                return NotFound();
+
+            await _context.Entry(school)
+                .Collection(s => s.SchoolBuildings)
+                .Query()
+                .Include(sb => sb.Building)
+                .LoadAsync();
+
+            return await _mapper.ProjectTo<BuildingDto>(school.SchoolBuildings.Select(sb => sb.Building).AsQueryable()).ToListAsyncFallback();
+        }
+
+        [HttpPost("{id}/buildings")]
+        public async Task<ActionResult<SchoolBuilding>> AddBuilding(string id, [FromBody, Required] string buildingId)
+        {
+            if (!(await _context.FindAsync<School>(id) is School school))
+                return NotFound();
+
+            if (!(await _context.FindAsync<Building>(buildingId) is Building building))
+                return UnprocessableEntity();
+
+            if (await _context.FindAsync<SchoolBuilding>(id, buildingId) != null)
+                return Conflict();
+
+            var sb = new SchoolBuilding { School = school, Building = building };
+
+            await _context.AddAsync(sb);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetBuildings", new { id = sb.SchoolId }, sb);
+        }
+
+        [HttpDelete("{schoolId}/buildings/{buildingId}")]
+        public async Task<ActionResult<SchoolBuilding>> RemoveBuilding(string schoolId, string buildingId)
+        {
+            if (!(await _context.FindAsync<SchoolBuilding>(schoolId, buildingId) is SchoolBuilding sb))
+                return NotFound();
+
+            _context.Remove(sb);
+            await _context.SaveChangesAsync();
+
+            return sb;
         }
 
     }

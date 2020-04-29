@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Identity.Api.Dtos;
 using Identity.Api.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,9 @@ namespace Identity.Api.Mappings {
             CreateMap<EmployeeCreateDto, Teacher>(MemberList.Source);
             CreateMap<Room, RoomDto>();
             CreateMap<Building, BuildingDto>();
+            CreateMap<string, RoleDto>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src));
+            CreateMap<Mentor, StudentMentorReadDto>();
         }
 
     }

@@ -70,6 +70,7 @@ namespace Identity.Api.Data {
             });
 
             builder.Entity<Student>(s => {
+                s.Property(s => s.DateOfBirth).HasColumnType("date");
                 s.Property(s => s.Nationality).IsRequired();
                 s.Property(s => s.ProgramId).IsRequired();
             });

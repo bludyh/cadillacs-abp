@@ -10,6 +10,7 @@ using Identity.Api.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Identity.Api.Dtos;
+using Infrastructure.Common;
 
 namespace Identity.Api.Controllers
 {
@@ -32,7 +33,7 @@ namespace Identity.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EmployeeReadDto>>> GetTeachers()
         {
-            return await _mapper.ProjectTo<EmployeeReadDto>(_userManager.Users.OfType<Teacher>()).ToListAsync();
+            return await _mapper.ProjectTo<EmployeeReadDto>(_userManager.Users.OfType<Teacher>()).ToListAsyncFallback();
         }
 
         // GET: api/Teachers/5
@@ -61,13 +62,6 @@ namespace Identity.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTeacher(int id, EmployeeUpdateDto dto)
         {
-            if (dto.FirstName == null
-                || dto.LastName == null
-                || dto.Initials == null
-                || (dto.RoomId == null && dto.BuildingId != null)
-                || (dto.RoomId != null && dto.BuildingId == null))
-                return BadRequest();
-
             // Check if keys are valid
             if (!(await _userManager.FindByIdAsync(id.ToString()) is Teacher teacher)
                 || (dto.SchoolId != null && await _context.FindAsync<School>(dto.SchoolId) == null)
@@ -87,14 +81,6 @@ namespace Identity.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Teacher>> PostTeacher(EmployeeCreateDto dto)
         {
-            if (dto.FirstName == null
-                || dto.LastName == null
-                || dto.Initials == null
-                || dto.Email == null
-                || (dto.RoomId == null && dto.BuildingId != null)
-                || (dto.RoomId != null && dto.BuildingId == null))
-                return BadRequest();
-
             if (await _userManager.FindByEmailAsync(dto.Email) != null)
                 return Conflict();
 
