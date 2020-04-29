@@ -12,192 +12,232 @@ using Xunit;
 
 namespace Identity.UnitTests {
 
-    public class IdentityContextFixture : IDisposable {
-        public IdentityContextFixture() {
-            var options = new DbContextOptionsBuilder<IdentityContext>()
-                .UseInMemoryDatabase("schools")
-                .Options;
-            IdentityContext = new IdentityContext(options);
-            IdentityContext.AddRange(Seed());
-            IdentityContext.SaveChanges();
-        }
+    [Collection("Tests")]
+    public class SchoolsControllerTest : IDisposable {
 
-        public IdentityContext IdentityContext { get; private set; }
+        private readonly TestFixture _fixture;
 
-        public void Dispose() {
-            IdentityContext.Database.EnsureDeleted();
-        }
-
-        private List<School> Seed() {
-            return new List<School> {
-                new School { 
-                    Id = "school1",
-                    Name = "Test School 1"
-                },
-                new School { 
-                    Id = "school2",
-                    Name = "Test School 2"
-                }
-            };
-        }
-    }
-
-    public class SchoolsControllerTest : IClassFixture<IdentityContextFixture> {
-
-        private readonly IdentityContextFixture _fixture;
-
-        public SchoolsControllerTest(IdentityContextFixture fixture) {
+        // Setup
+        // Runs before each test in this test class
+        public SchoolsControllerTest(TestFixture fixture) {
             _fixture = fixture;
         }
 
-        [Fact]
-        public async Task GetSchools_WhenCalled_ReturnsAllSchools() {
-            // Arrange
-            var schoolsController = new SchoolsController(_fixture.IdentityContext);
-            var count = _fixture.IdentityContext.Schools.Count();
-
-            // Act
-            var result = await schoolsController.GetSchools();
-
-            // Assert
-            Assert.IsType<ActionResult<IEnumerable<SchoolDto>>>(result);
-            var schools = Assert.IsAssignableFrom<IEnumerable<SchoolDto>>(result.Value);
-            Assert.Equal(count, schools.Count());
+        // Cleanup
+        // Runs after each test in this test class
+        public void Dispose() {
+            using var context = new IdentityContext(_fixture.DbContextOptions);
+            context.Database.EnsureDeleted();
         }
 
         [Fact]
-        public async Task GetSchool_WithExistingId_ReturnsSchool() {
-            // Arrange
-            var schoolsController = new SchoolsController(_fixture.IdentityContext);
-            var schoolId = "school1";
+        public async Task GetSchools_ShouldReturnAllSchools() {
+            //Arrange
+            // Insert seed data into the database using one instance of the context
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                context.Schools.AddRange(new List<School> { 
+                    new School { Id = "school1" },
+                    new School { Id = "school2" }
+                });
+                context.SaveChanges();
+            }
+
+            ActionResult<IEnumerable<SchoolCreateReadDto>> result;
 
             // Act
-            var result = await schoolsController.GetSchool(schoolId);
+            // Use a clean instance of the context to run the test
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                var sut = new SchoolsController(context, _fixture.Mapper);
+                result = await sut.GetSchools();
+            }
 
             // Assert
-            Assert.IsType<ActionResult<SchoolDto>>(result);
-            var school = Assert.IsAssignableFrom<SchoolDto>(result.Value);
-            Assert.Equal(schoolId, school.Id);
+            var schools = Assert.IsAssignableFrom<IEnumerable<SchoolCreateReadDto>>(result.Value);
+            Assert.Equal(2, schools.Count());
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("test")]
-        public async Task GetSchool_WithNonExistingId_ReturnsNotFoundResult(string id) {
+        [Fact]
+        public async Task GetSchool_WithInvalidId_ShouldReturnNotFoundResult() {
             // Arrange
-            var schoolsController = new SchoolsController(_fixture.IdentityContext);
+            using var context = new IdentityContext(_fixture.DbContextOptions);
 
             // Act
-            var result = await schoolsController.GetSchool(id);
+            var sut = new SchoolsController(context, _fixture.Mapper);
+            var result = await sut.GetSchool("school1");
 
             // Assert
             Assert.IsType<NotFoundResult>(result.Result);
         }
 
         [Fact]
-        public async Task PutSchool_WithExistingId_UpdatesSchoolAndReturnsNoContentResult() {
+        public async Task GetSchool_WithValidId_ShouldReturnSchool() {
             // Arrange
-            var schoolsController = new SchoolsController(_fixture.IdentityContext);
-            var school = new SchoolDto { Id = "school1", Name = "Updated name" };
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                context.Schools.Add(new School { Id = "school1" });
+                context.SaveChanges();
+            }
+
+            ActionResult<SchoolCreateReadDto> result;
 
             // Act
-            var result = await schoolsController.PutSchool(school.Id, school);
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                var sut = new SchoolsController(context, _fixture.Mapper);
+                result = await sut.GetSchool("school1");
+            }
 
             // Assert
-            Assert.Equal(school.Name, _fixture.IdentityContext.Schools.FindAsync(school.Id).Result.Name);
-            Assert.IsType<NoContentResult>(result);
+            var school = Assert.IsAssignableFrom<SchoolCreateReadDto>(result.Value);
+            Assert.Equal("school1", school.Id);
         }
 
         [Fact]
-        public async Task PutSchool_WithMismatchedId_ReturnsBadRequestResult() {
+        public async Task PutSchool_WithInvalidInfo_ShouldReturnBadRequestResult() {
             // Arrange
-            var schoolsController = new SchoolsController(_fixture.IdentityContext);
-            var schoolId = "school1";
-            var school = new SchoolDto { Id = "school2", Name = "Updated name" };
+            using var context = new IdentityContext(_fixture.DbContextOptions);
+            var dto = new SchoolUpdateDto(); // All required fields are null, hence invalid
 
             // Act
-            var result = await schoolsController.PutSchool(schoolId, school);
+            var sut = new SchoolsController(context, _fixture.Mapper);
+            var result = await sut.PutSchool("school1", dto);
 
             // Assert
             Assert.IsType<BadRequestResult>(result);
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("test")]
-        public async Task PutSchool_WithNonExistingId_ReturnsNotFoundResult(string id) {
+        [Fact]
+        public async Task PutSchool_WithInvalidId_ShouldReturnNotFoundResult() {
             // Arrange
-            var schoolsController = new SchoolsController(_fixture.IdentityContext);
-            var school = new SchoolDto { Id = id, Name = "Updated name" };
+            using var context = new IdentityContext(_fixture.DbContextOptions);
+
+            var dto = new SchoolUpdateDto { Name = "School 1" };
 
             // Act
-            var result = await schoolsController.PutSchool(school.Id, school);
+            var sut = new SchoolsController(context, _fixture.Mapper);
+            var result = await sut.PutSchool("school1", dto);
 
             // Assert
             Assert.IsType<NotFoundResult>(result);
         }
 
         [Fact]
-        public async Task PostSchool_WithNonExistingSchool_AddSchoolAndReturnsCreatedAtActionResult() {
+        public async Task PutSchool_WithValidInfo_ShouldUpdateSchoolAndReturnNoContentResult() {
             // Arrange
-            var schoolsController = new SchoolsController(_fixture.IdentityContext);
-            var school = new SchoolDto { Id = "school3", Name = "Test school 3" };
-            var count = _fixture.IdentityContext.Schools.Count();
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                context.Schools.Add(new School { Id = "school1", Name = "School 1" });
+                context.SaveChanges();
+            }
+
+            var dto = new SchoolUpdateDto { Name = "School One" };
+            IActionResult result;
 
             // Act
-            var result = await schoolsController.PostSchool(school);
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                var sut = new SchoolsController(context, _fixture.Mapper);
+                result = await sut.PutSchool("school1", dto);
+            }
 
             // Assert
-            Assert.Equal(++count, _fixture.IdentityContext.Schools.Count());
-            Assert.Contains(_fixture.IdentityContext.Schools, s => s.Id == school.Id);
-            Assert.IsType<CreatedAtActionResult>(result.Result);
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                Assert.Equal(dto.Name, context.Schools.FindAsync("school1").Result.Name);
+                Assert.IsType<NoContentResult>(result);
+            }
         }
 
         [Fact]
-        public async Task PostSchool_WithExistingSchool_ReturnsConflictResult() {
+        public async Task PostSchool_WithInvalidInfo_ShouldReturnBadRequestResult() {
             // Arrange
-            var schoolsController = new SchoolsController(_fixture.IdentityContext);
-            var school = new SchoolDto { Id = "school1", Name = "Test school 1" };
+            using var context = new IdentityContext(_fixture.DbContextOptions);
+
+            var dto = new SchoolCreateReadDto(); // All required fields are null, hence invalid
 
             // Act
-            var result = await schoolsController.PostSchool(school);
+            var sut = new SchoolsController(context, _fixture.Mapper);
+            var result = await sut.PostSchool(dto);
 
             // Assert
-            Assert.IsType<ConflictResult>(result.Result);
+            Assert.IsType<BadRequestResult>(result.Result);
         }
 
         [Fact]
-        public async Task DeleteSchool_WithExistingId_DeletesSchoolAndReturnsSchool() {
+        public async Task PostSchool_WithExistingInfo_ShouldReturnConflictResult() {
             // Arrange
-            var schoolsController = new SchoolsController(_fixture.IdentityContext);
-            var schoolId = "school2";
-            var count = _fixture.IdentityContext.Schools.Count();
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                context.Schools.Add(new School { Id = "school1" });
+                context.SaveChanges();
+            }
+
+            var dto = new SchoolCreateReadDto { Id = "school1", Name = "School One" };
+            ActionResult<School> result;
 
             // Act
-            var result = await schoolsController.DeleteSchool(schoolId);
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                var sut = new SchoolsController(context, _fixture.Mapper);
+                result = await sut.PostSchool(dto);
+            }
 
             // Assert
-            Assert.Equal(--count, _fixture.IdentityContext.Schools.Count());
-            Assert.DoesNotContain(_fixture.IdentityContext.Schools, s => s.Id == schoolId);
-            var school = Assert.IsAssignableFrom<School>(result.Value);
-            Assert.Equal(schoolId, school.Id);
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                Assert.IsType<ConflictResult>(result.Result);
+                Assert.Equal(1, context.Schools.Count());
+            }
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("test")]
-        public async Task DeleteSchool_WithNonExistingId_ReturnsNotFoundResult(string id) {
+        [Fact]
+        public async Task PostSchool_WithValidInfo_ShouldAddSchoolAndReturnCreatedAtActionResult() {
             // Arrange
-            var schoolsController = new SchoolsController(_fixture.IdentityContext);
+            var dto = new SchoolCreateReadDto { Id = "school1" , Name = "School One"};
+            ActionResult<School> result;
 
             // Act
-            var result = await schoolsController.DeleteSchool(id);
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                var sut = new SchoolsController(context, _fixture.Mapper);
+                result = await sut.PostSchool(dto);
+            }
+
+            // Assert
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                Assert.Equal(1, context.Schools.Count());
+                Assert.Contains(context.Schools, s => s.Id == dto.Id);
+                Assert.IsType<CreatedAtActionResult>(result.Result);
+            }
+        }
+
+        [Fact]
+        public async Task DeleteSchool_WithInvalidId_ShouldReturnNotFoundResult() {
+            // Arrange
+            using var context = new IdentityContext(_fixture.DbContextOptions);
+
+            // Act
+            var sut = new SchoolsController(context, _fixture.Mapper);
+            var result = await sut.DeleteSchool("school1");
 
             // Assert
             Assert.IsType<NotFoundResult>(result.Result);
+        }
+
+        [Fact]
+        public async Task DeleteSchool_WithValidId_ShouldDeleteAndReturnSchool() {
+            // Arrange
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                context.Schools.Add(new School { Id = "school1" });
+                context.SaveChanges();
+            }
+
+            ActionResult<School> result;
+
+            // Act
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                var sut = new SchoolsController(context, _fixture.Mapper);
+                result = await sut.DeleteSchool("school1");
+            }
+
+            // Assert
+            using (var context = new IdentityContext(_fixture.DbContextOptions)) {
+                Assert.Equal(0, context.Schools.Count());
+                Assert.DoesNotContain(context.Schools, s => s.Id == "school1");
+                var school = Assert.IsAssignableFrom<School>(result.Value);
+                Assert.Equal("school1", school.Id);
+            }
         }
 
     }

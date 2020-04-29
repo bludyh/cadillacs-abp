@@ -23,8 +23,5 @@ namespace Identity.Api.Models {
 
         // PasswordHash is inherited from IdentityUser
 
-        public string SchoolId { get; set; }
-        public School School { get; set; }
-
     }
 }
