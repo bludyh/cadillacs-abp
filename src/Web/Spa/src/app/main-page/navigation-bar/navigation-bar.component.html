@@ -1,1 +1,33 @@
-<p>navigation-bar works!</p>
+<nav class="navbar navbar-expand-lg navbar-light p-0 fontys-color">
+      
+    <a class="navbar-brand p-0" href="#">
+        <img src="https://i.imgur.com/YTrxPs4.png" width="120" height="80" alt="">
+    </a>     
+
+      <ul class="navbar-nav mr-auto w-100">    
+        <div class="active-purple-4 w-100">
+          <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+        </div>
+      </ul>     
+     
+
+        <ul class="navbar-nav navbar-right">                    
+            <li class="nav-item ">                   
+                <a class="nav-link dropdown-toggle dropdown-menu-right text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{getUserName()}}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#"  routerLink = "/profile" >Profile</a>
+                  <a class="dropdown-item" href="#"  routerLink = "/settings">Settings</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#"  routerLink = "/logout">Logout</a>
+                </div>                                     
+              </li>                 
+          </ul>
+          
+      <!-- <div class = "nav-item navbar-right " >
+        <img src="https://slyt.co.uk/wp-content/uploads/2018/12/temporary-profile-pic.jpg" id="profilePicture">
+      </div>   -->
+
+  </nav>
+
