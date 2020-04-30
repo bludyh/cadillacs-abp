@@ -17,8 +17,14 @@ namespace Announcement.Api {
         public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            var context = services.GetRequiredService<AnnouncementContext>();
 
             CreateDbIfNotExists(host);
+
+            host.Seed(context);
+
 
             host.Run();
         }
@@ -32,6 +38,7 @@ namespace Announcement.Api {
                 try
                 {
                     var context = services.GetRequiredService<AnnouncementContext>();
+                    context.Database.EnsureDeleted();
                     context.Database.EnsureCreated();
                 }
                 catch (Exception ex)
