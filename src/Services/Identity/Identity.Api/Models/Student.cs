@@ -10,7 +10,7 @@ namespace Identity.Api.Models {
         public DateTime DateOfBirth { get; set; }
         public string Nationality { get; set; }
         public string StreetName { get; set; }
-        public int HouseNumber { get; set; }
+        public int? HouseNumber { get; set; }
         public string PostalCode { get; set; }
         public string City { get; set; }
         public string Country { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Identity.Api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 namespace Identity.Api.Data {
     public class IdentityContext : IdentityDbContext<User, IdentityRole<int>, int> {
 
+        public IdentityContext() { }
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) { }
 
         public DbSet<School> Schools { get; set; }
@@ -32,6 +34,14 @@ namespace Identity.Api.Data {
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
 
+            builder.HasSequence<int>("UserId", "dbo")
+                .StartsAt(1000000)
+                .IncrementsBy(1);
+
+            builder.HasSequence<int>("Pcn", "dbo")
+                .StartsAt(100000)
+                .IncrementsBy(1);
+
             builder.Entity<School>(s => {
                 s.Property(s => s.Name).IsRequired();
             });
@@ -50,14 +60,19 @@ namespace Identity.Api.Data {
             });
 
             builder.Entity<User>(u => {
-                u.Property(u => u.UserName).IsRequired();
+                u.Property(u => u.Id).HasDefaultValueSql("next value for dbo.UserId");
                 u.Property(u => u.FirstName).IsRequired();
                 u.Property(u => u.LastName).IsRequired();
                 u.Property(u => u.Initials).IsRequired();
-                u.Property(u => u.Email).IsRequired();
                 u.Property(u => u.AccountStatus)
-                    .HasConversion(new EnumToStringConverter<AccountStatus>());
-                u.Property(u => u.SchoolId).IsRequired();
+                    .HasConversion(new EnumToStringConverter<AccountStatus>())
+                    .HasDefaultValue(AccountStatus.INACTIVE);
+            });
+
+            builder.Entity<Student>(s => {
+                s.Property(s => s.DateOfBirth).HasColumnType("date");
+                s.Property(s => s.Nationality).IsRequired();
+                s.Property(s => s.ProgramId).IsRequired();
             });
 
             builder.Entity<Employee>(e => { 
@@ -85,6 +100,17 @@ namespace Identity.Api.Data {
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
+        }
+
+        public virtual async Task<string> GetNextPcn() {
+            var result = new SqlParameter { 
+                SqlDbType = System.Data.SqlDbType.Int,
+                Direction = System.Data.ParameterDirection.Output
+            };
+
+            await Database.ExecuteSqlInterpolatedAsync($"set {result} = next value for dbo.Pcn");
+
+            return result.Value.ToString();
         }
 
     }
