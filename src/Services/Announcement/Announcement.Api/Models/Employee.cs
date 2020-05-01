@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace StudyProgress.Api.Models
+namespace Announcement.Api.Models
 {
-    public class Student
+    public class Employee
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
+
         public string FirstName { get; set; }
+
         public string LastName { get; set; }
+
         public string Initials { get; set; }
 
-        public List<Enrollment> Enrollments { get; set; }
+        public List<Announcement> Announcements { get; set; }
+
+
     }
 }

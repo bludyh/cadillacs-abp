@@ -18,34 +18,14 @@ namespace StudyProgress.Api {
             using var scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
             var env = services.GetRequiredService<IWebHostEnvironment>();
+
             if (env.IsDevelopment())
             {
-                CreateDb(host);
-
-                // TODO: Add Seed.
+                var context = services.GetRequiredService<StudyProgressContext>();
+                host.Seed(context);
             }
 
             host.Run();
-        }
-
-        private static void CreateDb(IHost host)
-        {
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-
-                try
-                {
-                    var context = services.GetRequiredService<StudyProgressContext>();
-                    context.Database.EnsureDeleted();
-                    context.Database.EnsureCreated();
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred creating the DB.");
-                }
-            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
