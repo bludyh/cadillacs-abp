@@ -3,6 +3,7 @@ using StudyProgress.Api.Dtos;
 using StudyProgress.Api.Services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,7 @@ namespace StudyProgress.Api.Controllers
             _programService = programService;
         }
 
+        #region Programs
         // GET: api/Programs
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProgramReadDto>>> GetPrograms()
@@ -57,5 +59,31 @@ namespace StudyProgress.Api.Controllers
         {
             return await _programService.DeleteAsync(id);
         }
+        #endregion
+
+        #region Courses
+        // GET: api/Programs/5/Courses
+        [HttpGet("{id}/courses")]
+        public async Task<ActionResult<IEnumerable<CourseReadDto>>> GetCourses(int id)
+        {
+            return await _programService.GetCoursesAsync(id);
+        }
+
+        // POST: api/Programs/5/Courses
+        [HttpPost("{id}/courses")]
+        public async Task<ActionResult<CourseReadDto>> AddCourse(int id, [FromBody, Required] int courseId)
+        {
+            var course = await _programService.AddCourseAsync(id, courseId);
+
+            return CreatedAtAction(nameof(GetCourses), new { id }, course);
+        }
+
+        // DELETE: api/Programs/5/Courses/5
+        [HttpDelete("{id}/courses/{courseId}")]
+        public async Task<ActionResult<CourseReadDto>> RemoveProgram(int id, int courseId)
+        {
+            return await _programService.RemoveCourseAsync(id, courseId);
+        }
+        #endregion
     }
 }
