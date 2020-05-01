@@ -46,6 +46,7 @@ namespace Identity.Api {
 
             // Add Services
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IStudentService, StudentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

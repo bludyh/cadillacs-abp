@@ -1,7 +1,6 @@
 ﻿using Infrastructure.Common.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +23,7 @@ namespace Infrastructure.Common.Services
         {
             if (!(await _context.FindAsync<TEntity>(keyValues) is TEntity entity))
                 throw new HttpResponseException(
-                    message: $"{typeof(TEntity).Name} '{JsonConvert.SerializeObject(keyValues)}' does not exist.",
+                    message: $"{typeof(TEntity).Name} does not exist.",
                     status: StatusCodes.Status404NotFound);
 
             return entity;
@@ -34,7 +33,7 @@ namespace Infrastructure.Common.Services
         {
             if (await _context.FindAsync<TEntity>(keyValues) is TEntity)
                 throw new HttpResponseException(
-                    message: $"{typeof(TEntity).Name} '{JsonConvert.SerializeObject(keyValues)}' already exists.",
+                    message: $"{typeof(TEntity).Name} already exists.",
                     status: StatusCodes.Status409Conflict);
         }
 
@@ -42,7 +41,7 @@ namespace Infrastructure.Common.Services
         {
             if (keyValues.All(kv => kv != null) && !(await _context.FindAsync<TEntity>(keyValues) is TEntity))
                 throw new HttpResponseException(
-                    message: $"Foreign key constraint is violated: {typeof(TEntity).Name} '{JsonConvert.SerializeObject(keyValues)}'.",
+                    message: $"Foreign key constraint is violated: {typeof(TEntity).Name}.",
                     status: StatusCodes.Status422UnprocessableEntity);
         }
 

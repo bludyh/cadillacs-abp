@@ -83,7 +83,7 @@ namespace Identity.Api.Services
         public async Task<EmployeeReadDto> CreateAsync(EmployeeCreateDto dto)
         {
             Validate(
-                condition: await _userManager.FindByEmailAsync(dto.Email) is Employee,
+                condition: await _userManager.FindByEmailAsync(dto.Email) != null,
                 message: $"Employee with email '{dto.Email}' already exists.",
                 status: StatusCodes.Status409Conflict);
 
@@ -96,6 +96,16 @@ namespace Identity.Api.Services
 
             await _userManager.CreateAsync(employee);
             await _userManager.AddToRoleAsync(employee, "Employee");
+
+            await _context.Entry(employee)
+                .Reference(e => e.School)
+                .LoadAsync();
+
+            await _context.Entry(employee)
+                .Reference(e => e.Room)
+                .Query()
+                .Include(r => r.Building)
+                .LoadAsync();
 
             return _mapper.Map<EmployeeReadDto>(employee);
         }
@@ -134,7 +144,7 @@ namespace Identity.Api.Services
             var role = await _roleManager.FindByNameAsync(roleName);
             Validate(
                 condition: !(role is IdentityRole<int>),
-                message: $"Role '{roleName}' does not exist.",
+                message: $"Role '{roleName}' is not valid.",
                 status: StatusCodes.Status422UnprocessableEntity);
 
             Validate(
@@ -154,8 +164,8 @@ namespace Identity.Api.Services
             var role = await _roleManager.FindByNameAsync(roleName);
             Validate(
                 condition: !(role is IdentityRole<int>),
-                message: $"Role '{roleName}' does not exist.",
-                status: StatusCodes.Status404NotFound);
+                message: $"Role '{roleName}' is not valid.",
+                status: StatusCodes.Status422UnprocessableEntity);
 
             Validate(
                 condition: !await _userManager.IsInRoleAsync(employee, roleName),
