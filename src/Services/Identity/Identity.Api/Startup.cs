@@ -45,8 +45,9 @@ namespace Identity.Api {
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             // Add Services
-            services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IEmployeeService, EmployeeService<Employee>>();
             services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<ITeacherService, TeacherService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
