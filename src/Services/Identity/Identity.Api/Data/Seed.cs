@@ -14,6 +14,7 @@ namespace Identity.Api.Data {
         public static IHost Seed(this IHost host, IdentityContext context, UserManager<User> userManager,
             RoleManager<IdentityRole<int>> roleManager) {
 
+            context.Database.EnsureDeleted();
             if (!context.Database.EnsureCreated()) return host;
 
             var faker = new Faker("nl");
