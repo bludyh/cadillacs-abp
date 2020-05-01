@@ -3,13 +3,10 @@ using Identity.Api.Data;
 using Identity.Api.Dtos;
 using Identity.Api.Models;
 using Infrastructure.Common;
-using Infrastructure.Common.Exceptions;
 using Infrastructure.Common.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -207,6 +204,10 @@ namespace Identity.Api.Services
 
         public async Task<ProgramDto> RemoveProgramAsync(int employeeId, string programId)
         {
+            await ValidateExistenceAsync<Employee>(employeeId);
+
+            await ValidateForeignKeyAsync<Models.Program>(programId);
+
             var ep = await _context.FindAsync<EmployeeProgram>(employeeId, programId);
             Validate(
                 condition: !(ep is EmployeeProgram),
