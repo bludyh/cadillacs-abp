@@ -6,6 +6,8 @@ using AutoMapper;
 using Identity.Api.Data;
 using Identity.Api.Mappings;
 using Identity.Api.Models;
+using Identity.Api.Services;
+using Infrastructure.Common.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,8 +41,11 @@ namespace Identity.Api {
             // Add AutoMapper
             services.AddAutoMapper(typeof(MappingProfile));
 
-            services.AddControllers()
+            services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            // Add Services
+            services.AddScoped<IEmployeeService, EmployeeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
