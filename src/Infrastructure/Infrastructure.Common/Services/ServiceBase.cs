@@ -37,12 +37,20 @@ namespace Infrastructure.Common.Services
                     status: StatusCodes.Status409Conflict);
         }
 
-        protected async Task ValidateForeignKeyAsync<TEntity>(params object[] keyValues) where TEntity : class
+        protected async Task<TEntity> ValidateForeignKeyAsync<TEntity>(params object[] keyValues) where TEntity : class
         {
-            if (keyValues.All(kv => kv != null) && !(await _context.FindAsync<TEntity>(keyValues) is TEntity))
-                throw new HttpResponseException(
-                    message: $"Foreign key constraint is violated: {typeof(TEntity).Name}.",
-                    status: StatusCodes.Status422UnprocessableEntity);
+            TEntity entity = null;
+            if (keyValues.All(kv => kv != null))
+            {
+                entity = await _context.FindAsync<TEntity>(keyValues); 
+
+                if (!(entity is TEntity))
+                    throw new HttpResponseException(
+                        message: $"Foreign key constraint is violated: {typeof(TEntity).Name}.",
+                        status: StatusCodes.Status422UnprocessableEntity);
+            }
+
+            return entity;
         }
 
         protected void Validate(bool condition, string message = null, int status = 500)
