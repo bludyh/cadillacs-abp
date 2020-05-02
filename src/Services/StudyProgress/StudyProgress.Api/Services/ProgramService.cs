@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Infrastructure.Common;
 using Infrastructure.Common.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using StudyProgress.Api.Data;
 using StudyProgress.Api.Dtos;
 using StudyProgress.Api.Models;
@@ -19,7 +21,9 @@ namespace StudyProgress.Api.Services
         public Task<ProgramReadDto> CreateAsync(ProgramCreateDto dto);
         public Task<ProgramReadDto> DeleteAsync(int programId);
 
-        //courses
+        public Task<List<CourseReadDto>> GetCoursesAsync(int programId);
+        public Task<CourseReadDto> AddCourseAsync(int programId, int courseId);
+        public Task<CourseReadDto> RemoveCourseAsync(int programId, int courseId);
     }
 
     public class ProgramService : ServiceBase, IProgramService
@@ -31,6 +35,7 @@ namespace StudyProgress.Api.Services
             _mapper = mapper;
         }
 
+        #region Programs
         public async Task<List<ProgramReadDto>> GetAllAsync()
         {
             return await _mapper.ProjectTo<ProgramReadDto>(_context.Set<Models.Program>()).ToListAsyncFallback();
@@ -59,12 +64,12 @@ namespace StudyProgress.Api.Services
 
         public async Task<ProgramReadDto> CreateAsync(ProgramCreateDto dto)
         {
-            // Unsure if correct
-            await ValidateExistenceAsync<Models.Program>(dto.Name);
-
             await ValidateForeignKeyAsync<School>(dto.SchoolId);
 
             var program = _mapper.Map<Models.Program>(dto);
+
+            await _context.AddAsync(program);
+            await _context.SaveChangesAsync();
 
             return _mapper.Map<ProgramReadDto>(program);
         }
@@ -82,5 +87,63 @@ namespace StudyProgress.Api.Services
 
             return _mapper.Map<ProgramReadDto>(program);
         }
+        #endregion
+
+        #region Courses
+        public async Task<List<CourseReadDto>> GetCoursesAsync(int programId)
+        {
+            var program = await ValidateExistenceAsync<Models.Program>(programId);
+
+            await _context.Entry(program)
+                .Collection(p => p.ProgramCourses)
+                .Query()
+                .Include(pc => pc.Course)
+                .LoadAsync();
+
+            return await _mapper.ProjectTo<CourseReadDto>(
+                    program.ProgramCourses
+                    .Select(pc => pc.Course)
+                    .AsQueryable())
+                .ToListAsyncFallback();
+        }
+
+        public async Task<CourseReadDto> AddCourseAsync(int programId, int courseId)
+        {
+            await ValidateExistenceAsync<Models.Program>(programId);
+
+            await ValidateForeignKeyAsync<Course>(courseId);
+
+            await ValidateDuplicationAsync<ProgramCourse>(programId, courseId);
+
+            var pc = new ProgramCourse { ProgramId = programId, CourseId = courseId };
+
+            await _context.AddAsync(pc);
+            await _context.SaveChangesAsync();
+
+            var course = await _context.FindAsync<Course>(courseId);
+
+            return _mapper.Map<CourseReadDto>(course);
+        }
+
+        public async Task<CourseReadDto> RemoveCourseAsync(int programId, int courseId)
+        {
+            await ValidateExistenceAsync<Models.Program>(programId);
+
+            await ValidateForeignKeyAsync<Course>(courseId);
+
+            var pc = await _context.FindAsync<ProgramCourse>(programId, courseId);
+            Validate(
+                condition: !(pc is ProgramCourse),
+                message: $"Course '{courseId}' is not in Program '{programId}'.",
+                status: StatusCodes.Status404NotFound);
+
+            _context.Remove(pc);
+            await _context.SaveChangesAsync();
+
+            var course = await _context.FindAsync<Course>(courseId);
+
+            return _mapper.Map<CourseReadDto>(course);
+        }
+        #endregion
     }
 }
