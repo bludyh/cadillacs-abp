@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using StudyProgress.Api.Dtos;
+using StudyProgress.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace StudyProgress.Api.Mappings
             CreateMap<ProgramUpdateDto, Models.Program>(MemberList.Source);
             CreateMap<ProgramCreateDto, Models.Program>(MemberList.Source);
 
-
+            CreateMap<Course, CourseReadDto>();
         }
     }
 }
