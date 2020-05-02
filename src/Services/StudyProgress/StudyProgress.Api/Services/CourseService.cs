@@ -24,6 +24,10 @@ namespace StudyProgress.Api.Services
         public Task<List<ProgramReadDto>> GetProgramsAsync(int courseId);
         public Task<ProgramReadDto> AddProgramAsync(int courseId, int programId);
         public Task<ProgramReadDto> RemoveProgramAsync(int courseId, int programId);
+
+        public Task<List<CourseReadDto>> GetRequirementsAsync(int courseId);
+        public Task<CourseReadDto> AddRequirementAsync(int courseId, int requiredCourseId);
+        public Task<CourseReadDto> RemoveRequirementAsync(int courseId, int requiredCourseId);
     }
     public class CourseService : ServiceBase, ICourseService
     {
@@ -132,6 +136,63 @@ namespace StudyProgress.Api.Services
             var program = await _context.FindAsync<Models.Program>(programId);
 
             return _mapper.Map<ProgramReadDto>(program);
+        }
+        #endregion
+
+        #region Requirements
+        public async Task<List<CourseReadDto>> GetRequirementsAsync(int courseId)
+        {
+            var course = await ValidateExistenceAsync<Course>(courseId);
+
+            await _context.Entry(course)
+                .Collection(c => c.Requirements)
+                .Query()
+                .Include(r => r.RequiredCourse)
+                .LoadAsync();
+
+            return await _mapper.ProjectTo<CourseReadDto>(
+                    course.Requirements
+                    .Select(r => r.RequiredCourse)
+                    .AsQueryable())
+                .ToListAsyncFallback();
+        }
+
+        public async Task<CourseReadDto> AddRequirementAsync(int courseId, int requiredCourseId)
+        {
+            await ValidateExistenceAsync<Course>(courseId);
+
+            await ValidateForeignKeyAsync<Course>(requiredCourseId);
+
+            await ValidateDuplicationAsync<Requirement>(courseId, requiredCourseId);
+
+            var r = new Requirement { CourseId = courseId, RequiredCourseId = requiredCourseId };
+
+            await _context.AddAsync(r);
+            await _context.SaveChangesAsync();
+
+            var requiredCourse = await _context.FindAsync<Course>(requiredCourseId);
+
+            return _mapper.Map<CourseReadDto>(requiredCourse);
+        }
+
+        public async Task<CourseReadDto> RemoveRequirementAsync(int courseId, int requiredCourseId)
+        {
+            await ValidateExistenceAsync<Course>(courseId);
+
+            await ValidateForeignKeyAsync<Course>(requiredCourseId);
+
+            var r = await _context.FindAsync<Requirement>(courseId, requiredCourseId);
+            Validate(
+                condition: !(r is Requirement),
+                message: $"Course '{courseId}' does not have a requirement for Required Course '{requiredCourseId}'.",
+                status: StatusCodes.Status404NotFound);
+
+            _context.Remove(r);
+            await _context.SaveChangesAsync();
+
+            var requiredCourse = await _context.FindAsync<Course>(requiredCourseId);
+
+            return _mapper.Map<CourseReadDto>(requiredCourse);
         }
         #endregion
     }

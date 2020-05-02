@@ -26,9 +26,9 @@ namespace StudyProgress.Api.Data
 
             modelBuilder.Entity<Requirement>(r => {
                 r.HasKey(r => new { r.CourseId, r.RequiredCourseId });
-                r.HasOne(r => r.RequiredCourse)
+                r.HasOne(r => r.Course)
                 .WithMany(c => c.Requirements)
-                .HasForeignKey(r => r.RequiredCourseId)
+                .HasForeignKey(r => r.CourseId)
                 .OnDelete(DeleteBehavior.Restrict);
             });
 

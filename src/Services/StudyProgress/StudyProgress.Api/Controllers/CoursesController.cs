@@ -85,5 +85,30 @@ namespace StudyProgress.Api.Controllers
             return await _courseService.RemoveProgramAsync(id, programId);
         }
         #endregion
+
+        #region Requirements
+        // GET: api/Courses/5/Requirements
+        [HttpGet("{id}/requirements")]
+        public async Task<ActionResult<IEnumerable<CourseReadDto>>> GetRequirements(int id)
+        {
+            return await _courseService.GetRequirementsAsync(id);
+        }
+
+        // POST: api/Courses/5/Requirements
+        [HttpPost("{id}/requirements")]
+        public async Task<ActionResult<CourseReadDto>> AddRequirement(int id, [FromBody, Required] int requiredCourseId)
+        {
+            var requiredCourse = await _courseService.AddRequirementAsync(id, requiredCourseId);
+
+            return CreatedAtAction(nameof(GetRequirements), new { id }, requiredCourse);
+        }
+
+        // DELETE: api/Courses/5/Requirements/5
+        [HttpDelete("{id}/requirements/{requiredCourseId}")]
+        public async Task<ActionResult<CourseReadDto>> RemoveRequirement(int id, int requiredCourseId)
+        {
+            return await _courseService.RemoveRequirementAsync(id, requiredCourseId);
+        }
+        #endregion
     }
 }
