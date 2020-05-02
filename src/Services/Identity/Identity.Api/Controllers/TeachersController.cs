@@ -70,6 +70,8 @@ namespace Identity.Api.Controllers
             return await _teacherService.DeleteAsync(id);
         }
 
+        // Roles
+
         [HttpGet("{id}/roles")]
         public async Task<ActionResult<IEnumerable<RoleDto>>> GetRoles(int id)
         {
