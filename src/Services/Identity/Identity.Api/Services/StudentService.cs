@@ -58,7 +58,7 @@ namespace Identity.Api.Services
 
             await ValidateDuplicationAsync<Mentor>(dto.TeacherId, studentId, mentorType);
 
-            var mentor = new Mentor { TeacherId = dto.TeacherId, StudentId = studentId, MentorType = mentorType };
+            var mentor = new Mentor { TeacherId = dto.TeacherId.Value, StudentId = studentId, MentorType = mentorType };
 
             await _context.AddAsync(mentor);
             await _context.SaveChangesAsync();

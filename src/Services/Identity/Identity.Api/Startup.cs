@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Identity.Api.Data;
 using Identity.Api.Mappings;
@@ -10,15 +6,11 @@ using Identity.Api.Services;
 using Infrastructure.Common.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Identity.Api {
     public class Startup {
@@ -45,8 +37,12 @@ namespace Identity.Api {
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             // Add Services
-            services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IEmployeeService, EmployeeService<Employee>>();
             services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<ITeacherService, TeacherService>();
+            services.AddScoped<ISchoolService, SchoolService>();
+            services.AddScoped<IBuildingService, BuildingService>();
+            services.AddScoped<IProgramService, ProgramService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

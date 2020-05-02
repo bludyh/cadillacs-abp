@@ -1,5 +1,4 @@
-﻿using Identity.Api.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Identity.Api.Dtos
 {
-    public class StudentMentorCreateDto
+    public class TeacherMentorCreateDto
     {
 
         [Required]
-        public int? TeacherId { get; set; }
+        public int? StudentId { get; set; }
 
         [Required]
         public string MentorType { get; set; }

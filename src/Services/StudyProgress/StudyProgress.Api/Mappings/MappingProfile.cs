@@ -16,10 +16,14 @@ namespace StudyProgress.Api.Mappings
             CreateMap<ProgramUpdateDto, Models.Program>(MemberList.Source);
             CreateMap<ProgramCreateDto, Models.Program>(MemberList.Source);
 
+
             CreateMap<Enrollment, StudentEnrollmentReadDto>();
                 //.ForMember(dest => dest.Pcn, opt => opt.MapFrom(src => src.UserName));
             //CreateMap<EmployeeUpdateDto, Student>(MemberList.Source);
             //CreateMap<EmployeeCreateDto, Student>(MemberList.Source);
+
+
+            CreateMap<Course, CourseReadDto>();
 
         }
     }

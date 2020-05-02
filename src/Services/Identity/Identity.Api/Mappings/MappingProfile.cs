@@ -24,11 +24,6 @@ namespace Identity.Api.Mappings {
             CreateMap<EmployeeUpdateDto, Employee>(MemberList.Source);
             CreateMap<EmployeeCreateDto, Employee>(MemberList.Source);
 
-            CreateMap<Teacher, EmployeeReadDto>()
-                .ForMember(dest => dest.Pcn, opt => opt.MapFrom(src => src.UserName));
-            CreateMap<EmployeeUpdateDto, Teacher>(MemberList.Source);
-            CreateMap<EmployeeCreateDto, Teacher>(MemberList.Source);
-
             CreateMap<Models.Program, ProgramDto>();
 
             CreateMap<Room, RoomDto>();
@@ -40,6 +35,7 @@ namespace Identity.Api.Mappings {
             CreateMap<IdentityRole<int>, RoleDto>();
 
             CreateMap<Mentor, StudentMentorReadDto>();
+            CreateMap<Mentor, TeacherMentorReadDto>();
         }
 
     }
