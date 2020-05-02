@@ -18,8 +18,7 @@ namespace StudyProgress.Api.Mappings
 
 
             CreateMap<Enrollment, StudentEnrollmentReadDto>();
-                //.ForMember(dest => dest.Pcn, opt => opt.MapFrom(src => src.UserName));
-            //CreateMap<EmployeeUpdateDto, Student>(MemberList.Source);
+            CreateMap<StudentEnrollmentCreateDto, Enrollment>(MemberList.Source);
             //CreateMap<EmployeeCreateDto, Student>(MemberList.Source);
 
 

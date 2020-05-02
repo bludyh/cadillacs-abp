@@ -45,9 +45,38 @@ namespace StudyProgress.Api.Services
             return await _mapper.ProjectTo<StudentEnrollmentReadDto>(student.Enrollments.AsQueryable()).ToListAsyncFallback();
         }
 
-        public Task<StudentEnrollmentReadDto> AddEnrollmentAsync(int studentId, StudentEnrollmentCreateDto dto)
+        public async Task<StudentEnrollmentReadDto> AddEnrollmentAsync(int studentId, StudentEnrollmentCreateDto dto)
         {
-            throw new NotImplementedException();
+            //Validations
+            var student = await ValidateExistenceAsync<Student>(studentId);
+            var inputClass = await ValidateForeignKeyAsync<Class>(dto.ClassId, dto.ClassSemester, dto.ClassYear, dto.ClassCourseId);
+
+            await ValidateDuplicationAsync<Enrollment>(studentId, dto.ClassId, dto.ClassSemester, dto.ClassYear, dto.ClassCourseId);
+
+            //var enrollment = new Enrollment()
+            //                    {
+            //                        StudentId = studentId,
+            //                        ClassId = dto.ClassId,
+            //                        ClassSemester = (int) dto.ClassSemester,
+            //                        ClassYear = (int) dto.ClassYear,
+            //                        ClassCourseId = (int) dto.ClassCourseId
+            //                    };
+
+            //Create the new object
+            var enrollment = _mapper.Map<Enrollment>(dto);
+            enrollment.StudentId = studentId;
+
+            //Add the new obj to the db
+            await _context.AddAsync(enrollment);
+            await _context.SaveChangesAsync();
+
+            //Links the relevant properties and subclasses
+            await _context.Entry(enrollment).Reference(e => e.Student).LoadAsync();
+            await _context.Entry(enrollment).Reference(e => e.Class).Query().Include(c => c.Course).LoadAsync();
+
+
+            //Returns the readDto
+            return _mapper.Map<StudentEnrollmentReadDto>(enrollment);
         }
     }
 }

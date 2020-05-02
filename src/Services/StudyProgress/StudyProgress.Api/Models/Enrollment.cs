@@ -7,7 +7,7 @@ namespace StudyProgress.Api.Models
 {
     public class Enrollment
     {
-        public string StudentId { get; set; }
+        public int StudentId { get; set; }
         public Student Student { get; set; }
 
         public string ClassId { get; set; }

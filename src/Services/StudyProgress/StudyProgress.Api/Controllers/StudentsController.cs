@@ -29,13 +29,13 @@ namespace StudyProgress.Api.Controllers
             return await _studentService.GetEnrollmentsAsync(id);
         }
 
-        //[HttpPost("{id}/enrollments")]
-        //public async Task<ActionResult<StudentMentorReadDto>> AddMentor(int id, StudentMentorCreateDto dto)
-        //{
-        //    var mentor = await _studentService.AddEnrollmentAsync(id, dto);
+        [HttpPost("{id}/enrollments")]
+        public async Task<ActionResult<StudentEnrollmentReadDto>> AddEnrollment(int id, StudentEnrollmentCreateDto dto)
+        {
+            var enrollment = await _studentService.AddEnrollmentAsync(id, dto);
 
-        //    return CreatedAtAction(nameof(GetMentors), new { id }, mentor);
-        //}
+            return CreatedAtAction(nameof(GetEnrollments), new { id }, enrollment);
+        }
 
         //[HttpDelete("{id}/enrollments")]
         //public async Task<ActionResult<StudentMentorReadDto>> RemoveMentor(int id, [FromQuery, Required] int teacherId, [FromQuery, Required] string mentorType)
