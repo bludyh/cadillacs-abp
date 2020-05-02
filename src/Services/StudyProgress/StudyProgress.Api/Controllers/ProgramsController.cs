@@ -80,7 +80,7 @@ namespace StudyProgress.Api.Controllers
 
         // DELETE: api/Programs/5/Courses/5
         [HttpDelete("{id}/courses/{courseId}")]
-        public async Task<ActionResult<CourseReadDto>> RemoveProgram(int id, int courseId)
+        public async Task<ActionResult<CourseReadDto>> RemoveCourse(int id, int courseId)
         {
             return await _programService.RemoveCourseAsync(id, courseId);
         }

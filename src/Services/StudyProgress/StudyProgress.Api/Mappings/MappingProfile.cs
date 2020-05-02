@@ -17,6 +17,7 @@ namespace StudyProgress.Api.Mappings
             CreateMap<ProgramCreateDto, Models.Program>(MemberList.Source);
 
             CreateMap<Course, CourseReadDto>();
+            CreateMap<CourseCreateUpdateDto, Course>(MemberList.Source);
         }
     }
 }
