@@ -30,14 +30,14 @@ namespace StudyProgress.Api.Controllers
 
         // GET: api/Courses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CourseReadDto>> GetCourse(int id)
+        public async Task<ActionResult<CourseReadDto>> GetCourse(string id)
         {
             return await _courseService.GetAsync(id);
         }
 
         // PUT: api/Courses/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutCourse(int id, CourseCreateUpdateDto dto)
+        public async Task<ActionResult> PutCourse(string id, CourseCreateUpdateDto dto)
         {
             await _courseService.UpdateAsync(id, dto);
 
@@ -55,7 +55,7 @@ namespace StudyProgress.Api.Controllers
 
         // DELETE: api/Courses/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<CourseReadDto>> DeleteCourse(int id)
+        public async Task<ActionResult<CourseReadDto>> DeleteCourse(string id)
         {
             return await _courseService.DeleteAsync(id);
         }
@@ -64,14 +64,14 @@ namespace StudyProgress.Api.Controllers
         #region Programs
         // GET: api/Courses/5/Programs
         [HttpGet("{id}/programs")]
-        public async Task<ActionResult<IEnumerable<ProgramReadDto>>> GetPrograms(int id)
+        public async Task<ActionResult<IEnumerable<ProgramReadDto>>> GetPrograms(string id)
         {
             return await _courseService.GetProgramsAsync(id);
         }
 
         // POST: api/Courses/5/Programs
         [HttpPost("{id}/programs")]
-        public async Task<ActionResult<ProgramReadDto>> AddProgram(int id, [FromBody, Required] int programId)
+        public async Task<ActionResult<ProgramReadDto>> AddProgram(string id, [FromBody, Required] string programId)
         {
             var program = await _courseService.AddProgramAsync(id, programId);
 
@@ -80,7 +80,7 @@ namespace StudyProgress.Api.Controllers
 
         // DELETE: api/Courses/5/Programs/5
         [HttpDelete("{id}/programs/{programId}")]
-        public async Task<ActionResult<ProgramReadDto>> RemoveProgram(int id, int programId)
+        public async Task<ActionResult<ProgramReadDto>> RemoveProgram(string id, string programId)
         {
             return await _courseService.RemoveProgramAsync(id, programId);
         }
@@ -89,14 +89,14 @@ namespace StudyProgress.Api.Controllers
         #region Requirements
         // GET: api/Courses/5/Requirements
         [HttpGet("{id}/requirements")]
-        public async Task<ActionResult<IEnumerable<CourseReadDto>>> GetRequirements(int id)
+        public async Task<ActionResult<IEnumerable<CourseReadDto>>> GetRequirements(string id)
         {
             return await _courseService.GetRequirementsAsync(id);
         }
 
         // POST: api/Courses/5/Requirements
         [HttpPost("{id}/requirements")]
-        public async Task<ActionResult<CourseReadDto>> AddRequirement(int id, [FromBody, Required] int requiredCourseId)
+        public async Task<ActionResult<CourseReadDto>> AddRequirement(string id, [FromBody, Required] string requiredCourseId)
         {
             var requiredCourse = await _courseService.AddRequirementAsync(id, requiredCourseId);
 
@@ -105,7 +105,7 @@ namespace StudyProgress.Api.Controllers
 
         // DELETE: api/Courses/5/Requirements/5
         [HttpDelete("{id}/requirements/{requiredCourseId}")]
-        public async Task<ActionResult<CourseReadDto>> RemoveRequirement(int id, int requiredCourseId)
+        public async Task<ActionResult<CourseReadDto>> RemoveRequirement(string id, string requiredCourseId)
         {
             return await _courseService.RemoveRequirementAsync(id, requiredCourseId);
         }

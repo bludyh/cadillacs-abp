@@ -14,6 +14,6 @@ namespace StudyProgress.Api.Dtos
         public string Description { get; set; }
         
         [Required]
-        public int TotalCredit { get; set; }
+        public int? TotalCredit { get; set; }
     }
 }

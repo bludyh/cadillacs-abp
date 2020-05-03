@@ -42,6 +42,10 @@ namespace StudyProgress.Api.Data
 
             modelBuilder.Entity<Enrollment>().HasKey(e => 
                 new { e.ClassId, e.ClassSemester, e.ClassYear, e.ClassCourseId, e.StudentId });
+
+            modelBuilder.Entity<Student>()
+                .Property(s => s.Id)
+                .ValueGeneratedNever();
         }
 
         //entities

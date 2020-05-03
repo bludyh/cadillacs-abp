@@ -16,18 +16,18 @@ namespace StudyProgress.Api.Services
     public interface ICourseService
     {
         public Task<List<CourseReadDto>> GetAllAsync();
-        public Task<CourseReadDto> GetAsync(int courseId);
-        public Task UpdateAsync(int courseId, CourseCreateUpdateDto dto);
+        public Task<CourseReadDto> GetAsync(string courseId);
+        public Task UpdateAsync(string courseId, CourseCreateUpdateDto dto);
         public Task<CourseReadDto> CreateAsync(CourseCreateUpdateDto dto);
-        public Task<CourseReadDto> DeleteAsync(int courseId);
+        public Task<CourseReadDto> DeleteAsync(string courseId);
 
-        public Task<List<ProgramReadDto>> GetProgramsAsync(int courseId);
-        public Task<ProgramReadDto> AddProgramAsync(int courseId, int programId);
-        public Task<ProgramReadDto> RemoveProgramAsync(int courseId, int programId);
+        public Task<List<ProgramReadDto>> GetProgramsAsync(string courseId);
+        public Task<ProgramReadDto> AddProgramAsync(string courseId, string programId);
+        public Task<ProgramReadDto> RemoveProgramAsync(string courseId, string programId);
 
-        public Task<List<CourseReadDto>> GetRequirementsAsync(int courseId);
-        public Task<CourseReadDto> AddRequirementAsync(int courseId, int requiredCourseId);
-        public Task<CourseReadDto> RemoveRequirementAsync(int courseId, int requiredCourseId);
+        public Task<List<CourseReadDto>> GetRequirementsAsync(string courseId);
+        public Task<CourseReadDto> AddRequirementAsync(string courseId, string requiredCourseId);
+        public Task<CourseReadDto> RemoveRequirementAsync(string courseId, string requiredCourseId);
     }
     public class CourseService : ServiceBase, ICourseService
     {
@@ -44,14 +44,14 @@ namespace StudyProgress.Api.Services
             return await _mapper.ProjectTo<CourseReadDto>(_context.Set<Course>()).ToListAsyncFallback();
         }
 
-        public async Task<CourseReadDto> GetAsync(int courseId)
+        public async Task<CourseReadDto> GetAsync(string courseId)
         {
             var course = await ValidateExistenceAsync<Course>(courseId);
 
             return _mapper.Map<CourseReadDto>(course);
         }
 
-        public async Task UpdateAsync(int courseId, CourseCreateUpdateDto dto)
+        public async Task UpdateAsync(string courseId, CourseCreateUpdateDto dto)
         {
             var course = await ValidateExistenceAsync<Course>(courseId);
 
@@ -63,6 +63,8 @@ namespace StudyProgress.Api.Services
 
         public async Task<CourseReadDto> CreateAsync(CourseCreateUpdateDto dto)
         {
+            await ValidateDuplicationAsync<Course>(dto.Id);
+
             var course = _mapper.Map<Course>(dto);
 
             await _context.AddAsync(course);
@@ -71,7 +73,7 @@ namespace StudyProgress.Api.Services
             return _mapper.Map<CourseReadDto>(course);
         }
 
-        public async Task<CourseReadDto> DeleteAsync(int courseId)
+        public async Task<CourseReadDto> DeleteAsync(string courseId)
         {
             var course = await ValidateExistenceAsync<Course>(courseId);
 
@@ -83,7 +85,7 @@ namespace StudyProgress.Api.Services
         #endregion
 
         #region Programs
-        public async Task<List<ProgramReadDto>> GetProgramsAsync(int courseId)
+        public async Task<List<ProgramReadDto>> GetProgramsAsync(string courseId)
         {
             var course = await ValidateExistenceAsync<Course>(courseId);
 
@@ -100,7 +102,7 @@ namespace StudyProgress.Api.Services
                 .ToListAsyncFallback();
         }
 
-        public async Task<ProgramReadDto> AddProgramAsync(int courseId, int programId)
+        public async Task<ProgramReadDto> AddProgramAsync(string courseId, string programId)
         {
             await ValidateExistenceAsync<Course>(courseId);
 
@@ -118,7 +120,7 @@ namespace StudyProgress.Api.Services
             return _mapper.Map<ProgramReadDto>(program);
         }
 
-        public async Task<ProgramReadDto> RemoveProgramAsync(int courseId, int programId)
+        public async Task<ProgramReadDto> RemoveProgramAsync(string courseId, string programId)
         {
             await ValidateExistenceAsync<Course>(courseId);
 
@@ -140,7 +142,7 @@ namespace StudyProgress.Api.Services
         #endregion
 
         #region Requirements
-        public async Task<List<CourseReadDto>> GetRequirementsAsync(int courseId)
+        public async Task<List<CourseReadDto>> GetRequirementsAsync(string courseId)
         {
             var course = await ValidateExistenceAsync<Course>(courseId);
 
@@ -157,7 +159,7 @@ namespace StudyProgress.Api.Services
                 .ToListAsyncFallback();
         }
 
-        public async Task<CourseReadDto> AddRequirementAsync(int courseId, int requiredCourseId)
+        public async Task<CourseReadDto> AddRequirementAsync(string courseId, string requiredCourseId)
         {
             await ValidateExistenceAsync<Course>(courseId);
 
@@ -175,7 +177,7 @@ namespace StudyProgress.Api.Services
             return _mapper.Map<CourseReadDto>(requiredCourse);
         }
 
-        public async Task<CourseReadDto> RemoveRequirementAsync(int courseId, int requiredCourseId)
+        public async Task<CourseReadDto> RemoveRequirementAsync(string courseId, string requiredCourseId)
         {
             await ValidateExistenceAsync<Course>(courseId);
 
