@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Infrastructure.Common;
 using Infrastructure.Common.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using StudyProgress.Api.Data;
 using StudyProgress.Api.Dtos;
@@ -16,7 +17,7 @@ namespace StudyProgress.Api.Services
     {
         public Task<List<StudentEnrollmentReadDto>> GetEnrollmentsAsync(int studentId);
         public Task<StudentEnrollmentReadDto> AddEnrollmentAsync(int studentId, StudentEnrollmentCreateDto dto);
-        //public Task<StudentEnrollmentReadDto> RemoveEnrollmentAsync(int studentId, int teacherId, string mentorType);
+        public Task<StudentEnrollmentReadDto> RemoveEnrollmentAsync(int studentId, int ClassId, int ClassSemester, int ClassYear, int ClassCourseId);
 
 
     }
@@ -53,15 +54,6 @@ namespace StudyProgress.Api.Services
 
             await ValidateDuplicationAsync<Enrollment>(studentId, dto.ClassId, dto.ClassSemester, dto.ClassYear, dto.ClassCourseId);
 
-            //var enrollment = new Enrollment()
-            //                    {
-            //                        StudentId = studentId,
-            //                        ClassId = dto.ClassId,
-            //                        ClassSemester = (int) dto.ClassSemester,
-            //                        ClassYear = (int) dto.ClassYear,
-            //                        ClassCourseId = (int) dto.ClassCourseId
-            //                    };
-
             //Create the new object
             var enrollment = _mapper.Map<Enrollment>(dto);
             enrollment.StudentId = studentId;
@@ -77,6 +69,25 @@ namespace StudyProgress.Api.Services
 
             //Returns the readDto
             return _mapper.Map<StudentEnrollmentReadDto>(enrollment);
+        }
+
+        public async Task<StudentEnrollmentReadDto> RemoveEnrollmentAsync(int studentId, int classId, int classSemester, int classYear, int classCourseId)
+        {
+            var student = await ValidateExistenceAsync<Student>(studentId);
+            var inputClass = await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+
+            var enrollment = await _context.FindAsync<Enrollment>(studentId, classId, classSemester, classYear, classCourseId);
+
+            Validate(
+                condition: !(enrollment is Enrollment),
+                message: $"Enrollment for course '{enrollment.ClassCourseId}' is not available",
+                status: StatusCodes.Status404NotFound);
+
+            _context.Remove(enrollment);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<StudentEnrollmentReadDto>(enrollment);
+
         }
     }
 }
