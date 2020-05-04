@@ -29,9 +29,9 @@ namespace StudyProgress.Api.Services
         public Task<CourseReadDto> AddRequirementAsync(string courseId, string requiredCourseId);
         public Task<CourseReadDto> RemoveRequirementAsync(string courseId, string requiredCourseId);
 
-        public Task<List<EnrollmentReadDto>> GetEnrollmentsAsync(string courseId, string classId, int classSemester, int classYear);
-        public Task<EnrollmentReadDto> AddEnrollmentAsync(string courseId, string classId, int classSemester, int classYear, int studentId);
-        public Task<EnrollmentReadDto> RemoveEnrollmentAsync(string courseId, string classId, int classSemester, int classYear, int studentId);
+        public Task<List<ClassEnrollmentReadDto>> GetEnrollmentsAsync(string courseId, string classId, int classSemester, int classYear);
+        public Task<ClassEnrollmentReadDto> AddEnrollmentAsync(string courseId, string classId, int classSemester, int classYear, int studentId);
+        public Task<ClassEnrollmentReadDto> RemoveEnrollmentAsync(string courseId, string classId, int classSemester, int classYear, int studentId);
     }
     public class CourseService : ServiceBase, ICourseService
     {
@@ -96,7 +96,7 @@ namespace StudyProgress.Api.Services
             await _context.Entry(course)
                 .Collection(c => c.ProgramCourses)
                 .Query()
-                .Include(pc => pc.Program)
+                .Include(pc => pc.Program).ThenInclude(p => p.School)
                 .LoadAsync();
 
             return await _mapper.ProjectTo<ProgramReadDto>(
@@ -203,7 +203,7 @@ namespace StudyProgress.Api.Services
         #endregion
 
         #region Enrollments
-        public async Task<List<EnrollmentReadDto>> GetEnrollmentsAsync(string courseId, string classId, int classSemester, int classYear)
+        public async Task<List<ClassEnrollmentReadDto>> GetEnrollmentsAsync(string courseId, string classId, int classSemester, int classYear)
         {
             var course = await ValidateExistenceAsync<Course>(courseId);
 
@@ -214,12 +214,13 @@ namespace StudyProgress.Api.Services
             await _context.Entry(inputClass)
                 .Collection(c => c.Enrollments)
                 .Query()
+                .Include(e => e.Student)
                 .LoadAsync();
 
-            return await _mapper.ProjectTo<EnrollmentReadDto>(inputClass.Enrollments.AsQueryable()).ToListAsyncFallback();
+            return await _mapper.ProjectTo<ClassEnrollmentReadDto>(inputClass.Enrollments.AsQueryable()).ToListAsyncFallback();
         }
 
-        public async Task<EnrollmentReadDto> AddEnrollmentAsync(string courseId, string classId, int classSemester, int classYear, int studentId)
+        public async Task<ClassEnrollmentReadDto> AddEnrollmentAsync(string courseId, string classId, int classSemester, int classYear, int studentId)
         {
             await ValidateExistenceAsync<Course>(courseId);
 
@@ -243,10 +244,10 @@ namespace StudyProgress.Api.Services
             await _context.AddAsync(e);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<EnrollmentReadDto>(e);
+            return _mapper.Map<ClassEnrollmentReadDto>(e);
         }
 
-        public async Task<EnrollmentReadDto> RemoveEnrollmentAsync(string courseId, string classId, int classSemester, int classYear, int studentId)
+        public async Task<ClassEnrollmentReadDto> RemoveEnrollmentAsync(string courseId, string classId, int classSemester, int classYear, int studentId)
         {
             await ValidateExistenceAsync<Course>(courseId);
 
@@ -265,7 +266,7 @@ namespace StudyProgress.Api.Services
             _context.Remove(e);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<EnrollmentReadDto>(e);
+            return _mapper.Map<ClassEnrollmentReadDto>(e);
         }
         #endregion
     }

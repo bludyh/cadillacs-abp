@@ -114,14 +114,14 @@ namespace StudyProgress.Api.Controllers
         #region Enrollments
         // GET: api/Courses/prc1/Classes/S-71/1/3/Enrollments
         [HttpGet("{id}/classes/{classId}/{classSemester}/{classYear}/enrollments")]
-        public async Task<ActionResult<IEnumerable<EnrollmentReadDto>>> GetEnrollments(string id, string classId, int classSemester, int classYear)
+        public async Task<ActionResult<IEnumerable<ClassEnrollmentReadDto>>> GetEnrollments(string id, string classId, int classSemester, int classYear)
         {
             return await _courseService.GetEnrollmentsAsync(id, classId, classSemester, classYear);
         }
 
         // POST: api/Courses/prc1/Classes/S-71/1/3/Enrollments
         [HttpPost("{id}/classes/{classId}/{classSemester}/{classYear}/enrollments")]
-        public async Task<ActionResult<EnrollmentReadDto>> AddEnrollment(string id, string classId, int classSemester, int classYear, [FromBody, Required] int studentId)
+        public async Task<ActionResult<ClassEnrollmentReadDto>> AddEnrollment(string id, string classId, int classSemester, int classYear, [FromBody, Required] int studentId)
         {
             var enrollment = await _courseService.AddEnrollmentAsync(id, classId, classSemester, classYear, studentId);
 
@@ -130,7 +130,7 @@ namespace StudyProgress.Api.Controllers
 
         // DELETE: api/Courses/prc1/Classes/S-71/1/3/Enrollments/1234567
         [HttpDelete("{id}/classes/{classId}/{classSemester}/{classYear}/enrollments/{studentId}")]
-        public async Task<ActionResult<EnrollmentReadDto>> RemoveEnrollment(string id, string classId, int classSemester, int classYear, int studentId)
+        public async Task<ActionResult<ClassEnrollmentReadDto>> RemoveEnrollment(string id, string classId, int classSemester, int classYear, int studentId)
         {
             return await _courseService.RemoveEnrollmentAsync(id, classId, classSemester, classYear, studentId);
         }

@@ -26,7 +26,7 @@ namespace StudyProgress.Api.Data
                 },
                 new School
                 {
-                    Id = "tb",
+                    Id = "tlb",
                     Name = "Fontys University of Applied Sciences Tilburg"
                 }
             };
@@ -36,26 +36,26 @@ namespace StudyProgress.Api.Data
             {
                 new Models.Program
                 {
-                    Id = "software",
+                    Id = "ict-s",
                     Name = "ICT & Software Engineering",
                     Description = faker.Lorem.Sentence(),
-                    TotalCredit = 60,
+                    TotalCredit = 240,
                     School = faker.PickRandom(schools)
                 },
                 new Models.Program
                 {
-                    Id = "technology",
+                    Id = "ict-t",
                     Name = "ICT & Technology",
                     Description = faker.Lorem.Sentence(),
-                    TotalCredit = 60,
+                    TotalCredit = 240,
                     School = faker.PickRandom(schools)
                 },
                 new Models.Program
                 {
-                    Id = "business",
+                    Id = "ict-b",
                     Name = "ICT & Business",
                     Description = faker.Lorem.Sentence(),
-                    TotalCredit = 60,
+                    TotalCredit = 240,
                     School = faker.PickRandom(schools)
                 }
             };
@@ -131,7 +131,7 @@ namespace StudyProgress.Api.Data
                 {
                     Id = "E-S71",
                     Semester = 1,
-                    Year = 3,
+                    Year = 2020,
                     Course = faker.PickRandom(courses),
                     StartDate = faker.Date.Past(),
                     EndDate = faker.Date.Future()
@@ -140,7 +140,7 @@ namespace StudyProgress.Api.Data
                 {
                     Id = "E-S72",
                     Semester = 1,
-                    Year = 3,
+                    Year = 2020,
                     Course = faker.PickRandom(courses),
                     StartDate = faker.Date.Past(),
                     EndDate = faker.Date.Future()
