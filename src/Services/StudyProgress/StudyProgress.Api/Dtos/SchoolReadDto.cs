@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace StudyProgress.Api.Models
+namespace StudyProgress.Api.Dtos
 {
-    public class School
+    public class SchoolReadDto
     {
         public string Id { get; set; }
         public string Name { get; set; }
-
-        public List<Program> Programs { get; set; }
     }
 }

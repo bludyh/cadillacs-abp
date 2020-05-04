@@ -39,7 +39,7 @@ namespace StudyProgress.Api {
             // Add Services
             services.AddScoped<IProgramService, ProgramService>();
             services.AddScoped<IStudentService, StudentService>();
-
+            services.AddScoped<ICourseService, CourseService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

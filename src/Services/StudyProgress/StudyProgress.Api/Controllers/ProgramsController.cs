@@ -30,14 +30,14 @@ namespace StudyProgress.Api.Controllers
 
         // GET: api/Programs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProgramReadDto>> GetProgram(int id)
+        public async Task<ActionResult<ProgramReadDto>> GetProgram(string id)
         {
             return await _programService.GetAsync(id);
         }
 
         // PUT: api/Programs/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProgram(int id, ProgramUpdateDto dto)
+        public async Task<IActionResult> PutProgram(string id, ProgramUpdateDto dto)
         {
             await _programService.UpdateAsync(id, dto);
 
@@ -55,7 +55,7 @@ namespace StudyProgress.Api.Controllers
 
         // DELETE: api/Programs/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ProgramReadDto>> DeleteProgram(int id)
+        public async Task<ActionResult<ProgramReadDto>> DeleteProgram(string id)
         {
             return await _programService.DeleteAsync(id);
         }
@@ -64,14 +64,14 @@ namespace StudyProgress.Api.Controllers
         #region Courses
         // GET: api/Programs/5/Courses
         [HttpGet("{id}/courses")]
-        public async Task<ActionResult<IEnumerable<CourseReadDto>>> GetCourses(int id)
+        public async Task<ActionResult<IEnumerable<CourseReadDto>>> GetCourses(string id)
         {
             return await _programService.GetCoursesAsync(id);
         }
 
         // POST: api/Programs/5/Courses
         [HttpPost("{id}/courses")]
-        public async Task<ActionResult<CourseReadDto>> AddCourse(int id, [FromBody, Required] int courseId)
+        public async Task<ActionResult<CourseReadDto>> AddCourse(string id, [FromBody, Required] string courseId)
         {
             var course = await _programService.AddCourseAsync(id, courseId);
 
@@ -80,7 +80,7 @@ namespace StudyProgress.Api.Controllers
 
         // DELETE: api/Programs/5/Courses/5
         [HttpDelete("{id}/courses/{courseId}")]
-        public async Task<ActionResult<CourseReadDto>> RemoveProgram(int id, int courseId)
+        public async Task<ActionResult<CourseReadDto>> RemoveCourse(string id, string courseId)
         {
             return await _programService.RemoveCourseAsync(id, courseId);
         }

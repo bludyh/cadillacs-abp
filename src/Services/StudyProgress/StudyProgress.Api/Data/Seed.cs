@@ -15,39 +15,90 @@ namespace StudyProgress.Api.Data
             context.Database.EnsureDeleted();
             if (!context.Database.EnsureCreated()) return host;
 
-            var schools = new Faker<School>()
-                .StrictMode(false)
-                .Rules((f, s) =>
-                    {
-                        s.Name = f.Company.CompanyName();
-                    }
-                )
-                .Generate(3);
+            var faker = new Faker();
+
+            var schools = new List<School>
+            {
+                new School
+                {
+                    Id = "ehv",
+                    Name = "Fontys University of Applied Sciences Eindhoven"
+                },
+                new School
+                {
+                    Id = "tlb",
+                    Name = "Fontys University of Applied Sciences Tilburg"
+                }
+            };
             context.Schools.AddRange(schools);
 
-            var programs = new Faker<Models.Program>()
-                .StrictMode(false)
-                .Rules((f, p) =>
-                    {
-                        p.Name = f.Lorem.Word();
-                        p.Description = f.Lorem.Sentences();
-                        p.TotalCredit = 60;
-                        p.School = f.PickRandom(schools);
-                    }
-                )
-                .Generate(3);
+            var programs = new List<Models.Program>
+            {
+                new Models.Program
+                {
+                    Id = "ict-s",
+                    Name = "ICT & Software Engineering",
+                    Description = faker.Lorem.Sentence(),
+                    TotalCredit = 240,
+                    School = faker.PickRandom(schools)
+                },
+                new Models.Program
+                {
+                    Id = "ict-t",
+                    Name = "ICT & Technology",
+                    Description = faker.Lorem.Sentence(),
+                    TotalCredit = 240,
+                    School = faker.PickRandom(schools)
+                },
+                new Models.Program
+                {
+                    Id = "ict-b",
+                    Name = "ICT & Business",
+                    Description = faker.Lorem.Sentence(),
+                    TotalCredit = 240,
+                    School = faker.PickRandom(schools)
+                }
+            };
             context.Programs.AddRange(programs);
 
-            var courses = new Faker<Course>()
-                .StrictMode(false)
-                .Rules((f, c) =>
-                    {
-                        c.Name = f.Lorem.Word();
-                        c.Description = f.Lorem.Sentence();
-                        c.Credit = 3;
-                    }
-                )
-                .Generate(10);
+            var courses = new List<Course>
+            {
+                new Course
+                {
+                    Id = "prc1",
+                    Name = "Programming C",
+                    Description = faker.Lorem.Sentence(),
+                    Credit = 3
+                },
+                new Course
+                {
+                    Id = "prc2",
+                    Name = "Programming C++",
+                    Description = faker.Lorem.Sentence(),
+                    Credit = 3
+                },
+                new Course
+                {
+                    Id = "andr1",
+                    Name = "Android 1",
+                    Description = faker.Lorem.Sentence(),
+                    Credit = 3
+                },
+                new Course
+                {
+                    Id = "andr2",
+                    Name = "Android 2",
+                    Description = faker.Lorem.Sentence(),
+                    Credit = 3
+                },
+                new Course
+                {
+                    Id = "ipv",
+                    Name = "Image Processing Vision",
+                    Description = faker.Lorem.Sentence(),
+                    Credit = 3
+                }
+            };
             context.Courses.AddRange(courses);
 
             var courseId = 0;
@@ -59,7 +110,7 @@ namespace StudyProgress.Api.Data
                         pc.Course = courses[courseId++];
                     }
                 )
-                .Generate(10);
+                .Generate(5);
             context.ProgramCourses.AddRange(programCourses);
 
             var id = 0;
@@ -74,15 +125,13 @@ namespace StudyProgress.Api.Data
                 .Generate(5);
             context.Requirements.AddRange(requirements);
 
-            var faker = new Faker();
-
             var classes = new List<Class>
             {
                 new Class
                 {
                     Id = "E-S71",
                     Semester = 1,
-                    Year = 3,
+                    Year = 2020,
                     Course = faker.PickRandom(courses),
                     StartDate = faker.Date.Past(),
                     EndDate = faker.Date.Future()
@@ -91,7 +140,7 @@ namespace StudyProgress.Api.Data
                 {
                     Id = "E-S72",
                     Semester = 1,
-                    Year = 3,
+                    Year = 2020,
                     Course = faker.PickRandom(courses),
                     StartDate = faker.Date.Past(),
                     EndDate = faker.Date.Future()
@@ -103,7 +152,7 @@ namespace StudyProgress.Api.Data
                 .StrictMode(false)
                 .Rules((f, s) =>
                     {
-                        s.Id = f.Random.ReplaceNumbers("#######");
+                        s.Id = Convert.ToInt32(f.Random.ReplaceNumbers("#######"));
                         s.FirstName = f.Name.FirstName();
                         s.LastName = f.Name.LastName();
                         s.Initials = f.Random.Replace("?.?.");
@@ -121,7 +170,7 @@ namespace StudyProgress.Api.Data
                         e.Student = students[enrollmentStudentId++];
                     }
                 )
-                .Generate(15);
+                .Generate(10);
             context.Enrollments.AddRange(enrollments);
 
             context.SaveChanges();

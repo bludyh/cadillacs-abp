@@ -7,9 +7,9 @@ namespace StudyProgress.Api.Models
 {
     public class Requirement
     {
-        public int CourseId { get; set; }
+        public string CourseId { get; set; }
         public Course Course { get; set; }
-        public int RequiredCourseId { get; set; }
+        public string RequiredCourseId { get; set; }
         public Course RequiredCourse { get; set; }
     }
 }

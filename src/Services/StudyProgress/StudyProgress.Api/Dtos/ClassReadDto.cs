@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace StudyProgress.Api.Models
+namespace StudyProgress.Api.Dtos
 {
-    public class Class
+    public class ClassReadDto
     {
         public string Id { get; set; }
         public int Semester { get; set; }
         public int Year { get; set; }
-        public string CourseId { get; set; }
-        public Course Course { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-   
-        public List<Enrollment> Enrollments { get; set; }
+
+        public CourseReadDto Course { get; set; }
     }
 }
