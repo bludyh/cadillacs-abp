@@ -37,10 +37,10 @@ namespace StudyProgress.Api.Controllers
             return CreatedAtAction(nameof(GetEnrollments), new { id }, enrollment);
         }
 
-        //[HttpDelete("{id}/enrollments")]
-        //public async Task<ActionResult<StudentMentorReadDto>> RemoveMentor(int id, [FromQuery, Required] int teacherId, [FromQuery, Required] string mentorType)
-        //{
-        //    return await _studentService.RemoveEnrollmentAsync(id, teacherId, mentorType);
-        //}
+        [HttpDelete("{id}/enrollments")]
+        public async Task<ActionResult<StudentEnrollmentReadDto>> RemoveEnrollment(int id, int classId, int classSemester, int classYear, int classCourseId)
+        {
+            return await _studentService.RemoveEnrollmentAsync(id, classId, classSemester, classYear, classCourseId);
+        }
     }
 }
