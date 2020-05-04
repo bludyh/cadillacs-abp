@@ -8,9 +8,8 @@ namespace StudyProgress.Api.Dtos
 {
     public class StudentEnrollmentReadDto
     {
-        //public StudentDto Student { get; set; }
 
-        public ClassDto Class { get; set; }
+        public ClassReadDto Class { get; set; }
 
         public double FinalGrade { get; set; }
 

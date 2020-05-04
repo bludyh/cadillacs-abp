@@ -17,7 +17,7 @@ namespace StudyProgress.Api.Services
     {
         public Task<List<StudentEnrollmentReadDto>> GetEnrollmentsAsync(int studentId);
         public Task<StudentEnrollmentReadDto> AddEnrollmentAsync(int studentId, StudentEnrollmentCreateDto dto);
-        public Task<StudentEnrollmentReadDto> RemoveEnrollmentAsync(int studentId, int ClassId, int ClassSemester, int ClassYear, int ClassCourseId);
+        public Task<StudentEnrollmentReadDto> RemoveEnrollmentAsync(int studentId, string ClassId, int ClassSemester, int ClassYear, string ClassCourseId);
 
 
     }
@@ -52,7 +52,7 @@ namespace StudyProgress.Api.Services
             var student = await ValidateExistenceAsync<Student>(studentId);
             var inputClass = await ValidateForeignKeyAsync<Class>(dto.ClassId, dto.ClassSemester, dto.ClassYear, dto.ClassCourseId);
 
-            await ValidateDuplicationAsync<Enrollment>(studentId, dto.ClassId, dto.ClassSemester, dto.ClassYear, dto.ClassCourseId);
+            await ValidateDuplicationAsync<Enrollment>(dto.ClassId, dto.ClassSemester, dto.ClassYear, dto.ClassCourseId, studentId);
 
             //Create the new object
             var enrollment = _mapper.Map<Enrollment>(dto);
@@ -71,12 +71,12 @@ namespace StudyProgress.Api.Services
             return _mapper.Map<StudentEnrollmentReadDto>(enrollment);
         }
 
-        public async Task<StudentEnrollmentReadDto> RemoveEnrollmentAsync(int studentId, int classId, int classSemester, int classYear, int classCourseId)
+        public async Task<StudentEnrollmentReadDto> RemoveEnrollmentAsync(int studentId, string classId, int classSemester, int classYear, string classCourseId)
         {
-            var student = await ValidateExistenceAsync<Student>(studentId);
-            var inputClass = await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateExistenceAsync<Student>(studentId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
 
-            var enrollment = await _context.FindAsync<Enrollment>(studentId, classId, classSemester, classYear, classCourseId);
+            var enrollment = await _context.FindAsync<Enrollment>(classId, classSemester, classYear, classCourseId, studentId);
 
             Validate(
                 condition: !(enrollment is Enrollment),

@@ -18,7 +18,7 @@ namespace StudyProgress.Api.Dtos
         public int? ClassYear { get; set; }
         
         [Required]
-        public int? ClassCourseId { get; set; }
+        public string ClassCourseId { get; set; }
 
     }
 }

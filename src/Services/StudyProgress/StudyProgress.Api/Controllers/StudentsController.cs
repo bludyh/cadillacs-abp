@@ -3,6 +3,7 @@ using StudyProgress.Api.Dtos;
 using StudyProgress.Api.Services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,7 +39,12 @@ namespace StudyProgress.Api.Controllers
         }
 
         [HttpDelete("{id}/enrollments")]
-        public async Task<ActionResult<StudentEnrollmentReadDto>> RemoveEnrollment(int id, int classId, int classSemester, int classYear, int classCourseId)
+        public async Task<ActionResult<StudentEnrollmentReadDto>> RemoveEnrollment(
+            int id,
+            [FromQuery, Required] string classId,
+            [FromQuery, Required] int classSemester,
+            [FromQuery, Required] int classYear,
+            [FromQuery, Required] string classCourseId)
         {
             return await _studentService.RemoveEnrollmentAsync(id, classId, classSemester, classYear, classCourseId);
         }
