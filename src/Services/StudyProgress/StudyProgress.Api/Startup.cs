@@ -38,6 +38,7 @@ namespace StudyProgress.Api {
 
             // Add Services
             services.AddScoped<IProgramService, ProgramService>();
+            services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<ICourseService, CourseService>();
         }
 
