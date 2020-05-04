@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Identity.Api.Dtos
 {
-    public class RoleDto
+    public class RoleReadDto
     {
 
         public string Name { get; set; }

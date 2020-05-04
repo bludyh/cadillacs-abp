@@ -76,13 +76,13 @@ namespace Identity.Api.Controllers
         // Roles
 
         [HttpGet("{id}/roles")]
-        public async Task<ActionResult<IEnumerable<RoleDto>>> GetRoles(int id)
+        public async Task<ActionResult<IEnumerable<RoleReadDto>>> GetRoles(int id)
         {
             return await _studentService.GetRolesAsync(id);
         }
 
         [HttpPost("{id}/roles")]
-        public async Task<ActionResult<RoleDto>> AddRole(int id, [FromBody, Required] string roleName)
+        public async Task<ActionResult<RoleReadDto>> AddRole(int id, [FromBody, Required] string roleName)
         {
             var role = await _studentService.AddRoleAsync(id, roleName);
 
@@ -90,7 +90,7 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{studentId}/roles/{roleName}")]
-        public async Task<ActionResult<RoleDto>> RemoveRole(int studentId, string roleName)
+        public async Task<ActionResult<RoleReadDto>> RemoveRole(int studentId, string roleName)
         {
             return await _studentService.RemoveRoleAsync(studentId, roleName);
         }

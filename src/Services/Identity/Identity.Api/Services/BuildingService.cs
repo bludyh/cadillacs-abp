@@ -17,14 +17,14 @@ namespace Identity.Api.Services
 
     public interface IBuildingService
     {
-        public Task<List<BuildingDto>> GetAllAsync();
-        public Task<BuildingDto> GetAsync(string buildingId);
-        public Task<BuildingDto> CreateAsync(string buildingId);
-        public Task<BuildingDto> DeleteAsync(string buildingId);
-        public Task<List<RoomDto>> GetRoomsAsync(string buildingId);
-        public Task<RoomDto> GetRoomAsync(string buildingId, string roomId);
-        public Task<RoomDto> AddRoomAsync(string buildingId, string roomId);
-        public Task<RoomDto> RemoveRoomAsync(string buildingId, string roomId);
+        public Task<List<BuildingReadDto>> GetAllAsync();
+        public Task<BuildingReadDto> GetAsync(string buildingId);
+        public Task<BuildingReadDto> CreateAsync(string buildingId);
+        public Task<BuildingReadDto> DeleteAsync(string buildingId);
+        public Task<List<RoomReadDto>> GetRoomsAsync(string buildingId);
+        public Task<RoomReadDto> GetRoomAsync(string buildingId, string roomId);
+        public Task<RoomReadDto> AddRoomAsync(string buildingId, string roomId);
+        public Task<RoomReadDto> RemoveRoomAsync(string buildingId, string roomId);
         public Task<List<SchoolCreateReadDto>> GetSchoolsAsync(string buildingId);
         public Task<SchoolCreateReadDto> AddSchoolAsync(string buildingId, string schoolId);
         public Task<SchoolCreateReadDto> RemoveSchoolAsync(string buildingId, string schoolId);
@@ -39,7 +39,7 @@ namespace Identity.Api.Services
             _mapper = mapper;
         }
 
-        public async Task<RoomDto> AddRoomAsync(string buildingId, string roomId)
+        public async Task<RoomReadDto> AddRoomAsync(string buildingId, string roomId)
         {
             var building = await ValidateExistenceAsync<Building>(buildingId);
             await ValidateDuplicationAsync<Room>(roomId, buildingId);
@@ -53,7 +53,7 @@ namespace Identity.Api.Services
                 .Reference(r => r.Building)
                 .LoadAsync();
 
-            return _mapper.Map<RoomDto>(room);
+            return _mapper.Map<RoomReadDto>(room);
         }
 
         public async Task<SchoolCreateReadDto> AddSchoolAsync(string buildingId, string schoolId)
@@ -70,7 +70,7 @@ namespace Identity.Api.Services
             return _mapper.Map<SchoolCreateReadDto>(school);
         }
 
-        public async Task<BuildingDto> CreateAsync(string buildingId)
+        public async Task<BuildingReadDto> CreateAsync(string buildingId)
         {
             await ValidateDuplicationAsync<Building>(buildingId);
 
@@ -79,32 +79,32 @@ namespace Identity.Api.Services
             await _context.AddAsync(building);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<BuildingDto>(building);
+            return _mapper.Map<BuildingReadDto>(building);
         }
 
-        public async Task<BuildingDto> DeleteAsync(string buildingId)
+        public async Task<BuildingReadDto> DeleteAsync(string buildingId)
         {
             var building = await ValidateExistenceAsync<Building>(buildingId);
 
             _context.Remove(building);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<BuildingDto>(building);
+            return _mapper.Map<BuildingReadDto>(building);
         }
 
-        public async Task<List<BuildingDto>> GetAllAsync()
+        public async Task<List<BuildingReadDto>> GetAllAsync()
         {
-            return await _mapper.ProjectTo<BuildingDto>(_context.Set<Building>()).ToListAsyncFallback();
+            return await _mapper.ProjectTo<BuildingReadDto>(_context.Set<Building>()).ToListAsyncFallback();
         }
 
-        public async Task<BuildingDto> GetAsync(string buildingId)
+        public async Task<BuildingReadDto> GetAsync(string buildingId)
         {
             var building = await ValidateExistenceAsync<Building>(buildingId);
 
-            return _mapper.Map<BuildingDto>(building);
+            return _mapper.Map<BuildingReadDto>(building);
         }
 
-        public async Task<RoomDto> GetRoomAsync(string buildingId, string roomId)
+        public async Task<RoomReadDto> GetRoomAsync(string buildingId, string roomId)
         {
             var room = await ValidateExistenceAsync<Room>(roomId, buildingId);
 
@@ -112,10 +112,10 @@ namespace Identity.Api.Services
                 .Reference(r => r.Building)
                 .LoadAsync();
 
-            return _mapper.Map<RoomDto>(room);
+            return _mapper.Map<RoomReadDto>(room);
         }
 
-        public async Task<List<RoomDto>> GetRoomsAsync(string buildingId)
+        public async Task<List<RoomReadDto>> GetRoomsAsync(string buildingId)
         {
             var building = await ValidateExistenceAsync<Building>(buildingId);
 
@@ -123,7 +123,7 @@ namespace Identity.Api.Services
                 .Collection(b => b.Rooms)
                 .LoadAsync();
 
-            return await _mapper.ProjectTo<RoomDto>(building.Rooms.AsQueryable()).ToListAsyncFallback();
+            return await _mapper.ProjectTo<RoomReadDto>(building.Rooms.AsQueryable()).ToListAsyncFallback();
         }
 
         public async Task<List<SchoolCreateReadDto>> GetSchoolsAsync(string buildingId)
@@ -139,7 +139,7 @@ namespace Identity.Api.Services
             return await _mapper.ProjectTo<SchoolCreateReadDto>(building.SchoolBuildings.Select(sb => sb.School).AsQueryable()).ToListAsyncFallback();
         }
 
-        public async Task<RoomDto> RemoveRoomAsync(string buildingId, string roomId)
+        public async Task<RoomReadDto> RemoveRoomAsync(string buildingId, string roomId)
         {
             var room = await ValidateExistenceAsync<Room>(roomId, buildingId);
 
@@ -150,7 +150,7 @@ namespace Identity.Api.Services
             _context.Remove(room);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<RoomDto>(room);
+            return _mapper.Map<RoomReadDto>(room);
         }
 
         public async Task<SchoolCreateReadDto> RemoveSchoolAsync(string buildingId, string schoolId)

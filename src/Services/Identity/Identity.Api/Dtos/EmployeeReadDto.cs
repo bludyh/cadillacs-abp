@@ -19,6 +19,6 @@ namespace Identity.Api.Dtos {
         public string AccountStatus { get; set; }
 
         public SchoolCreateReadDto School { get; set; }
-        public RoomDto Room { get; set; }
+        public RoomReadDto Room { get; set; }
     }
 }

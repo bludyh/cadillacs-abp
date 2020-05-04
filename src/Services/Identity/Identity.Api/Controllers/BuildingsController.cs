@@ -27,14 +27,14 @@ namespace Identity.Api.Controllers
 
         // GET: api/Buildings
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BuildingDto>>> GetBuildings()
+        public async Task<ActionResult<IEnumerable<BuildingReadDto>>> GetBuildings()
         {
             return await _buildingService.GetAllAsync();
         }
 
         // GET: api/Buildings/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BuildingDto>> GetBuilding(string id)
+        public async Task<ActionResult<BuildingReadDto>> GetBuilding(string id)
         {
             return await _buildingService.GetAsync(id);
         }
@@ -43,7 +43,7 @@ namespace Identity.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<BuildingDto>> PostBuilding([FromBody, Required] string buildingId)
+        public async Task<ActionResult<BuildingReadDto>> PostBuilding([FromBody, Required] string buildingId)
         {
             var building = await _buildingService.CreateAsync(buildingId);
 
@@ -52,7 +52,7 @@ namespace Identity.Api.Controllers
 
         // DELETE: api/Buildings/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<BuildingDto>> DeleteBuilding(string id)
+        public async Task<ActionResult<BuildingReadDto>> DeleteBuilding(string id)
         {
             return await _buildingService.DeleteAsync(id);
         }
@@ -60,19 +60,19 @@ namespace Identity.Api.Controllers
         // Rooms
 
         [HttpGet("{buildingId}/rooms")]
-        public async Task<ActionResult<IEnumerable<RoomDto>>> GetRooms(string buildingId)
+        public async Task<ActionResult<IEnumerable<RoomReadDto>>> GetRooms(string buildingId)
         {
             return await _buildingService.GetRoomsAsync(buildingId);
         }
 
         [HttpGet("{buildingId}/rooms/{roomId}")]
-        public async Task<ActionResult<RoomDto>> GetRoom(string buildingId, string roomId)
+        public async Task<ActionResult<RoomReadDto>> GetRoom(string buildingId, string roomId)
         {
             return await _buildingService.GetRoomAsync(buildingId, roomId);
         }
 
         [HttpPost("{buildingId}/rooms")]
-        public async Task<ActionResult<RoomDto>> AddRoom(string buildingId, [FromBody, Required] string roomId)
+        public async Task<ActionResult<RoomReadDto>> AddRoom(string buildingId, [FromBody, Required] string roomId)
         {
             var room = await _buildingService.AddRoomAsync(buildingId, roomId);
 
@@ -80,7 +80,7 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{buildingId}/rooms/{roomId}")]
-        public async Task<ActionResult<RoomDto>> RemoveRoom(string buildingId, string roomId)
+        public async Task<ActionResult<RoomReadDto>> RemoveRoom(string buildingId, string roomId)
         {
             return await _buildingService.RemoveRoomAsync(buildingId, roomId);
         }

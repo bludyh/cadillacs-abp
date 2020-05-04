@@ -24,15 +24,15 @@ namespace Identity.Api.Mappings {
             CreateMap<EmployeeUpdateDto, Employee>(MemberList.Source);
             CreateMap<EmployeeCreateDto, Employee>(MemberList.Source);
 
-            CreateMap<Models.Program, ProgramDto>();
+            CreateMap<Models.Program, ProgramReadDto>();
 
-            CreateMap<Room, RoomDto>();
+            CreateMap<Room, RoomReadDto>();
 
-            CreateMap<Building, BuildingDto>();
+            CreateMap<Building, BuildingReadDto>();
 
-            CreateMap<string, RoleDto>()
+            CreateMap<string, RoleReadDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src));
-            CreateMap<IdentityRole<int>, RoleDto>();
+            CreateMap<IdentityRole<int>, RoleReadDto>();
 
             CreateMap<Mentor, StudentMentorReadDto>();
             CreateMap<Mentor, TeacherMentorReadDto>();

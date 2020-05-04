@@ -22,9 +22,9 @@ namespace Identity.Api.Services
         public Task UpdateAsync(int studentId, StudentUpdateDto dto);
         public Task<StudentReadDto> CreateAsync(StudentCreateDto dto);
         public Task<StudentReadDto> DeleteAsync(int studentId);
-        public Task<List<RoleDto>> GetRolesAsync(int studentId); 
-        public Task<RoleDto> AddRoleAsync(int studentId, string roleName); 
-        public Task<RoleDto> RemoveRoleAsync(int studentId, string roleName);
+        public Task<List<RoleReadDto>> GetRolesAsync(int studentId); 
+        public Task<RoleReadDto> AddRoleAsync(int studentId, string roleName); 
+        public Task<RoleReadDto> RemoveRoleAsync(int studentId, string roleName);
         public Task<List<StudentMentorReadDto>> GetMentorsAsync(int studentId);
         public Task<StudentMentorReadDto> AddMentorAsync(int studentId, StudentMentorCreateDto dto);
         public Task<StudentMentorReadDto> RemoveMentorAsync(int studentId, int teacherId, string mentorType);
@@ -73,7 +73,7 @@ namespace Identity.Api.Services
             return _mapper.Map<StudentMentorReadDto>(mentor);
         }
 
-        public async Task<RoleDto> AddRoleAsync(int studentId, string roleName)
+        public async Task<RoleReadDto> AddRoleAsync(int studentId, string roleName)
         {
             var student = await ValidateExistenceAsync<Student>(studentId);
 
@@ -90,7 +90,7 @@ namespace Identity.Api.Services
 
             await _userManager.AddToRoleAsync(student, roleName);
 
-            return _mapper.Map<RoleDto>(role);
+            return _mapper.Map<RoleReadDto>(role);
         }
 
         public async Task<StudentReadDto> CreateAsync(StudentCreateDto dto)
@@ -165,11 +165,11 @@ namespace Identity.Api.Services
             return await _mapper.ProjectTo<StudentMentorReadDto>(student.Mentors.AsQueryable()).ToListAsyncFallback();
         }
 
-        public async Task<List<RoleDto>> GetRolesAsync(int studentId)
+        public async Task<List<RoleReadDto>> GetRolesAsync(int studentId)
         {
             var student = await ValidateExistenceAsync<Student>(studentId);
 
-            return await _mapper.ProjectTo<RoleDto>((await _userManager.GetRolesAsync(student)).AsQueryable()).ToListAsyncFallback();
+            return await _mapper.ProjectTo<RoleReadDto>((await _userManager.GetRolesAsync(student)).AsQueryable()).ToListAsyncFallback();
         }
 
         public async Task<StudentMentorReadDto> RemoveMentorAsync(int studentId, int teacherId, string mentorType)
@@ -200,7 +200,7 @@ namespace Identity.Api.Services
             return _mapper.Map<StudentMentorReadDto>(mentor);
         }
 
-        public async Task<RoleDto> RemoveRoleAsync(int studentId, string roleName)
+        public async Task<RoleReadDto> RemoveRoleAsync(int studentId, string roleName)
         {
             var student = await ValidateExistenceAsync<Student>(studentId);
 
@@ -217,7 +217,7 @@ namespace Identity.Api.Services
 
             await _userManager.RemoveFromRoleAsync(student, roleName);
 
-            return _mapper.Map<RoleDto>(role);
+            return _mapper.Map<RoleReadDto>(role);
         }
 
         public async Task UpdateAsync(int studentId, StudentUpdateDto dto)

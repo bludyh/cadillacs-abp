@@ -74,13 +74,13 @@ namespace Identity.Api.Controllers
         // Roles
 
         [HttpGet("{id}/roles")]
-        public async Task<ActionResult<IEnumerable<RoleDto>>> GetRoles(int id)
+        public async Task<ActionResult<IEnumerable<RoleReadDto>>> GetRoles(int id)
         {
             return await _employeeService.GetRolesAsync(id);
         }
 
         [HttpPost("{id}/roles")]
-        public async Task<ActionResult<RoleDto>> AddRole(int id, [FromBody, Required] string roleName)
+        public async Task<ActionResult<RoleReadDto>> AddRole(int id, [FromBody, Required] string roleName)
         {
             var role = await _employeeService.AddRoleAsync(id, roleName);
 
@@ -88,7 +88,7 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{employeeId}/roles/{roleName}")]
-        public async Task<ActionResult<RoleDto>> RemoveRole(int employeeId, string roleName)
+        public async Task<ActionResult<RoleReadDto>> RemoveRole(int employeeId, string roleName)
         {
             return await _employeeService.RemoveRoleAsync(employeeId, roleName);
         }
@@ -96,13 +96,13 @@ namespace Identity.Api.Controllers
         // Programs
 
         [HttpGet("{id}/programs")]
-        public async Task<ActionResult<IEnumerable<ProgramDto>>> GetPrograms(int id)
+        public async Task<ActionResult<IEnumerable<ProgramReadDto>>> GetPrograms(int id)
         {
             return await _employeeService.GetProgramsAsync(id);
         }
 
         [HttpPost("{id}/programs")]
-        public async Task<ActionResult<ProgramDto>> AddProgram(int id, [FromBody, Required] string programId)
+        public async Task<ActionResult<ProgramReadDto>> AddProgram(int id, [FromBody, Required] string programId)
         {
             var program = await _employeeService.AddProgramAsync(id, programId);
 
@@ -110,7 +110,7 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{employeeId}/programs/{programId}")]
-        public async Task<ActionResult<ProgramDto>> RemoveProgram(int employeeId, string programId)
+        public async Task<ActionResult<ProgramReadDto>> RemoveProgram(int employeeId, string programId)
         {
             return await _employeeService.RemoveProgramAsync(employeeId, programId);
         }

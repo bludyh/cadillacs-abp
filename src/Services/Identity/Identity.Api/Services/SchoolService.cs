@@ -20,9 +20,9 @@ namespace Identity.Api.Services
         public Task UpdateAsync(string schoolId, SchoolUpdateDto dto);
         public Task<SchoolCreateReadDto> CreateAsync(SchoolCreateReadDto dto);
         public Task<SchoolCreateReadDto> DeleteAsync(string schoolId);
-        public Task<List<BuildingDto>> GetBuildingsAsync(string schoolId);
-        public Task<BuildingDto> AddBuildingAsync(string schoolId, string buildingId);
-        public Task<BuildingDto> RemoveBuildingAsync(string schoolId, string buildingId);
+        public Task<List<BuildingReadDto>> GetBuildingsAsync(string schoolId);
+        public Task<BuildingReadDto> AddBuildingAsync(string schoolId, string buildingId);
+        public Task<BuildingReadDto> RemoveBuildingAsync(string schoolId, string buildingId);
     }
 
     public class SchoolService : ServiceBase, ISchoolService
@@ -34,7 +34,7 @@ namespace Identity.Api.Services
             _mapper = mapper;
         }
 
-        public async Task<BuildingDto> AddBuildingAsync(string schoolId, string buildingId)
+        public async Task<BuildingReadDto> AddBuildingAsync(string schoolId, string buildingId)
         {
             var school = await ValidateExistenceAsync<School>(schoolId);
             var building = await ValidateForeignKeyAsync<Building>(buildingId);
@@ -45,7 +45,7 @@ namespace Identity.Api.Services
             await _context.AddAsync(sb);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<BuildingDto>(building);
+            return _mapper.Map<BuildingReadDto>(building);
         }
 
         public async Task<SchoolCreateReadDto> CreateAsync(SchoolCreateReadDto dto)
@@ -82,7 +82,7 @@ namespace Identity.Api.Services
             return _mapper.Map<SchoolCreateReadDto>(school);
         }
 
-        public async Task<List<BuildingDto>> GetBuildingsAsync(string schoolId)
+        public async Task<List<BuildingReadDto>> GetBuildingsAsync(string schoolId)
         {
             var school = await ValidateExistenceAsync<School>(schoolId);
 
@@ -92,10 +92,10 @@ namespace Identity.Api.Services
                 .Include(sb => sb.Building)
                 .LoadAsync();
 
-            return await _mapper.ProjectTo<BuildingDto>(school.SchoolBuildings.Select(sb => sb.Building).AsQueryable()).ToListAsyncFallback();
+            return await _mapper.ProjectTo<BuildingReadDto>(school.SchoolBuildings.Select(sb => sb.Building).AsQueryable()).ToListAsyncFallback();
         }
 
-        public async Task<BuildingDto> RemoveBuildingAsync(string schoolId, string buildingId)
+        public async Task<BuildingReadDto> RemoveBuildingAsync(string schoolId, string buildingId)
         {
             await ValidateExistenceAsync<School>(schoolId);
             var building = await ValidateForeignKeyAsync<Building>(buildingId);
@@ -104,7 +104,7 @@ namespace Identity.Api.Services
             _context.Remove(sb);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<BuildingDto>(building);
+            return _mapper.Map<BuildingReadDto>(building);
         }
 
         public async Task UpdateAsync(string schoolId, SchoolUpdateDto dto)

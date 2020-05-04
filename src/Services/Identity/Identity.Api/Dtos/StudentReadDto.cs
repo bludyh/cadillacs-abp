@@ -26,7 +26,7 @@ namespace Identity.Api.Dtos {
         public string City { get; set; }
         public string Country { get; set; }
 
-        public ProgramDto Program { get; set; }
+        public ProgramReadDto Program { get; set; }
 
     }
 }

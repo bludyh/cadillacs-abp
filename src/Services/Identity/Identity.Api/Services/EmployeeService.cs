@@ -21,12 +21,12 @@ namespace Identity.Api.Services
         public Task UpdateAsync(int employeeId, EmployeeUpdateDto dto);
         public Task<EmployeeReadDto> CreateAsync(EmployeeCreateDto dto);
         public Task<EmployeeReadDto> DeleteAsync(int employeeId);
-        public Task<List<RoleDto>> GetRolesAsync(int employeeId); 
-        public Task<RoleDto> AddRoleAsync(int employeeId, string roleName); 
-        public Task<RoleDto> RemoveRoleAsync(int employeeId, string roleName);
-        public Task<List<ProgramDto>> GetProgramsAsync(int employeeId);
-        public Task<ProgramDto> AddProgramAsync(int employeeId, string programId);
-        public Task<ProgramDto> RemoveProgramAsync(int employeeId, string programId);
+        public Task<List<RoleReadDto>> GetRolesAsync(int employeeId); 
+        public Task<RoleReadDto> AddRoleAsync(int employeeId, string roleName); 
+        public Task<RoleReadDto> RemoveRoleAsync(int employeeId, string roleName);
+        public Task<List<ProgramReadDto>> GetProgramsAsync(int employeeId);
+        public Task<ProgramReadDto> AddProgramAsync(int employeeId, string programId);
+        public Task<ProgramReadDto> RemoveProgramAsync(int employeeId, string programId);
     }
 
     public class EmployeeService<T> : ServiceBase, IEmployeeService where T : Employee
@@ -132,14 +132,14 @@ namespace Identity.Api.Services
             return _mapper.Map<EmployeeReadDto>(employee);
         }
 
-        public async Task<List<RoleDto>> GetRolesAsync(int employeeId)
+        public async Task<List<RoleReadDto>> GetRolesAsync(int employeeId)
         {
             var employee = await ValidateExistenceAsync<T>(employeeId);
 
-            return await _mapper.ProjectTo<RoleDto>((await _userManager.GetRolesAsync(employee)).AsQueryable()).ToListAsyncFallback();
+            return await _mapper.ProjectTo<RoleReadDto>((await _userManager.GetRolesAsync(employee)).AsQueryable()).ToListAsyncFallback();
         }
 
-        public async Task<RoleDto> AddRoleAsync(int employeeId, string roleName)
+        public async Task<RoleReadDto> AddRoleAsync(int employeeId, string roleName)
         {
             var employee = await ValidateExistenceAsync<T>(employeeId);
 
@@ -156,10 +156,10 @@ namespace Identity.Api.Services
 
             await _userManager.AddToRoleAsync(employee, roleName);
 
-            return _mapper.Map<RoleDto>(role);
+            return _mapper.Map<RoleReadDto>(role);
         }
 
-        public async Task<RoleDto> RemoveRoleAsync(int employeeId, string roleName)
+        public async Task<RoleReadDto> RemoveRoleAsync(int employeeId, string roleName)
         {
             var employee = await ValidateExistenceAsync<T>(employeeId);
 
@@ -176,10 +176,10 @@ namespace Identity.Api.Services
 
             await _userManager.RemoveFromRoleAsync(employee, roleName);
 
-            return _mapper.Map<RoleDto>(role);
+            return _mapper.Map<RoleReadDto>(role);
         }
 
-        public async Task<List<ProgramDto>> GetProgramsAsync(int employeeId)
+        public async Task<List<ProgramReadDto>> GetProgramsAsync(int employeeId)
         {
             var employee = await ValidateExistenceAsync<T>(employeeId);
 
@@ -189,10 +189,10 @@ namespace Identity.Api.Services
                 .Include(ep => ep.Program).ThenInclude(p => p.School)
                 .LoadAsync();
 
-            return await _mapper.ProjectTo<ProgramDto>(employee.EmployeePrograms.Select(ep => ep.Program).AsQueryable()).ToListAsyncFallback();
+            return await _mapper.ProjectTo<ProgramReadDto>(employee.EmployeePrograms.Select(ep => ep.Program).AsQueryable()).ToListAsyncFallback();
         }
 
-        public async Task<ProgramDto> AddProgramAsync(int employeeId, string programId)
+        public async Task<ProgramReadDto> AddProgramAsync(int employeeId, string programId)
         {
             await ValidateExistenceAsync<T>(employeeId);
 
@@ -211,10 +211,10 @@ namespace Identity.Api.Services
                 .Reference(p => p.School)
                 .LoadAsync();
 
-            return _mapper.Map<ProgramDto>(program);
+            return _mapper.Map<ProgramReadDto>(program);
         }
 
-        public async Task<ProgramDto> RemoveProgramAsync(int employeeId, string programId)
+        public async Task<ProgramReadDto> RemoveProgramAsync(int employeeId, string programId)
         {
             await ValidateExistenceAsync<T>(employeeId);
 
@@ -235,7 +235,7 @@ namespace Identity.Api.Services
                 .Reference(p => p.School)
                 .LoadAsync();
 
-            return _mapper.Map<ProgramDto>(program);
+            return _mapper.Map<ProgramReadDto>(program);
         }
 
     }

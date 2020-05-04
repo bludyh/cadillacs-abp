@@ -73,13 +73,13 @@ namespace Identity.Api.Controllers
         // Buildings
 
         [HttpGet("{id}/buildings")]
-        public async Task<ActionResult<IEnumerable<BuildingDto>>> GetBuildings(string id)
+        public async Task<ActionResult<IEnumerable<BuildingReadDto>>> GetBuildings(string id)
         {
             return await _schoolService.GetBuildingsAsync(id);
         }
 
         [HttpPost("{id}/buildings")]
-        public async Task<ActionResult<BuildingDto>> AddBuilding(string id, [FromBody, Required] string buildingId)
+        public async Task<ActionResult<BuildingReadDto>> AddBuilding(string id, [FromBody, Required] string buildingId)
         {
             var building = await _schoolService.AddBuildingAsync(id, buildingId);
 
@@ -87,7 +87,7 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{schoolId}/buildings/{buildingId}")]
-        public async Task<ActionResult<BuildingDto>> RemoveBuilding(string schoolId, string buildingId)
+        public async Task<ActionResult<BuildingReadDto>> RemoveBuilding(string schoolId, string buildingId)
         {
             return await _schoolService.RemoveBuildingAsync(schoolId, buildingId);
         }
