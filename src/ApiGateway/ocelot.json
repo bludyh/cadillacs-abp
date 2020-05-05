@@ -1,7 +1,10 @@
 ﻿{
     "ReRoutes": [
+
+      // Identity
+
       {
-        "DownstreamPathTemplate": "/weatherforecast",
+        "DownstreamPathTemplate": "/api/buildings",
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
@@ -9,23 +12,210 @@
             "Port": 80
           }
         ],
-        "UpstreamPathTemplate": "/api/identity",
-        "UpstreamHttpMethod": [ "Get" ]
+        "UpstreamPathTemplate": "/api/buildings",
+        "UpstreamHttpMethod": [ "Get", "Post" ],
+        "Priority": 0
       },
       {
-        "DownstreamPathTemplate": "/weatherforecast",
+        "DownstreamPathTemplate": "/api/buildings/{buildingId}",
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
-            "Host": "courseapi",
+            "Host": "identityapi",
             "Port": 80
           }
         ],
-        "UpstreamPathTemplate": "/api/course",
-        "UpstreamHttpMethod": [ "Get" ]
+        "UpstreamPathTemplate": "/api/buildings/{buildingId}",
+        "UpstreamHttpMethod": [ "Get", "Delete" ],
+        "Priority": 0
       },
       {
-        "DownstreamPathTemplate": "/weatherforecast",
+        "DownstreamPathTemplate": "/api/buildings/{buildingId}/{any}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/buildings/{buildingId}/{any}",
+        "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/employees",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/employees",
+        "UpstreamHttpMethod": [ "Get", "Post" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/employees/{employeeId}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/employees/{employeeId}",
+        "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/employees/{employeeId}/{any}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/employees/{employeeId}/{any}",
+        "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/programs/{programId}/employees",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/programs/{programId}/employees",
+        "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
+        "Priority": 1
+      },
+      {
+        "DownstreamPathTemplate": "/api/schools",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/schools",
+        "UpstreamHttpMethod": [ "Get", "Post"],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/schools/{schoolId}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/schools/{schoolId}",
+        "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/schools/{schoolId}/{any}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/schools/{schoolId}/{any}",
+        "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/students",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/students",
+        "UpstreamHttpMethod": [ "Get", "Post" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/students/{studentId}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/students/{studentId}",
+        "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/students/{studentId}/{any}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/students/{studentId}/{any}",
+        "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/teachers",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/teachers",
+        "UpstreamHttpMethod": [ "Get", "Post" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/teachers/{teacherId}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/teachers/{teacherId}",
+        "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/teachers/{teacherId}/{any}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/teachers/{teacherId}/{any}",
+        "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
+        "Priority": 0
+      },
+
+      // StudyProgress
+
+      {
+        "DownstreamPathTemplate": "/api/programs",
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
@@ -33,32 +223,87 @@
             "Port": 80
           }
         ],
-        "UpstreamPathTemplate": "/api/progress",
-        "UpstreamHttpMethod": [ "Get" ]
+        "UpstreamPathTemplate": "/api/programs",
+        "UpstreamHttpMethod": [ "Get", "Post" ],
+        "Priority": 0
       },
       {
-        "DownstreamPathTemplate": "/weatherforecast",
+        "DownstreamPathTemplate": "/api/programs/{programId}",
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
-            "Host": "scheduleapi",
+            "Host": "studyprogressapi",
             "Port": 80
           }
         ],
-        "UpstreamPathTemplate": "/api/schedule",
-        "UpstreamHttpMethod": [ "Get" ]
+        "UpstreamPathTemplate": "/api/programs/{programId}",
+        "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
+        "Priority": 0
       },
       {
-        "DownstreamPathTemplate": "/weatherforecast",
+        "DownstreamPathTemplate": "/api/programs/{programId}/{any}",
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
-            "Host": "announcementapi",
+            "Host": "studyprogressapi",
             "Port": 80
           }
         ],
-        "UpstreamPathTemplate": "/api/announcement",
-        "UpstreamHttpMethod": [ "Get" ]
+        "UpstreamPathTemplate": "/api/programs/{programId}/{any}",
+        "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/courses",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "studyprogressapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/courses",
+        "UpstreamHttpMethod": [ "Get", "Post" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/courses/{courseId}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "studyprogressapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/courses/{courseId}",
+        "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/courses/{courseId}/{any}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "studyprogressapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/courses/{courseId}/{any}",
+        "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
+        "Priority": 0
+      },
+      {
+        "DownstreamPathTemplate": "/api/students/{studentId}/enrollments",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "studyprogressapi",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/students/{studentId}/enrollments",
+        "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
+        "Priority":  1
       }
     ],
     "GlobalConfiguration": { }
