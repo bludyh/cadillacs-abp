@@ -14,5 +14,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.Common\Infrastructure.Common.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.Messaging\Infrastructure.Messaging.csproj" />
+  </ItemGroup>
+
 
 </Project>
