@@ -1,6 +1,7 @@
 import { Component, OnInit,Input } from '@angular/core';
 import { myCourse } from 'src/app/models/myCourse';
 import { Assignment } from 'src/app/models/assignment';
+import {formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-submissions',
@@ -50,7 +51,11 @@ assignmentsCourse1: Assignment[]= [];
   CourseAssignemnt:string ='PRC assignemnt';
 
   @Input() isActive:boolean=true;
-  constructor() { }
+  today= new Date();
+  jstoday = '';
+  constructor() {
+    this.jstoday = formatDate(this.today, 'd-MMMM-yyyy', 'en-US', '+0530');
+  }
 
   ngOnInit(): void {
     console.log("onInit ")
