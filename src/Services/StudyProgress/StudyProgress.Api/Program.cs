@@ -13,19 +13,7 @@ using StudyProgress.Api.Data;
 namespace StudyProgress.Api {
     public class Program {
         public static void Main(string[] args) {
-            var host = CreateHostBuilder(args).Build();
-
-            using var scope = host.Services.CreateScope();
-            var services = scope.ServiceProvider;
-            var env = services.GetRequiredService<IWebHostEnvironment>();
-
-            if (env.IsDevelopment())
-            {
-                var context = services.GetRequiredService<StudyProgressContext>();
-                host.Seed(context);
-            }
-
-            host.Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

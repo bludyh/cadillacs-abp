@@ -14,21 +14,7 @@ using Microsoft.Extensions.Logging;
 namespace Identity.Api {
     public class Program {
         public static void Main(string[] args) {
-            var host = CreateHostBuilder(args).Build();
-
-            using var scope = host.Services.CreateScope();
-            var services = scope.ServiceProvider;
-            var env = services.GetRequiredService<IWebHostEnvironment>();
-
-            if (env.IsDevelopment()) {
-                var context = services.GetRequiredService<IdentityContext>();
-                var userManager = services.GetRequiredService<UserManager<User>>();
-                var roleManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
-
-                host.Seed(context, userManager, roleManager);
-            }
-
-            host.Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
