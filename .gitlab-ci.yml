@@ -6,7 +6,7 @@ stages:
 
 variables:
     APIGATEWAY_DIR: "src/ApiGateway"
-    EVENTBUS_DIR: "src/Infrastructure/Infrastructure.Messaging"
+    MESSAGING_DIR: "src/Infrastructure/Infrastructure.Messaging"
     ANNOUNCEMENT_API_DIR: "src/Services/Announcement/Announcement.Api"
     ANNOUNCEMENT_EVENTHANDLER_DIR: "src/Services/Announcement/Announcement.EventHandler"
     ANNOUNCEMENT_UNITTESTS_DIR: "src/Services/Announcement/Announcement.UnitTests"
@@ -35,7 +35,7 @@ build_services:
         expire_in: 1 day
         paths:
             - $APIGATEWAY_DIR/bin/
-            - $EVENTBUS_DIR/bin/
+            - $MESSAGING_DIR/bin/
             - $ANNOUNCEMENT_API_DIR/bin/
             - $ANNOUNCEMENT_EVENTHANDLER_DIR/bin/
             - $COURSE_API_DIR/bin/

@@ -10,7 +10,6 @@ using Identity.Api.Models;
 using Identity.Api.Services;
 using Identity.Api.Dtos;
 using System.ComponentModel.DataAnnotations;
-using Bogus.DataSets;
 
 namespace Identity.Api.Controllers
 {

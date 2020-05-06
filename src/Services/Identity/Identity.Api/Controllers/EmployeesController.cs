@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Identity;
 using Identity.Api.Dtos;
 using Infrastructure.Common;
 using System.ComponentModel.DataAnnotations;
-using Bogus.DataSets;
 using Identity.Api.Services;
 
 namespace Identity.Api.Controllers
