@@ -13,6 +13,8 @@ import { SubmissionsComponent } from './main-page/main-content/submissions/submi
 import { ProgressComponent } from './main-page/main-content/progress/progress.component';
 import { CalendarComponent } from './main-page/main-content/calendar/calendar.component';
 import { FunctionItemComponent } from './main-page/side-bar/function-item/function-item.component';
+import { CourseComponent } from './main-page/main-content/courses/course/course.component';
+import { ProgressObjectComponent } from './main-page/main-content/progress/progress-object/progress-object.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,8 @@ import { FunctionItemComponent } from './main-page/side-bar/function-item/functi
     ProgressComponent,
     CalendarComponent,
     FunctionItemComponent,
+    CourseComponent,
+    ProgressObjectComponent,
   ],
   imports: [
     BrowserModule
