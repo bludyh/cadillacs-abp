@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using StudyProgress.Api.Dtos;
+using StudyProgress.Api.Events;
 using StudyProgress.Api.Models;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,11 @@ namespace StudyProgress.Api.Mappings
             CreateMap<Student, StudentReadDto>();
 
             CreateMap<School, SchoolReadDto>();
+
+            // Map events
+            CreateMap<Models.Program, ProgramCreated>();
+            CreateMap<Models.Program, ProgramDeleted>();
+            CreateMap<Models.Program, ProgramUpdated>();
         }
     }
 }

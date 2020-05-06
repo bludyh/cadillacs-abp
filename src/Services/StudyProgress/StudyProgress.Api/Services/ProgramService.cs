@@ -3,8 +3,10 @@ using Infrastructure.Common;
 using Infrastructure.Common.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Pitstop.Infrastructure.Messaging;
 using StudyProgress.Api.Data;
 using StudyProgress.Api.Dtos;
+using StudyProgress.Api.Events;
 using StudyProgress.Api.Models;
 using System;
 using System.Collections.Generic;
@@ -29,10 +31,12 @@ namespace StudyProgress.Api.Services
     public class ProgramService : ServiceBase, IProgramService
     {
         private readonly IMapper _mapper;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public ProgramService(StudyProgressContext context, IMapper mapper) : base(context)
+        public ProgramService(StudyProgressContext context, IMapper mapper, IMessagePublisher messagePublisher) : base(context)
         {
             _mapper = mapper;
+            _messagePublisher = messagePublisher;
         }
 
         #region Programs
@@ -60,6 +64,10 @@ namespace StudyProgress.Api.Services
 
             _context.Update(program);
             await _context.SaveChangesAsync();
+
+            // Publish Updated event
+            var e = _mapper.Map<ProgramUpdated>(program);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
         }
 
         public async Task<ProgramReadDto> CreateAsync(ProgramCreateDto dto)
@@ -72,6 +80,10 @@ namespace StudyProgress.Api.Services
 
             await _context.AddAsync(program);
             await _context.SaveChangesAsync();
+
+            // Publish Created event
+            var e = _mapper.Map<ProgramCreated>(program);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
 
             return _mapper.Map<ProgramReadDto>(program);
         }
@@ -86,6 +98,10 @@ namespace StudyProgress.Api.Services
 
             _context.Remove(program);
             await _context.SaveChangesAsync();
+
+            // Publish Deleted event
+            var e = _mapper.Map<ProgramDeleted>(program);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
 
             return _mapper.Map<ProgramReadDto>(program);
         }

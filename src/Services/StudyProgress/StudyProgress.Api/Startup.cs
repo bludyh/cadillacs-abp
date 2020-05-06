@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Pitstop.Infrastructure.Messaging.Configuration;
 using StudyProgress.Api.Data;
 using StudyProgress.Api.Mappings;
 using StudyProgress.Api.Services;
@@ -40,6 +41,9 @@ namespace StudyProgress.Api {
             services.AddScoped<IProgramService, ProgramService>();
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<ICourseService, CourseService>();
+
+            // Add MessagePublisher
+            services.UseRabbitMQMessagePublisher(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
