@@ -7,10 +7,11 @@
     </div>
   
     
-
+    <ng-template [ngIf]="myCourses.length > 0 " [ngIfElse]="none">
   <div class="col-sm-12 mb-4 "
   *ngFor ="let myClass of myCourses"
   >
+  <ng-template [ngIf]="getAssignments(myClass).length > 0 " [ngIfElse]="noAssignemnts">
 
     <div class="row no-gutters mb-2 ">
       <div class="col-2  card-header  text-center border bg-info border-info" >   
@@ -27,11 +28,15 @@
         </div>         
       </div>   
   </div>    
-
-
-
+</ng-template>
+<ng-template #noAssignemnts>
+ 
+</ng-template>
 </div>
-
+</ng-template>
+<ng-template #none>
+  <p>The click counter <strong> IS not greater </strong> than 4</p>
+</ng-template>
 
 
   <div>
