@@ -3,3 +3,28 @@ html,body{
     height: 100%;
 }
 
+:root {
+   
+    --primaryCourseFromFirstYear: rgb(21, 114, 49);
+    --nonPrimaryCourseFromFIrstYear: rgba(255, 0, 255, 0.568);
+    --corePhase: rgb(12, 88, 160);
+    
+    --other: rgb(13, 76, 136);
+
+    --specialization: rgb(111, 0, 255);
+
+    --elective: rgb(48, 40, 160);
+    --project: rgb(56, 42, 73);
+  }
+
+  .courseElective{
+    --elective: rgb(48, 40, 160);
+    background-color:  elective;
+
+  }
+.card-Elective{
+  background-color:  rgb(56, 42, 73);
+}
+  .courseProject{
+    --project: project;
+  }
