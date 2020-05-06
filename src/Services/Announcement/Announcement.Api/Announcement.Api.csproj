@@ -20,7 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Identity\Identity.Api\Identity.Api.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.Common\Infrastructure.Common.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.Messaging\Infrastructure.Messaging.csproj" />
   </ItemGroup>
 
 
