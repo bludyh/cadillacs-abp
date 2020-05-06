@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using Identity.Api.Data;
 using Identity.Api.Dtos;
+using Identity.Api.Events;
 using Identity.Api.Models;
 using Infrastructure.Common;
 using Infrastructure.Common.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Pitstop.Infrastructure.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,13 +38,15 @@ namespace Identity.Api.Services
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public StudentService(IdentityContext context, IMapper mapper, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager)
+        public StudentService(IdentityContext context, IMapper mapper, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, IMessagePublisher messagePublisher)
             : base(context)
         {
             _mapper = mapper;
             _userManager = userManager;
             _roleManager = roleManager;
+            _messagePublisher = messagePublisher;
         }
 
         public async Task<StudentMentorReadDto> AddMentorAsync(int studentId, StudentMentorCreateDto dto)
@@ -108,6 +112,10 @@ namespace Identity.Api.Services
             await _userManager.CreateAsync(student);
             await _userManager.AddToRoleAsync(student, "Student");
 
+            // Publish Created event
+            var e = _mapper.Map<StudentCreated>(student);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
+
             await _context.Entry(student)
                 .Reference(s => s.Program)
                 .Query()
@@ -129,6 +137,10 @@ namespace Identity.Api.Services
 
             _context.Remove(student);
             await _context.SaveChangesAsync();
+
+            // Publish Deleted event
+            var e = _mapper.Map<StudentDeleted>(student);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
 
             return _mapper.Map<StudentReadDto>(student);
         }
@@ -230,6 +242,10 @@ namespace Identity.Api.Services
 
             _context.Update(student);
             await _context.SaveChangesAsync();
+
+            // Publish Updated event
+            var e = _mapper.Map<StudentUpdated>(student);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
         }
     }
 }

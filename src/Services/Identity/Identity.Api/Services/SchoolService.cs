@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Identity.Api.Data;
 using Identity.Api.Dtos;
+using Identity.Api.Events;
 using Identity.Api.Models;
 using Infrastructure.Common;
 using Infrastructure.Common.Services;
 using Microsoft.EntityFrameworkCore;
+using Pitstop.Infrastructure.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,10 +30,12 @@ namespace Identity.Api.Services
     public class SchoolService : ServiceBase, ISchoolService
     {
         private readonly IMapper _mapper;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public SchoolService(IdentityContext context, IMapper mapper) : base(context)
+        public SchoolService(IdentityContext context, IMapper mapper, IMessagePublisher messagePublisher) : base(context)
         {
             _mapper = mapper;
+            _messagePublisher = messagePublisher;
         }
 
         public async Task<BuildingReadDto> AddBuildingAsync(string schoolId, string buildingId)
@@ -57,6 +61,10 @@ namespace Identity.Api.Services
             await _context.AddAsync(school);
             await _context.SaveChangesAsync();
 
+            // Publish Created event
+            var e = _mapper.Map<SchoolCreated>(school);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
+
             return _mapper.Map<SchoolCreateReadDto>(school);
         }
 
@@ -66,6 +74,10 @@ namespace Identity.Api.Services
 
             _context.Remove(school);
             await _context.SaveChangesAsync();
+
+            // Publish Deleted event
+            var e = _mapper.Map<SchoolDeleted>(school);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
 
             return _mapper.Map<SchoolCreateReadDto>(school);
         }
@@ -115,6 +127,10 @@ namespace Identity.Api.Services
 
             _context.Update(school);
             await _context.SaveChangesAsync();
+
+            // Publish Updated event
+            var e = _mapper.Map<SchoolUpdated>(school);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
         }
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Pitstop.Infrastructure.Messaging.Configuration;
 
 namespace Identity.Api {
     public class Startup {
@@ -43,6 +44,9 @@ namespace Identity.Api {
             services.AddScoped<ISchoolService, SchoolService>();
             services.AddScoped<IBuildingService, BuildingService>();
             services.AddScoped<IProgramService, ProgramService>();
+
+            // Add MessagePublisher
+            services.UseRabbitMQMessagePublisher(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

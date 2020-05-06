@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Identity.Api.Dtos;
+using Identity.Api.Events;
 using Identity.Api.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -36,6 +37,14 @@ namespace Identity.Api.Mappings {
 
             CreateMap<Mentor, StudentMentorReadDto>();
             CreateMap<Mentor, TeacherMentorReadDto>();
+
+            // Map events
+            CreateMap<School, SchoolCreated>();
+            CreateMap<School, SchoolDeleted>();
+            CreateMap<School, SchoolUpdated>();
+            CreateMap<Student, StudentCreated>();
+            CreateMap<Student, StudentDeleted>();
+            CreateMap<Student, StudentUpdated>();
         }
 
     }
