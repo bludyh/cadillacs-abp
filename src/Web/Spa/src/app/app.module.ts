@@ -23,6 +23,11 @@ import { CalendarWeekDayComponent } from './main-page/main-content/calendar/cale
 import { CalendarWeekWeekComponent } from './main-page/main-content/calendar/calendar-week/calendar-week-week/calendar-week-week.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarMonthDayComponent } from './main-page/main-content/calendar/calendar-month/calendar-month-day/calendar-month-day.component';
+import {HttpClientModule} from '@angular/common/http';
+import { ActivitiesComponent } from './main-page/main-content/dashboard/activities/activities.component';
+import { ActivityComponent } from './main-page/main-content/dashboard/activities/activity/activity.component';
+import { EmailsComponent } from './main-page/main-content/dashboard/emails/emails.component';
+import { EmailComponent } from './main-page/main-content/dashboard/emails/email/email.component';
 
 @NgModule({
   declarations: [
@@ -47,10 +52,15 @@ import { CalendarMonthDayComponent } from './main-page/main-content/calendar/cal
     CalendarWeekDayComponent,
     CalendarWeekWeekComponent,
     CalendarMonthDayComponent,
+    ActivitiesComponent,
+    ActivityComponent,
+    EmailsComponent,
+    EmailComponent,
   ],
   imports: [
     BrowserModule,
-    NgbModule
+    NgbModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
