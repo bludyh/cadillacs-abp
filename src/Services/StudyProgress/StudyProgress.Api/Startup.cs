@@ -34,9 +34,6 @@ namespace StudyProgress.Api {
             // Add AutoMapper
             services.AddAutoMapper(typeof(MappingProfile));
 
-            services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
-                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
             // Add Services
             services.AddScoped<IProgramService, ProgramService>();
             services.AddScoped<IStudentService, StudentService>();
@@ -44,6 +41,12 @@ namespace StudyProgress.Api {
 
             // Add MessagePublisher
             services.UseRabbitMQMessagePublisher(Configuration);
+
+            // CORS
+            services.AddCors();
+
+            services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +54,9 @@ namespace StudyProgress.Api {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
+
+            // CORS
+            app.UseCors(options => options.AllowAnyOrigin());  
 
             app.UseRouting();
 
