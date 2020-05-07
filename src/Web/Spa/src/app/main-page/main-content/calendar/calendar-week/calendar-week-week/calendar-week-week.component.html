@@ -1,0 +1,13 @@
+<table class="table table-striped mt-2">
+    <thead >
+        <th>Time</th>
+        <th *ngFor="let date of this.WeekObject.ReturnDaysOfWeek()">{{date}}</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let hour of hours">
+            <td class="font-weight-bold align-middle">{{hour}}</td>
+            <td *ngFor="let date of this.WeekObject.ReturnDaysOfWeek()"></td>
+        </tr>
+    </tbody>
+</table>
+  

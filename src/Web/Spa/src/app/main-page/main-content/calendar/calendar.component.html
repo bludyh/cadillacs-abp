@@ -1,1 +1,52 @@
-<p>calendar works!</p>
+<div class="container-fluid py-3">
+    <div class="row"> <!--main row-->
+      <div class="col-lg-6">
+        <div class="row"><!--row for button group and header-->
+          <div class="button-group">
+  <!--          button group for week-->
+            <button type="button" class="btn btn-light" *ngIf="activeCalendarStatus[1]" (click)="ChangeCurrentWeek(true)"><i class="fas fa-arrow-up"></i></button>
+            <button type="button" class="btn btn-light" *ngIf="activeCalendarStatus[1]" (click)="ChangeCurrentWeek(false)"><i class="fas fa-arrow-down"></i></button>
+            <button type="button" class="btn btn-light ml-3" *ngIf="activeCalendarStatus[1]" (click)="ResetWeekChangeValue()"><i class="far fa-calendar-check"></i> Current Week</button>
+  <!--          button group for day-->
+            <button type="button" class="btn btn-light" *ngIf="activeCalendarStatus[2]" (click)="ChangeCurrentDay(true)"><i class="fas fa-arrow-up"></i></button>
+            <button type="button" class="btn btn-light" *ngIf="activeCalendarStatus[2]" (click)="ChangeCurrentDay(false)"><i class="fas fa-arrow-down"></i></button>
+            <button type="button" class="btn btn-light ml-3" *ngIf="activeCalendarStatus[2]" (click)="ResetDayChangeValue()"><i class="far fa-calendar-check"></i> Current Day</button>
+            <!--          drop down selector-->
+            <div ngbDropdown class="ml-3 mt-2 d-inline-block">
+              <button class="btn btn-outline-primary" id="MonthDropdown" ngbDropdownToggle *ngIf="activeCalendarStatus[0]"><i class="fas fa-chevron-down"></i> Month</button>
+              <div ngbDropdownMenu aria-labelledby="MonthDropdown">
+                <button ngbDropdownItem>Jan</button>
+                <button ngbDropdownItem>Feb</button>
+                <button ngbDropdownItem>Mar</button>
+                <button ngbDropdownItem>Apr</button>
+                <button ngbDropdownItem>May</button>
+                <button ngbDropdownItem>June</button>
+                <button ngbDropdownItem>July</button>
+                <button ngbDropdownItem>Aug</button>
+                <button ngbDropdownItem>Sep</button>
+                <button ngbDropdownItem>Oct</button>
+                <button ngbDropdownItem>Nov</button>
+                <button ngbDropdownItem>Dec</button>
+              </div>
+            </div>
+          </div>
+          <!--        <p class="ml-3 mt-2">JAN 2019 <i class="fas fa-chevron-down"></i></p>-->
+  
+        </div>
+      </div>
+      <div class="col-lg-6 center-block"> <!--right header-->
+        <div class="row float-right">
+          <div class="button-group">
+            <button type="button" class="btn btn-light mx-1 button-header-size" (click)="setActivePage(0)">Month</button>
+            <button type="button" class="btn btn-light mx-1 button-header-size" (click)="setActivePage(1)">Week</button>
+            <button type="button" class="btn btn-light mx-1 button-header-size" (click)="setActivePage(2)">Day</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <app-calendar-month *ngIf="activeCalendarStatus[0]"></app-calendar-month>
+  <app-calendar-week *ngIf="activeCalendarStatus[1]" [weekDifferent]="weekChangeValue"></app-calendar-week>
+  <app-calendar-day *ngIf="activeCalendarStatus[2]" [dayChange]="dayChangeValue"></app-calendar-day>
+  
