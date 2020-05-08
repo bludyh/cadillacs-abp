@@ -33,24 +33,24 @@ build_services:
             - develop
             - master
     cache:
-        key: services_cache
+        key: nuget_cache
         paths:
             - .nuget/
     script:
         - dotnet restore src/Services.sln --packages .nuget/
         - dotnet publish src/Services.sln -c Release --no-restore
         - zip -r artifacts.zip
-        $APIGATEWAY_DIR/$PUBLISH_DIR
-        $ANNOUNCEMENT_API_DIR/$PUBLISH_DIR
-        $ANNOUNCEMENT_EVENTHANDLER_DIR/$PUBLISH_DIR
-        $COURSE_API_DIR/$PUBLISH_DIR 
-        $COURSE_EVENTHANDLER_DIR/$PUBLISH_DIR
-        $IDENTITY_API_DIR/$PUBLISH_DIR
-        $IDENTITY_EVENTHANDLER_DIR/$PUBLISH_DIR
-        $SCHEDULE_API_DIR/$PUBLISH_DIR 
-        $SCHEDULE_EVENTHANDLER_DIR/$PUBLISH_DIR
-        $STUDYPROGRESS_API_DIR/$PUBLISH_DIR 
-        $STUDYPROGRESS_EVENTHANDLER_DIR/$PUBLISH_DIR
+            $APIGATEWAY_DIR/$PUBLISH_DIR
+            $ANNOUNCEMENT_API_DIR/$PUBLISH_DIR
+            $ANNOUNCEMENT_EVENTHANDLER_DIR/$PUBLISH_DIR
+            $COURSE_API_DIR/$PUBLISH_DIR 
+            $COURSE_EVENTHANDLER_DIR/$PUBLISH_DIR
+            $IDENTITY_API_DIR/$PUBLISH_DIR
+            $IDENTITY_EVENTHANDLER_DIR/$PUBLISH_DIR
+            $SCHEDULE_API_DIR/$PUBLISH_DIR 
+            $SCHEDULE_EVENTHANDLER_DIR/$PUBLISH_DIR
+            $STUDYPROGRESS_API_DIR/$PUBLISH_DIR 
+            $STUDYPROGRESS_EVENTHANDLER_DIR/$PUBLISH_DIR
     artifacts:
         expire_in: 1 day
         paths:
@@ -65,7 +65,7 @@ test_services:
             - develop
             - master
     cache:
-        key: services_cache
+        key: nuget_cache
         paths:
             - .nuget/
     dependencies:
