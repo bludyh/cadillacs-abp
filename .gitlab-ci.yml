@@ -75,7 +75,7 @@ test_services:
     dependencies:
         - build_services
     script:
-        - 7z e services.7z
+        - 7z x services.7z
         - dotnet restore src/Services.sln --packages .nuget/
         - dotnet test src/Services.sln -c Release --no-restore --test-adapter-path:src/ --logger:"junit;MethodFormat=Class;FailureBodyFormat=Verbose"
     artifacts:
@@ -105,7 +105,7 @@ publish_images:
     dependencies:
         - build_services
     script:
-        - 7z e services.7z
+        - 7z x services.7z
         - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(echo -n $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" > /kaniko/.docker/config.json
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$APIGATEWAY_DIR/Dockerfile --destination i360147/apigateway --target production
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_API_DIR/Dockerfile --destination i360147/identityapi --target production
