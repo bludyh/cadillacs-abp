@@ -24,6 +24,10 @@ variables:
     PUBLISH_DIR: bin/Release/netcoreapp3.1/publish
     TEST_RESULTS: TestResults/TestResults.xml
 
+default:
+    before_script:
+        - apt-get update && apt-get install zip unzip -y
+
 build_services:
     stage: build
     image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
