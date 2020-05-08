@@ -26,7 +26,7 @@ variables:
 
 default:
     before_script:
-        - apt-get update && apt-get install zip unzip -y
+        - apt-get update && apt-get install p7zip -y
 
 build_services:
     stage: build
@@ -43,7 +43,7 @@ build_services:
     script:
         - dotnet restore src/Services.sln --packages .nuget/
         - dotnet publish src/Services.sln -c Release --no-restore
-        - zip -r artifacts.zip
+        - 7z a services.7z
             $APIGATEWAY_DIR/$PUBLISH_DIR
             $ANNOUNCEMENT_API_DIR/$PUBLISH_DIR
             $ANNOUNCEMENT_EVENTHANDLER_DIR/$PUBLISH_DIR
@@ -58,7 +58,7 @@ build_services:
     artifacts:
         expire_in: 1 day
         paths:
-            - artifacts.zip
+            - services.7z
 
 test_services:
     stage: test
@@ -75,7 +75,7 @@ test_services:
     dependencies:
         - build_services
     script:
-        - unzip artifacts.zip
+        - 7z e services.7z
         - dotnet restore src/Services.sln --packages .nuget/
         - dotnet test src/Services.sln -c Release --no-restore --test-adapter-path:src/ --logger:"junit;MethodFormat=Class;FailureBodyFormat=Verbose"
     artifacts:
@@ -105,7 +105,7 @@ publish_images:
     dependencies:
         - build_services
     script:
-        - unzip artifacts.zip
+        - 7z e services.7z
         - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(echo -n $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" > /kaniko/.docker/config.json
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$APIGATEWAY_DIR/Dockerfile --destination i360147/apigateway --target production
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_API_DIR/Dockerfile --destination i360147/identityapi --target production
