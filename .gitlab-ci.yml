@@ -5,85 +5,66 @@ stages:
     - deploy
 
 variables:
-    APIGATEWAY_DIR: "src/ApiGateway"
-    MESSAGING_DIR: "src/Infrastructure/Infrastructure.Messaging"
-    ANNOUNCEMENT_API_DIR: "src/Services/Announcement/Announcement.Api"
-    ANNOUNCEMENT_EVENTHANDLER_DIR: "src/Services/Announcement/Announcement.EventHandler"
-    ANNOUNCEMENT_UNITTESTS_DIR: "src/Services/Announcement/Announcement.UnitTests"
-    COURSE_API_DIR: "src/Services/Course/Course.Api"
-    COURSE_EVENTHANDLER_DIR: "src/Services/Course/Course.EventHandler"
-    COURSE_UNITTESTS_DIR: "src/Services/Course/Course.UnitTests"
-    IDENTITY_API_DIR: "src/Services/Identity/Identity.Api"
-    IDENTITY_EVENTHANDLER_DIR: "src/Services/Identity/Identity.EventHandler"
-    IDENTITY_UNITTESTS_DIR: "src/Services/Identity/Identity.UnitTests"
-    SCHEDULE_API_DIR: "src/Services/Schedule/Schedule.Api"
-    SCHEDULE_EVENTHANDLER_DIR: "src/Services/Schedule/Schedule.EventHandler"
-    SCHEDULE_UNITTESTS_DIR: "src/Services/Schedule/Schedule.UnitTests"
-    STUDYPROGRESS_API_DIR: "src/Services/StudyProgress/StudyProgress.Api"
-    STUDYPROGRESS_EVENTHANDLER_DIR: "src/Services/StudyProgress/StudyProgress.EventHandler"
-    STUDYPROGRESS_UNITTESTS_DIR: "src/Services/StudyProgress/StudyProgress.UnitTests"
-    WEBSPA_DIR: "src/Web/Spa"
+    APIGATEWAY_DIR: src/ApiGateway
+    ANNOUNCEMENT_API_DIR: src/Services/Announcement/Announcement.Api
+    ANNOUNCEMENT_EVENTHANDLER_DIR: src/Services/Announcement/Announcement.EventHandler
+    ANNOUNCEMENT_UNITTESTS_DIR: src/Services/Announcement/Announcement.UnitTests
+    COURSE_API_DIR: src/Services/Course/Course.Api
+    COURSE_EVENTHANDLER_DIR: src/Services/Course/Course.EventHandler
+    COURSE_UNITTESTS_DIR: src/Services/Course/Course.UnitTests
+    IDENTITY_API_DIR: src/Services/Identity/Identity.Api
+    IDENTITY_EVENTHANDLER_DIR: src/Services/Identity/Identity.EventHandler
+    IDENTITY_UNITTESTS_DIR: src/Services/Identity/Identity.UnitTests
+    SCHEDULE_API_DIR: src/Services/Schedule/Schedule.Api
+    SCHEDULE_EVENTHANDLER_DIR: src/Services/Schedule/Schedule.EventHandler
+    SCHEDULE_UNITTESTS_DIR: src/Services/Schedule/Schedule.UnitTests
+    STUDYPROGRESS_API_DIR: src/Services/StudyProgress/StudyProgress.Api
+    STUDYPROGRESS_EVENTHANDLER_DIR: src/Services/StudyProgress/StudyProgress.EventHandler
+    STUDYPROGRESS_UNITTESTS_DIR: src/Services/StudyProgress/StudyProgress.UnitTests
+
+default:
+    before_script:
+        - apt update && apt install -y p7zip-full
 
 build_services:
     stage: build
     image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
+    only:
+        refs:
+            - /^ABP-[0-9]+.*$/i
+            - develop
+            - master
     cache:
         key: services_cache
         paths:
             - src/.nuget/
+    script:
+        - dotnet restore src/Services.sln --packages src/.nuget/
+        - dotnet publish src/Services.sln -c Release --no-restore
+        - 7z a artifacts.7z $APIGATEWAY_DIR/bin/ $ANNOUNCEMENT_API_DIR/bin/ $ANNOUNCEMENT_EVENTHANDLER_DIR/bin/ $COURSE_API_DIR/bin/ $COURSE_EVENTHANDLER_DIR/bin/ $IDENTITY_API_DIR/bin/ $IDENTITY_EVENTHANDLER_DIR/bin/ $SCHEDULE_API_DIR/bin/ $SCHEDULE_EVENTHANDLER_DIR/bin/ $STUDYPROGRESS_API_DIR/bin/ $STUDYPROGRESS_EVENTHANDLER_DIR/bin/
     artifacts:
         expire_in: 1 day
         paths:
-            - $APIGATEWAY_DIR/bin/
-            - $MESSAGING_DIR/bin/
-            - $ANNOUNCEMENT_API_DIR/bin/
-            - $ANNOUNCEMENT_EVENTHANDLER_DIR/bin/
-            - $COURSE_API_DIR/bin/
-            - $COURSE_EVENTHANDLER_DIR/bin/
-            - $IDENTITY_API_DIR/bin/
-            - $IDENTITY_EVENTHANDLER_DIR/bin/
-            - $SCHEDULE_API_DIR/bin/
-            - $SCHEDULE_EVENTHANDLER_DIR/bin/
-            - $STUDYPROGRESS_API_DIR/bin/
-            - $STUDYPROGRESS_EVENTHANDLER_DIR/bin/
-    script:
-        - cd src/
-        - dotnet restore Services.sln --packages .nuget/
-        - dotnet publish Services.sln -c Release --no-restore
-    only:
-        refs:
-            - /^ABP-[0-9]+.*$/i
-            - develop
-            - master
-
-build_webspa:
-    stage: build
-    image: node:13.10.1-alpine
-    cache:
-        key: webspa_cache
-        paths:
-            - $WEBSPA_DIR/.npm/
-    artifacts:
-        expire_in: 1 day
-        paths:
-            - $WEBSPA_DIR/dist/
-    script:
-        - cd $WEBSPA_DIR/
-        - npm ci --cache .npm/ --prefer-offline
-        - npm run build -- --prod
-    only:
-        refs:
-            - /^ABP-[0-9]+.*$/i
-            - develop
-            - master
+            - artifacts.7z
 
 test_services:
     stage: test
     image: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
+    only:
+        refs:
+            - /^ABP-[0-9]+.*$/i
+            - develop
+            - master
     cache:
         key: services_cache
         paths:
             - src/.nuget/
+    dependencies:
+        - build_services
+    script:
+        - 7z e artifacts.7z
+        - dotnet restore src/Services.sln --packages src/.nuget/
+        - dotnet test src/Services.sln -c Release --no-restore --test-adapter-path:src --logger:"junit;MethodFormat=Class;FailureBodyFormat=Verbose"
     artifacts:
         when: always
         paths:
@@ -99,27 +80,19 @@ test_services:
                 - $IDENTITY_UNITTESTS_DIR/TestResults/TestResults.xml
                 - $SCHEDULE_UNITTESTS_DIR/TestResults/TestResults.xml
                 - $STUDYPROGRESS_UNITTESTS_DIR/TestResults/TestResults.xml
-    dependencies:
-        - build_services
-    script:
-        - cd src/
-        - dotnet restore Services.sln --packages .nuget/
-        - dotnet test Services.sln -c Release --no-restore --test-adapter-path:. --logger:"junit;MethodFormat=Class;FailureBodyFormat=Verbose"
-    only:
-        refs:
-            - /^ABP-[0-9]+.*$/i
-            - develop
-            - master
 
 publish_images:
     stage: publish
     image:
         name: gcr.io/kaniko-project/executor:debug
         entrypoint: [""]
+    only:
+        refs:
+            - master
     dependencies:
         - build_services
-        - build_webspa
     script:
+        - 7z e artifacts.7z
         - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(echo -n $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" > /kaniko/.docker/config.json
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$APIGATEWAY_DIR/Dockerfile --destination i360147/apigateway --target production
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_API_DIR/Dockerfile --destination i360147/identityapi --target production
@@ -132,7 +105,3 @@ publish_images:
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$SCHEDULE_EVENTHANDLER_DIR/Dockerfile --destination i360147/scheduleeventhandler --target production
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$ANNOUNCEMENT_API_DIR/Dockerfile --destination i360147/announcementapi --target production
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$ANNOUNCEMENT_EVENTHANDLER_DIR/Dockerfile --destination i360147/announcementeventhandler --target production
-        - /kaniko/executor --context $CI_PROJECT_DIR/$WEBSPA_DIR/ --dockerfile $CI_PROJECT_DIR/$WEBSPA_DIR/Dockerfile --destination i360147/webspa --target production
-    only:
-        refs:
-            - master
