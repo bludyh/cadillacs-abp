@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using StudyProgress.EventHandler.Events;
+using Infrastructure.Common.Events;
 using StudyProgress.EventHandler.Models;
 using System;
 using System.Collections.Generic;
@@ -11,10 +11,10 @@ namespace StudyProgress.EventHandler.Mappings
     {
         public MappingProfile()
         {
-            CreateMap<SchoolCreated, School>(MemberList.Source);
-            CreateMap<SchoolUpdated, School>(MemberList.Source);
-            CreateMap<StudentCreated, Student>(MemberList.Source);
-            CreateMap<StudentUpdated, Student>(MemberList.Source);
+            CreateMap<SchoolCreated, School>();
+            CreateMap<SchoolUpdated, School>();
+            CreateMap<StudentCreated, Student>();
+            CreateMap<StudentUpdated, Student>();
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using Pitstop.Infrastructure.Messaging;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace StudyProgress.EventHandler.Events
+namespace Infrastructure.Common.Events
 {
-    public class SchoolDeleted : Event
+    public class ProgramDeleted : Event
     {
         public string Id { get; set; }
     }

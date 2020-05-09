@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Identity.EventHandler.Data;
-using Identity.EventHandler.Events;
 using Identity.EventHandler.Models;
+using Infrastructure.Common.Events;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using Pitstop.Infrastructure.Messaging;

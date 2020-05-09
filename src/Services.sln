@@ -41,15 +41,30 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyProgress.UnitTests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Common", "Infrastructure\Infrastructure.Common\Infrastructure.Common.csproj", "{328A0E10-7D65-4935-95C4-D94EA965F49A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Announcement.EventHandler", "Services\Announcement\Announcement.EventHandler\Announcement.EventHandler.csproj", "{DFFBBC85-C448-48C8-8617-30D0F37C27A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Announcement.EventHandler", "Services\Announcement\Announcement.EventHandler\Announcement.EventHandler.csproj", "{DFFBBC85-C448-48C8-8617-30D0F37C27A0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{328A0E10-7D65-4935-95C4-D94EA965F49A} = {328A0E10-7D65-4935-95C4-D94EA965F49A}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Course.EventHandler", "Services\Course\Course.EventHandler\Course.EventHandler.csproj", "{7C257FA7-AA57-428A-AC61-5E3BDC94EE4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Course.EventHandler", "Services\Course\Course.EventHandler\Course.EventHandler.csproj", "{7C257FA7-AA57-428A-AC61-5E3BDC94EE4D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{328A0E10-7D65-4935-95C4-D94EA965F49A} = {328A0E10-7D65-4935-95C4-D94EA965F49A}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.EventHandler", "Services\Identity\Identity.EventHandler\Identity.EventHandler.csproj", "{5260313A-A082-4BC8-B63C-DDA879A4880F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.EventHandler", "Services\Identity\Identity.EventHandler\Identity.EventHandler.csproj", "{5260313A-A082-4BC8-B63C-DDA879A4880F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{328A0E10-7D65-4935-95C4-D94EA965F49A} = {328A0E10-7D65-4935-95C4-D94EA965F49A}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedule.EventHandler", "Services\Schedule\Schedule.EventHandler\Schedule.EventHandler.csproj", "{00F302F1-3952-446B-B06D-E60562007291}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schedule.EventHandler", "Services\Schedule\Schedule.EventHandler\Schedule.EventHandler.csproj", "{00F302F1-3952-446B-B06D-E60562007291}"
+	ProjectSection(ProjectDependencies) = postProject
+		{328A0E10-7D65-4935-95C4-D94EA965F49A} = {328A0E10-7D65-4935-95C4-D94EA965F49A}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyProgress.EventHandler", "Services\StudyProgress\StudyProgress.EventHandler\StudyProgress.EventHandler.csproj", "{A9EEA1A6-464A-4EAF-BA60-C0DEC1E64FCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyProgress.EventHandler", "Services\StudyProgress\StudyProgress.EventHandler\StudyProgress.EventHandler.csproj", "{A9EEA1A6-464A-4EAF-BA60-C0DEC1E64FCA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{328A0E10-7D65-4935-95C4-D94EA965F49A} = {328A0E10-7D65-4935-95C4-D94EA965F49A}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

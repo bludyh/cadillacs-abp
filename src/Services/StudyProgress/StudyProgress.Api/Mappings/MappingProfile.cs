@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Infrastructure.Common.Events;
 using StudyProgress.Api.Dtos;
-using StudyProgress.Api.Events;
 using StudyProgress.Api.Models;
 using System;
 using System.Collections.Generic;

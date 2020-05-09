@@ -46,7 +46,7 @@ namespace Infrastructure.Common.Services
 
                 if (!(entity is TEntity))
                     throw new HttpResponseException(
-                        message: $"Foreign key constraint is violated: {typeof(TEntity).Name}.",
+                        message: $"The foreign key for {typeof(TEntity).Name} is invalid.",
                         status: StatusCodes.Status422UnprocessableEntity);
             }
 

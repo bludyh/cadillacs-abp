@@ -28,7 +28,7 @@ namespace Infrastructure.Common.Attributes
                 || keyValues.All(kv => kv != null))
                 return ValidationResult.Success;
 
-            return new ValidationResult("The key is incomplete. One or more fields have null values.", memberNames);
+            return new ValidationResult("The composite key is incomplete. One or more fields have null values.", memberNames);
         }
 
     }

@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Infrastructure.Common;
+using Infrastructure.Common.Events;
 using Infrastructure.Common.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Pitstop.Infrastructure.Messaging;
 using StudyProgress.Api.Data;
 using StudyProgress.Api.Dtos;
-using StudyProgress.Api.Events;
 using StudyProgress.Api.Models;
 using System;
 using System.Collections.Generic;

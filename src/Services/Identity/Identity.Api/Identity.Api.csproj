@@ -9,14 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200404212858_InitialCreate.cs" />
-    <Compile Remove="Migrations\20200404212858_InitialCreate.Designer.cs" />
-    <Compile Remove="Migrations\20200404222318_DisableUserRoleIdGeneratedValue.cs" />
-    <Compile Remove="Migrations\20200404222318_DisableUserRoleIdGeneratedValue.Designer.cs" />
-    <Compile Remove="Migrations\20200404223204_InitialCreate.cs" />
-    <Compile Remove="Migrations\20200404223204_InitialCreate.Designer.cs" />
-    <Compile Remove="Migrations\20200405101225_InitialCreate.cs" />
-    <Compile Remove="Migrations\20200405101225_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\**" />
+    <Content Remove="Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Migrations\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,11 +29,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
-    <PackageReference Include="Pitstop.Infrastructure.Messaging" Version="2.6.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>

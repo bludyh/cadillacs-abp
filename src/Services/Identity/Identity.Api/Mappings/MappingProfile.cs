@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Identity.Api.Dtos;
-using Identity.Api.Events;
 using Identity.Api.Models;
+using Infrastructure.Common.Events;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;

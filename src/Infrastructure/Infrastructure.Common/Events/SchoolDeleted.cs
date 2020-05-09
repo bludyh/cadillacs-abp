@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace StudyProgress.Api.Events
+namespace Infrastructure.Common.Events
 {
-    public class ProgramDeleted : Event
+    public class SchoolDeleted : Event
     {
         public string Id { get; set; }
     }

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Infrastructure.Common.Events;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using Pitstop.Infrastructure.Messaging;
 using StudyProgress.EventHandler.Data;
-using StudyProgress.EventHandler.Events;
 using StudyProgress.EventHandler.Models;
 using System;
 using System.Collections.Generic;

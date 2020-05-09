@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Identity.Api.Events
+namespace Infrastructure.Common.Events
 {
-    public class SchoolDeleted : Event
+    public class StudentDeleted : Event
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Identity.Api.Data;
 using Identity.Api.Dtos;
-using Identity.Api.Events;
 using Identity.Api.Models;
 using Infrastructure.Common;
+using Infrastructure.Common.Events;
 using Infrastructure.Common.Services;
 using Microsoft.EntityFrameworkCore;
 using Pitstop.Infrastructure.Messaging;

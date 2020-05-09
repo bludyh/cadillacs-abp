@@ -1,11 +1,10 @@
-﻿using Identity.Api.Models;
-using Pitstop.Infrastructure.Messaging;
+﻿using Pitstop.Infrastructure.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Identity.Api.Events
+namespace Infrastructure.Common.Events
 {
     public class StudentCreated : Event
     {

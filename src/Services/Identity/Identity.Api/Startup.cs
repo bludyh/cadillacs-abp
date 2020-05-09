@@ -56,11 +56,7 @@ namespace Identity.Api {
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             if (env.IsDevelopment())
             {
-                app.UseExceptionHandler("/error-development");
-            }
-            else
-            {
-                app.UseExceptionHandler("/error");
+                app.UseDeveloperExceptionPage();
             }
 
             // CORS
