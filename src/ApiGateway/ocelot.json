@@ -1,65 +1,29 @@
 ﻿{
-    "ReRoutes": [
-      {
-        "DownstreamPathTemplate": "/weatherforecast",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "identity.api",
-            "Port": 80
-          }
-        ],
-        "UpstreamPathTemplate": "/api/identity",
-        "UpstreamHttpMethod": [ "Get" ]
-      },
-      {
-        "DownstreamPathTemplate": "/weatherforecast",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "course.api",
-            "Port": 80
-          }
-        ],
-        "UpstreamPathTemplate": "/api/course",
-        "UpstreamHttpMethod": [ "Get" ]
-      },
-      {
-        "DownstreamPathTemplate": "/weatherforecast",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "studyprogress.api",
-            "Port": 80
-          }
-        ],
-        "UpstreamPathTemplate": "/api/progress",
-        "UpstreamHttpMethod": [ "Get" ]
-      },
-      {
-        "DownstreamPathTemplate": "/weatherforecast",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "schedule.api",
-            "Port": 80
-          }
-        ],
-        "UpstreamPathTemplate": "/api/schedule",
-        "UpstreamHttpMethod": [ "Get" ]
-      },
-      {
-        "DownstreamPathTemplate": "/weatherforecast",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "announcement.api",
-            "Port": 80
-          }
-        ],
-        "UpstreamPathTemplate": "/api/announcement",
-        "UpstreamHttpMethod": [ "Get" ]
-      }
-    ],
-    "GlobalConfiguration": { }
+  "ReRoutes": [
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identityapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/identity/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Post", "Delete" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "studyprogressapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/studyprogress/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Post", "Delete" ]
+    }
+  ],
+  "GlobalConfiguration": {}
 }

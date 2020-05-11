@@ -1,22 +1,63 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Pitstop.Infrastructure.Messaging.Configuration;
+using StudyProgress.EventHandler.Data;
+using StudyProgress.EventHandler.Mappings;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
-namespace StudyProgress.EventHandler {
-    public class Program {
-        public static void Main(string[] args) {
-            CreateHostBuilder(args).Build().Run();
+namespace StudyProgress.EventHandler
+{
+    class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            await CreateHostBuilder(args).Build().RunAsync();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => {
-                    webBuilder.UseStartup<Startup>();
-                });
+        private static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            var hostBuilder = Host.CreateDefaultBuilder(args)
+                .ConfigureHostConfiguration(configHost =>
+                {
+                    configHost.SetBasePath(Directory.GetCurrentDirectory());
+                    configHost.AddJsonFile("hostsettings.json", optional: true);
+                    configHost.AddJsonFile($"appsettings.json", optional: false);
+                    configHost.AddEnvironmentVariables();
+                    configHost.AddEnvironmentVariables("DOTNET_");
+                    configHost.AddCommandLine(args);
+                })
+                .ConfigureAppConfiguration((hostContext, config) =>
+                {
+                    config.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: false);
+                })
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.UseRabbitMQMessageHandler(hostContext.Configuration);
+
+                    services.AddTransient(_ =>
+                    {
+                        var sqlConnectionString = hostContext.Configuration.GetConnectionString("StudyProgress");
+                        var dbContextOptions = new DbContextOptionsBuilder<StudyProgressContext>()
+                            .UseSqlServer(sqlConnectionString)
+                            .Options;
+                        var dbContext = new StudyProgressContext(dbContextOptions);
+
+                        return dbContext;
+                    });
+
+                    services.AddHostedService<EventHandler>();
+
+                    services.AddAutoMapper(typeof(MappingProfile));
+                })
+                .UseConsoleLifetime();
+
+            return hostBuilder;
+        }
+
     }
 }
