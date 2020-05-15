@@ -7,18 +7,13 @@ namespace Announcement.Api.Models
 {
     public class ClassAnnouncement
     {
-        public string AnnouncementId { get; set; }
-
-        public int ClassId { get; set; }
-
-        public int Semester { get; set; }
-
-        public int Year { get; set; }
-
-        public string CourseId { get; set; }
+        public int AnnouncementId { get; set; }
+        public string ClassId { get; set; }
+        public int ClassSemester { get; set; }
+        public int ClassYear { get; set; }
+        public string ClassCourseId { get; set; }
 
         public Announcement Announcement { get; set; }
-
         public Class Class { get; set; }
     }
 }
