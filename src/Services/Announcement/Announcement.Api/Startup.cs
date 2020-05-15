@@ -37,10 +37,10 @@ namespace Announcement.Api {
 
             // Add Services
             services.AddScoped<IAnnouncementService, AnnouncementService>();
+            services.AddScoped<IClassService, ClassService>();
 
-            services.AddControllers();
-            //services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
-              //  .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
