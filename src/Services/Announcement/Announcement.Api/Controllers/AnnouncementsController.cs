@@ -11,11 +11,11 @@ namespace Announcement.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AnnouncementController : ControllerBase
+    public class AnnouncementsController : ControllerBase
     {
         private readonly IAnnouncementService _announcementService;
 
-        public AnnouncementController(IAnnouncementService announcementService)
+        public AnnouncementsController(IAnnouncementService announcementService)
         {
             _announcementService = announcementService;
         }

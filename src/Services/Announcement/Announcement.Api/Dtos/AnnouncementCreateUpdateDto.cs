@@ -16,7 +16,5 @@ namespace Announcement.Api.Dtos
 
         [Required]
         public string Body { get; set; }
-
-        // TODO: Get current DateTime in code at creation
     }
 }

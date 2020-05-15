@@ -54,6 +54,9 @@ namespace Announcement.Api.Services
         {
             var announcement = _mapper.Map<Models.Announcement>(dto);
 
+            // Add current DateTime at announcement creation, formatted to Sortable ("s") format to remove milliseconds.
+            announcement.DateTime = Convert.ToDateTime(DateTime.Now.ToString("s"));
+
             await _context.AddAsync(announcement);
             await _context.SaveChangesAsync();
 
