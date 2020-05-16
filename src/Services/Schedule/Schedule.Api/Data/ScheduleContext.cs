@@ -18,32 +18,9 @@ namespace Schedule.Api.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<UserSchedule>(us =>
-            //{
-            //    us.HasKey(us => new { us.Id });
-
-            //    us.HasOne<User>(us => us.User)
-            //        .WithMany(u => u.UserSchedules)
-            //        .HasForeignKey(us => us.UserId);
-            //});
-            
-
-            modelBuilder.Entity<User>(u => {
-                u.HasKey(u => new { u.Id });
-
-                //u.HasMany(u => u.UserSchedules)
-                //    .WithOne(us => us.User);
-            });
-
-            modelBuilder.Entity<Student>(s =>
-            {
-                //s.HasKey(s => new { s.Id });
-            });
-
-            modelBuilder.Entity<Teacher>(t =>
-            {
-                //t.HasKey(t => new { t.Id });
-            });
+            modelBuilder.Entity<User>()
+                .Property(u => u.Id)
+                .ValueGeneratedNever();
 
             modelBuilder.Entity<Enrollment>(e => {
                 e.HasKey(e => new { e.StudentId, e.ClassId, e.ClassSemester, e.ClassYear, e.ClassCourseId });
@@ -58,7 +35,7 @@ namespace Schedule.Api.Data
             });
 
             modelBuilder.Entity<ClassSchedule>(cs => {
-                cs.HasKey(cs => new { cs.Day, cs.StartTime, cs.EndTime, cs.ClassId, cs.ClassSemester, cs.ClassYear, cs.ClassCourseId, cs.RoomId, cs.RoomBuildingId });
+                cs.HasKey(cs => new { cs.StartTime, cs.ClassId, cs.ClassSemester, cs.ClassYear, cs.ClassCourseId, cs.RoomId, cs.RoomBuildingId });
             });
 
             modelBuilder.Entity<Room>(r => {
@@ -67,8 +44,6 @@ namespace Schedule.Api.Data
         }
 
         //entities
-        //public DbSet<UserSchedule> UserSchedules { get; set; }
-
         public DbSet<User> Users { get; set; }
 
         public DbSet<Student> Students { get; set; }

@@ -8,17 +8,12 @@ namespace Schedule.Api.Models
     public class Enrollment
     {
         public int StudentId { get; set; }
-
         public string ClassId { get; set; }
-
         public int ClassSemester { get; set; }
-
         public int ClassYear { get; set; }
-
         public string ClassCourseId { get; set; }
 
         public Student Student { get; set; }
-
         public Class Class { get; set; }
     }
 }

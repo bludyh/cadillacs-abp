@@ -19,13 +19,26 @@ namespace Schedule.Api.Controllers
             _classService = classService;
         }
 
-
-
         [HttpGet("{classCourseId}/[controller]/{classId}/{classSemester}/{classYear}/schedules")]
-        public async Task<ActionResult<IEnumerable<ClassScheduleReadDto>>> GetClassSchedules(string roomId, string classCourseId, string classId, int classSemester, int classYear)
+        public async Task<ActionResult<IEnumerable<ClassScheduleReadDto>>> GetClassSchedules(string classCourseId, string classId, int classSemester, int classYear)
         {
-            return await _classService.GetClassSchedulesAsync(roomId, classCourseId, classId, classSemester, classYear);
+            return await _classService.GetClassSchedulesAsync(classCourseId, classId, classSemester, classYear);
         }
 
+        // POST: api/Courses/prc1/Classes/e-s71/1/2020/Schedules
+        [HttpPost("{classCourseId}/[controller]/{classId}/{classSemester}/{classYear}/schedules")]
+        public async Task<ActionResult<ClassScheduleReadDto>> AddClassSchedules(string classCourseId, string classId, int classSemester, int classYear, ClassClassScheduleCreateDto dto)
+        {
+            var classSchedule = await _classService.AddClassScheduleAsync(classCourseId, classId, classSemester, classYear, dto);
+
+            return CreatedAtAction(nameof(GetClassSchedules), new { classCourseId, classId, classSemester, classYear }, classSchedule);
+        }
+
+        // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Schedules
+        [HttpDelete("{classCourseId}/[controller]/{classId}/{classSemester}/{classYear}/schedules")]
+        public async Task<ActionResult<ClassScheduleReadDto>> RemoveClassSchedule(string classCourseId, string classId, int classSemester, int classYear, ClassClassScheduleDeleteDto dto)
+        {
+            return await _classService.RemoveClassScheduleAsync(classCourseId, classId, classSemester, classYear, dto);
+        }
     }
 }

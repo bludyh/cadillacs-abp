@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:50732",
+      "applicationUrl": "http://localhost:50826",
       "sslPort": 44332
     }
   },
@@ -11,8 +11,7 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "api/courses/prc1/classes/e-s71/1/2020/schedules",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -7,7 +7,6 @@ namespace Schedule.Api.Models
 {
     public class Student : User
     {
-
         public List<Enrollment> Enrollments { get; set; }
     }
 }

@@ -29,11 +29,9 @@ namespace Schedule.Api {
             services.AddDbContext<ScheduleContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Schedule")));
 
-
             services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddScoped<IClassService, ClassService>();
-
 
             services.AddControllers();
         }
