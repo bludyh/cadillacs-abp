@@ -15,7 +15,7 @@ namespace Schedule.Api.Models
 
         public string Initials { get; set; }
 
-        public List<UserSchedule> UserSchedules { get; set; }
+        //public List<UserSchedule> UserSchedules { get; set; }
     
     
     

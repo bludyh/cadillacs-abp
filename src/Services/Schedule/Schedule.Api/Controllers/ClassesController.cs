@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace Schedule.Api.Controllers
 {
+    [Route("api/courses")]
+    [ApiController]
     public class ClassesController : ControllerBase
     {
         private readonly IClassService _classService;
@@ -20,7 +22,7 @@ namespace Schedule.Api.Controllers
 
 
         [HttpGet("{classCourseId}/[controller]/{classId}/{classSemester}/{classYear}/schedules")]
-        public async Task<ActionResult<IEnumerable<ClassScheduleReadDto>>> GetClassSchedules(string roomId, string classCourseId, string classId, int classSemester, int classYear
+        public async Task<ActionResult<IEnumerable<ClassScheduleReadDto>>> GetClassSchedules(string roomId, string classCourseId, string classId, int classSemester, int classYear)
         {
             return await _classService.GetClassSchedulesAsync(roomId, classCourseId, classId, classSemester, classYear);
         }

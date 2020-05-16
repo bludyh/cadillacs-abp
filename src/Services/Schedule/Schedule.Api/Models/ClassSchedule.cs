@@ -12,17 +12,17 @@ namespace Schedule.Api.Models
     
         public DateTime EndTime { get; set; }
 
-        public int ClassId { get; set; }
+        public string ClassId { get; set; }
 
-        public int Semester { get; set; }
+        public int ClassSemester { get; set; }
 
-        public int Year { get; set; }
+        public int ClassYear { get; set; }
 
-        public int CourseId { get; set; }
+        public string ClassCourseId { get; set; }
 
         public string RoomId { get; set; }
 
-        public string Building { get; set; }
+        public string RoomBuildingId { get; set; }
 
         public Class Class { get; set; }
 

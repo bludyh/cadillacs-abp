@@ -9,13 +9,13 @@ namespace Schedule.Api.Models
     {
         public int TeacherId { get; set; }
 
-        public int ClassId { get; set; }
+        public string ClassId { get; set; }
 
-        public int Semester { get; set; }
+        public int ClassSemester { get; set; }
 
-        public int Year { get; set; }
+        public int ClassYear { get; set; }
 
-        public int CourseId { get; set; }
+        public string ClassCourseId { get; set; }
 
         public Teacher Teacher { get; set; }
 
