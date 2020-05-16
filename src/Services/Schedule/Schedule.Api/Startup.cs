@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Schedule.Api.Data;
+using Schedule.Api.Mappings;
+using Schedule.Api.Services;
 
 namespace Schedule.Api {
     public class Startup {
@@ -25,6 +28,12 @@ namespace Schedule.Api {
         public void ConfigureServices(IServiceCollection services) {
             services.AddDbContext<ScheduleContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Schedule")));
+
+
+            services.AddAutoMapper(typeof(MappingProfile));
+
+            services.AddScoped<IClassService, ClassService>();
+
 
             services.AddControllers();
         }
