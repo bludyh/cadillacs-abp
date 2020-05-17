@@ -15,12 +15,6 @@ namespace StudyProgress.Api.Services
 {
     public interface ICourseService
     {
-        public Task<List<CourseReadDto>> GetAllAsync();
-        public Task<CourseReadDto> GetAsync(string courseId);
-        public Task UpdateAsync(string courseId, CourseCreateUpdateDto dto);
-        public Task<CourseReadDto> CreateAsync(CourseCreateUpdateDto dto);
-        public Task<CourseReadDto> DeleteAsync(string courseId);
-
         public Task<List<ProgramReadDto>> GetProgramsAsync(string courseId);
         public Task<ProgramReadDto> AddProgramAsync(string courseId, string programId);
         public Task<ProgramReadDto> RemoveProgramAsync(string courseId, string programId);
@@ -28,10 +22,6 @@ namespace StudyProgress.Api.Services
         public Task<List<CourseReadDto>> GetRequirementsAsync(string courseId);
         public Task<CourseReadDto> AddRequirementAsync(string courseId, string requiredCourseId);
         public Task<CourseReadDto> RemoveRequirementAsync(string courseId, string requiredCourseId);
-
-        public Task<List<ClassEnrollmentReadDto>> GetEnrollmentsAsync(string courseId, string classId, int classSemester, int classYear);
-        public Task<ClassEnrollmentReadDto> AddEnrollmentAsync(string courseId, string classId, int classSemester, int classYear, int studentId);
-        public Task<ClassEnrollmentReadDto> RemoveEnrollmentAsync(string courseId, string classId, int classSemester, int classYear, int studentId);
     }
     public class CourseService : ServiceBase, ICourseService
     {
@@ -41,52 +31,6 @@ namespace StudyProgress.Api.Services
         {
             _mapper = mapper;
         }
-
-        #region Courses
-        public async Task<List<CourseReadDto>> GetAllAsync()
-        {
-            return await _mapper.ProjectTo<CourseReadDto>(_context.Set<Course>()).ToListAsyncFallback();
-        }
-
-        public async Task<CourseReadDto> GetAsync(string courseId)
-        {
-            var course = await ValidateExistenceAsync<Course>(courseId);
-
-            return _mapper.Map<CourseReadDto>(course);
-        }
-
-        public async Task UpdateAsync(string courseId, CourseCreateUpdateDto dto)
-        {
-            var course = await ValidateExistenceAsync<Course>(courseId);
-
-            _mapper.Map(dto, course);
-
-            _context.Update(course);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<CourseReadDto> CreateAsync(CourseCreateUpdateDto dto)
-        {
-            await ValidateDuplicationAsync<Course>(dto.Id);
-
-            var course = _mapper.Map<Course>(dto);
-
-            await _context.AddAsync(course);
-            await _context.SaveChangesAsync();
-
-            return _mapper.Map<CourseReadDto>(course);
-        }
-
-        public async Task<CourseReadDto> DeleteAsync(string courseId)
-        {
-            var course = await ValidateExistenceAsync<Course>(courseId);
-
-            _context.Remove(course);
-            await _context.SaveChangesAsync();
-
-            return _mapper.Map<CourseReadDto>(course);
-        }
-        #endregion
 
         #region Programs
         public async Task<List<ProgramReadDto>> GetProgramsAsync(string courseId)
@@ -202,72 +146,5 @@ namespace StudyProgress.Api.Services
         }
         #endregion
 
-        #region Enrollments
-        public async Task<List<ClassEnrollmentReadDto>> GetEnrollmentsAsync(string courseId, string classId, int classSemester, int classYear)
-        {
-            var course = await ValidateExistenceAsync<Course>(courseId);
-
-            var inputClass = await ValidateExistenceAsync<Class>(classId, classSemester, classYear, courseId);
-
-            await ValidateForeignKeyAsync<Course>(inputClass.CourseId);
-
-            await _context.Entry(inputClass)
-                .Collection(c => c.Enrollments)
-                .Query()
-                .Include(e => e.Student)
-                .LoadAsync();
-
-            return await _mapper.ProjectTo<ClassEnrollmentReadDto>(inputClass.Enrollments.AsQueryable()).ToListAsyncFallback();
-        }
-
-        public async Task<ClassEnrollmentReadDto> AddEnrollmentAsync(string courseId, string classId, int classSemester, int classYear, int studentId)
-        {
-            await ValidateExistenceAsync<Course>(courseId);
-
-            var inputClass = await ValidateExistenceAsync<Class>(classId, classSemester, classYear, courseId);
-
-            await ValidateExistenceAsync<Student>(studentId);
-
-            await ValidateForeignKeyAsync<Course>(inputClass.CourseId);
-
-            await ValidateDuplicationAsync<Enrollment>(classId, classSemester, classYear, courseId, studentId);
-
-            var e = new Enrollment
-            {
-                ClassId = classId,
-                ClassSemester = classSemester,
-                ClassYear = classYear,
-                ClassCourseId = courseId,
-                StudentId = studentId
-            };
-
-            await _context.AddAsync(e);
-            await _context.SaveChangesAsync();
-
-            return _mapper.Map<ClassEnrollmentReadDto>(e);
-        }
-
-        public async Task<ClassEnrollmentReadDto> RemoveEnrollmentAsync(string courseId, string classId, int classSemester, int classYear, int studentId)
-        {
-            await ValidateExistenceAsync<Course>(courseId);
-
-            var inputClass = await ValidateExistenceAsync<Class>(classId, classSemester, classYear, courseId);
-
-            await ValidateExistenceAsync<Student>(studentId);
-
-            await ValidateForeignKeyAsync<Course>(inputClass.CourseId);
-
-            var e = await _context.FindAsync<Enrollment>(classId, classSemester, classYear, courseId, studentId);
-            Validate(
-                condition: !(e is Enrollment),
-                message: $"Student '{studentId}' is not enrolled in Class.",
-                status: StatusCodes.Status404NotFound);
-
-            _context.Remove(e);
-            await _context.SaveChangesAsync();
-
-            return _mapper.Map<ClassEnrollmentReadDto>(e);
-        }
-        #endregion
     }
 }
