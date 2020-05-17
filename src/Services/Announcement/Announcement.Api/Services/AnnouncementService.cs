@@ -1,5 +1,6 @@
 ﻿using Announcement.Api.Data;
 using Announcement.Api.Dtos;
+using Announcement.Api.Models;
 using AutoMapper;
 using Infrastructure.Common;
 using Infrastructure.Common.Services;
@@ -37,6 +38,10 @@ namespace Announcement.Api.Services
         {
             var announcement = await ValidateExistenceAsync<Models.Announcement>(announcementId);
 
+            await _context.Entry(announcement)
+                .Reference(a => a.Employee)
+                .LoadAsync();
+
             return _mapper.Map<AnnouncementReadDto>(announcement);
         }
 
@@ -52,6 +57,8 @@ namespace Announcement.Api.Services
 
         public async Task<AnnouncementReadDto> CreateAsync(AnnouncementCreateUpdateDto dto)
         {
+            await ValidateForeignKeyAsync<Employee>(dto.EmployeeId);
+
             var announcement = _mapper.Map<Models.Announcement>(dto);
 
             // Add current DateTime at announcement creation, formatted to Sortable ("s") format to remove milliseconds.
@@ -66,6 +73,10 @@ namespace Announcement.Api.Services
         public async Task<AnnouncementReadDto> DeleteAsync(int announcementId)
         {
             var announcement = await ValidateExistenceAsync<Models.Announcement>(announcementId);
+
+            await _context.Entry(announcement)
+                .Reference(a => a.Employee)
+                .LoadAsync();
 
             _context.Remove(announcement);
             await _context.SaveChangesAsync();

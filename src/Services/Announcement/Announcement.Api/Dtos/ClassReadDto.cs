@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Announcement.Api.Models
+namespace Announcement.Api.Dtos
 {
-    public class Class
+    public class ClassReadDto
     {
         public string Id { get; set; }
         public int Semester { get; set; }
         public int Year { get; set; }
         public string CourseId { get; set; }
-
         public string CourseName { get; set; }
-
-        public List<ClassAnnouncement> ClassAnnouncements{ get; set; }
     }
 }

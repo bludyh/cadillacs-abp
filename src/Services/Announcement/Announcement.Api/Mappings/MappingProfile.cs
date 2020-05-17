@@ -16,6 +16,9 @@ namespace Announcement.Api.Mappings
             CreateMap<AnnouncementCreateUpdateDto, Models.Announcement>(MemberList.Source);
 
             CreateMap<ClassAnnouncement, ClassAnnouncementReadDto>();
+            
+            CreateMap<Class, ClassReadDto>();
+            CreateMap<Employee, EmployeeReadDto>();
         }
     }
 }

@@ -38,6 +38,7 @@ namespace Announcement.Api.Services
                 .Collection(c => c.ClassAnnouncements)
                 .Query()
                 .Include(ca => ca.Announcement)
+                .ThenInclude(a => a.Employee)
                 .LoadAsync();
 
             return await _mapper.ProjectTo<ClassAnnouncementReadDto>(inputClass.ClassAnnouncements.AsQueryable()).ToListAsyncFallback();
@@ -46,6 +47,12 @@ namespace Announcement.Api.Services
         public async Task<ClassAnnouncementReadDto> GetClassAnnouncementAsync(string classCourseId, string classId, int classSemester, int classYear, int announcementId)
         {
             var classAnnouncement = await ValidateExistenceAsync<ClassAnnouncement>(announcementId, classId, classSemester, classYear, classCourseId);
+
+            await _context.Entry(classAnnouncement)
+                .Reference(ca => ca.Announcement)
+                .Query()
+                .Include(a => a.Employee)
+                .LoadAsync();
 
             return _mapper.Map<ClassAnnouncementReadDto>(classAnnouncement);
         }
@@ -76,6 +83,12 @@ namespace Announcement.Api.Services
         public async Task<ClassAnnouncementReadDto> DeleteClassAnnouncementAsync(string classCourseId, string classId, int classSemester, int classYear, int announcementId)
         {
             var classAnnouncement = await ValidateExistenceAsync<ClassAnnouncement>(announcementId, classId, classSemester, classYear, classCourseId);
+
+            await _context.Entry(classAnnouncement)
+                .Reference(ca => ca.Announcement)
+                .Query()
+                .Include(a => a.Employee)
+                .LoadAsync();
 
             _context.Remove(classAnnouncement);
             await _context.SaveChangesAsync();
