@@ -24,9 +24,6 @@ namespace StudyProgress.Api.Mappings
 
             CreateMap<Class, ClassReadDto>();
             CreateMap<Course, CourseReadDto>();
-            CreateMap<CourseCreateUpdateDto, Course>(MemberList.Source);
-
-            CreateMap<Enrollment, ClassEnrollmentReadDto>();
 
             CreateMap<Student, StudentReadDto>();
 

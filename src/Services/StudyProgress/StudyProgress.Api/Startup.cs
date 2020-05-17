@@ -47,6 +47,13 @@ namespace StudyProgress.Api {
 
             services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            // Swagger
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("studyprogress", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Study Progress API" });
+            });
+
+            services.AddSwaggerGenNewtonsoftSupport();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +63,13 @@ namespace StudyProgress.Api {
             }
 
             // CORS
-            app.UseCors(options => options.AllowAnyOrigin());  
+            app.UseCors(options => options.AllowAnyOrigin());
+
+            // Swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/studyprogress/swagger.json", "Study Progress API");
+            });
 
             app.UseRouting();
 
