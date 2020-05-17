@@ -36,7 +36,7 @@ namespace Identity.Api.Controllers
 
         // GET: api/Schools/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<SchoolCreateReadDto>> GetSchool(string id)
+        public async Task<ActionResult<SchoolCreateReadDto>> GetSchool([FromRoute] string id)
         {
             return await _schoolService.GetAsync(id);
         }
@@ -45,7 +45,7 @@ namespace Identity.Api.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSchool(string id, SchoolUpdateDto dto)
+        public async Task<IActionResult> PutSchool([FromRoute] string id, [FromBody] SchoolUpdateDto dto)
         {
             await _schoolService.UpdateAsync(id, dto);
 
@@ -56,7 +56,7 @@ namespace Identity.Api.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<SchoolCreateReadDto>> PostSchool(SchoolCreateReadDto dto)
+        public async Task<ActionResult<SchoolCreateReadDto>> PostSchool([FromBody] SchoolCreateReadDto dto)
         {
             var school = await _schoolService.CreateAsync(dto);
 
@@ -65,7 +65,7 @@ namespace Identity.Api.Controllers
 
         // DELETE: api/Schools/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<SchoolCreateReadDto>> DeleteSchool(string id)
+        public async Task<ActionResult<SchoolCreateReadDto>> DeleteSchool([FromRoute] string id)
         {
             return await _schoolService.DeleteAsync(id);
         }
@@ -73,13 +73,13 @@ namespace Identity.Api.Controllers
         // Buildings
 
         [HttpGet("{id}/buildings")]
-        public async Task<ActionResult<IEnumerable<BuildingReadDto>>> GetBuildings(string id)
+        public async Task<ActionResult<IEnumerable<BuildingReadDto>>> GetBuildings([FromRoute] string id)
         {
             return await _schoolService.GetBuildingsAsync(id);
         }
 
         [HttpPost("{id}/buildings")]
-        public async Task<ActionResult<BuildingReadDto>> AddBuilding(string id, [FromBody, Required] string buildingId)
+        public async Task<ActionResult<BuildingReadDto>> AddBuilding([FromRoute] string id, [FromBody, Required] string buildingId)
         {
             var building = await _schoolService.AddBuildingAsync(id, buildingId);
 
@@ -87,7 +87,7 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{schoolId}/buildings/{buildingId}")]
-        public async Task<ActionResult<BuildingReadDto>> RemoveBuilding(string schoolId, string buildingId)
+        public async Task<ActionResult<BuildingReadDto>> RemoveBuilding([FromRoute] string schoolId, [FromRoute] string buildingId)
         {
             return await _schoolService.RemoveBuildingAsync(schoolId, buildingId);
         }
