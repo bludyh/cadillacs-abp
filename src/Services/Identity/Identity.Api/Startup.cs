@@ -50,6 +50,13 @@ namespace Identity.Api {
 
             services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            // Swagger
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("identity", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Identity API" });
+            });
+
+            services.AddSwaggerGenNewtonsoftSupport();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,7 +67,13 @@ namespace Identity.Api {
             }
 
             // CORS
-            app.UseCors(options => options.AllowAnyOrigin());  
+            app.UseCors(options => options.AllowAnyOrigin());
+
+            // Swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/identity/swagger.json", "Identity API");
+            });
 
             app.UseRouting();
             app.UseAuthentication();

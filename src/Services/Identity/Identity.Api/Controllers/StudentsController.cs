@@ -39,7 +39,7 @@ namespace Identity.Api.Controllers
 
         // GET: api/Students/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<StudentReadDto>> GetStudent(int id)
+        public async Task<ActionResult<StudentReadDto>> GetStudent([FromRoute] int id)
         {
             return await _studentService.GetAsync(id);
         }
@@ -48,7 +48,7 @@ namespace Identity.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStudent(int id, StudentUpdateDto dto)
+        public async Task<IActionResult> PutStudent([FromRoute] int id, [FromBody] StudentUpdateDto dto)
         {
             await _studentService.UpdateAsync(id, dto);
 
@@ -59,7 +59,7 @@ namespace Identity.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<StudentReadDto>> PostStudent(StudentCreateDto dto)
+        public async Task<ActionResult<StudentReadDto>> PostStudent([FromBody] StudentCreateDto dto)
         {
             var student = await _studentService.CreateAsync(dto);
 
@@ -68,7 +68,7 @@ namespace Identity.Api.Controllers
 
         // DELETE: api/Students/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<StudentReadDto>> DeleteStudent(int id)
+        public async Task<ActionResult<StudentReadDto>> DeleteStudent([FromRoute] int id)
         {
             return await _studentService.DeleteAsync(id);
         }
@@ -76,13 +76,13 @@ namespace Identity.Api.Controllers
         // Roles
 
         [HttpGet("{id}/roles")]
-        public async Task<ActionResult<IEnumerable<RoleReadDto>>> GetRoles(int id)
+        public async Task<ActionResult<IEnumerable<RoleReadDto>>> GetRoles([FromRoute] int id)
         {
             return await _studentService.GetRolesAsync(id);
         }
 
         [HttpPost("{id}/roles")]
-        public async Task<ActionResult<RoleReadDto>> AddRole(int id, [FromBody, Required] string roleName)
+        public async Task<ActionResult<RoleReadDto>> AddRole([FromRoute] int id, [FromBody, Required] string roleName)
         {
             var role = await _studentService.AddRoleAsync(id, roleName);
 
@@ -90,7 +90,7 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{studentId}/roles/{roleName}")]
-        public async Task<ActionResult<RoleReadDto>> RemoveRole(int studentId, string roleName)
+        public async Task<ActionResult<RoleReadDto>> RemoveRole([FromRoute] int studentId, [FromRoute] string roleName)
         {
             return await _studentService.RemoveRoleAsync(studentId, roleName);
         }
@@ -98,13 +98,13 @@ namespace Identity.Api.Controllers
         // Mentors
 
         [HttpGet("{id}/mentors")]
-        public async Task<ActionResult<IEnumerable<StudentMentorReadDto>>> GetMentors(int id)
+        public async Task<ActionResult<IEnumerable<StudentMentorReadDto>>> GetMentors([FromRoute] int id)
         {
             return await _studentService.GetMentorsAsync(id);
         }
 
         [HttpPost("{id}/mentors")]
-        public async Task<ActionResult<StudentMentorReadDto>> AddMentor(int id, StudentMentorCreateDto dto)
+        public async Task<ActionResult<StudentMentorReadDto>> AddMentor([FromRoute] int id, [FromBody] StudentMentorCreateDto dto)
         {
             var mentor = await _studentService.AddMentorAsync(id, dto);
 
@@ -112,7 +112,7 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{id}/mentors")]
-        public async Task<ActionResult<StudentMentorReadDto>> RemoveMentor(int id, [FromQuery, Required] int teacherId, [FromQuery, Required] string mentorType)
+        public async Task<ActionResult<StudentMentorReadDto>> RemoveMentor([FromRoute] int id, [FromQuery, Required] int teacherId, [FromQuery, Required] string mentorType)
         {
             return await _studentService.RemoveMentorAsync(id, teacherId, mentorType);
         }

@@ -25,13 +25,13 @@ namespace Identity.Api.Controllers
         }
 
         [HttpGet("{programId}/employees")]
-        public async Task<ActionResult<IEnumerable<EmployeeReadDto>>> GetEmployees(string programId)
+        public async Task<ActionResult<IEnumerable<EmployeeReadDto>>> GetEmployees([FromRoute] string programId)
         {
             return await _programService.GetEmployeesAsync(programId);
         }
 
         [HttpPost("{programId}/employees")]
-        public async Task<ActionResult<EmployeeReadDto>> AddEmployee(string programId, [FromBody, Required] int employeeId)
+        public async Task<ActionResult<EmployeeReadDto>> AddEmployee([FromRoute] string programId, [FromBody, Required] int employeeId)
         {
             var employee = await _programService.AddEmployeeAsync(programId, employeeId);
 
@@ -39,7 +39,7 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{programId}/employees/{employeeId}")]
-        public async Task<ActionResult<EmployeeReadDto>> DeleteProgram(string programId, int employeeId)
+        public async Task<ActionResult<EmployeeReadDto>> DeleteProgram([FromRoute] string programId, [FromRoute] int employeeId)
         {
             return await _programService.RemoveEmployeeAsync(programId, employeeId);
         }
