@@ -27,7 +27,7 @@ namespace Schedule.Api.Controllers
 
         // POST: api/Courses/prc1/Classes/e-s71/1/2020/Schedules
         [HttpPost("{classCourseId}/[controller]/{classId}/{classSemester}/{classYear}/schedules")]
-        public async Task<ActionResult<ClassScheduleReadDto>> AddClassSchedules(string classCourseId, string classId, int classSemester, int classYear, ClassClassScheduleCreateDto dto)
+        public async Task<ActionResult<ClassScheduleReadDto>> AddClassSchedules(string classCourseId, string classId, int classSemester, int classYear, ClassClassScheduleCreateDeleteDto dto)
         {
             var classSchedule = await _classService.AddClassScheduleAsync(classCourseId, classId, classSemester, classYear, dto);
 
@@ -36,7 +36,7 @@ namespace Schedule.Api.Controllers
 
         // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Schedules
         [HttpDelete("{classCourseId}/[controller]/{classId}/{classSemester}/{classYear}/schedules")]
-        public async Task<ActionResult<ClassScheduleReadDto>> RemoveClassSchedule(string classCourseId, string classId, int classSemester, int classYear, ClassClassScheduleDeleteDto dto)
+        public async Task<ActionResult<ClassScheduleReadDto>> RemoveClassSchedule(string classCourseId, string classId, int classSemester, int classYear, ClassClassScheduleCreateDeleteDto dto)
         {
             return await _classService.RemoveClassScheduleAsync(classCourseId, classId, classSemester, classYear, dto);
         }

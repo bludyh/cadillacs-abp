@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace Schedule.Api.Dtos
 {
-    public class ClassClassScheduleDeleteDto
+    public class ClassClassScheduleCreateDeleteDto
     {
         [Required]
-        public DateTime StartTime { get; set; }
+        public int? TimeSlotId { get; set; }
+
+        [Required]
+        public DateTime Date { get; set; }
 
         [Required]
         public string RoomId { get; set; }

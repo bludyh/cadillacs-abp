@@ -14,11 +14,11 @@ namespace Schedule.Api.Mappings
         public MappingProfile()
         {
             CreateMap<ClassSchedule, ClassScheduleReadDto>();
-            CreateMap<ClassClassScheduleCreateDto, ClassSchedule>(MemberList.Source);
-            CreateMap<ClassClassScheduleDeleteDto, ClassSchedule>(MemberList.Source);
+            CreateMap<ClassClassScheduleCreateDeleteDto, ClassSchedule>(MemberList.Source);
 
             CreateMap<Class, ClassReadDto>();
             CreateMap<Room, RoomReadDto>();
+            CreateMap<TimeSlot, TimeSlotReadDto>();
         }
     }
 }

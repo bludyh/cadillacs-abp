@@ -7,11 +7,10 @@ namespace Schedule.Api.Dtos
 {
     public class ClassScheduleReadDto
     {
-        public DateTime StartTime { get; set; }
-
-        public ClassReadDto Class { get; set; }
+        public TimeSlotReadDto TimeSlot { get; set; }
+        public DateTime Date { get; set; }
         public RoomReadDto Room { get; set; }
 
-        public DateTime EndTime { get; set; }
+        public ClassReadDto Class { get; set; }
     }
 }

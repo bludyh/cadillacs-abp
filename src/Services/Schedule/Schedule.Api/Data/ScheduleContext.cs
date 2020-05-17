@@ -35,7 +35,7 @@ namespace Schedule.Api.Data
             });
 
             modelBuilder.Entity<ClassSchedule>(cs => {
-                cs.HasKey(cs => new { cs.StartTime, cs.ClassId, cs.ClassSemester, cs.ClassYear, cs.ClassCourseId, cs.RoomId, cs.RoomBuildingId });
+                cs.HasKey(cs => new { cs.TimeSlotId, cs.Date, cs.RoomId, cs.RoomBuildingId });
             });
 
             modelBuilder.Entity<Room>(r => {
@@ -55,6 +55,8 @@ namespace Schedule.Api.Data
         public DbSet<Lecturer> Lecturers { get; set; }
 
         public DbSet<Class> Classes { get; set; }
+
+        public DbSet<TimeSlot> TimeSlots { get; set; }
 
         public DbSet<ClassSchedule> ClassSchedules { get; set; }
 
