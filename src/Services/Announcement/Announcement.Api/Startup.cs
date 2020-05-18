@@ -39,6 +39,9 @@ namespace Announcement.Api {
             services.AddScoped<IAnnouncementService, AnnouncementService>();
             services.AddScoped<IClassService, ClassService>();
 
+            // CORS
+            services.AddCors();
+
             services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
@@ -48,6 +51,9 @@ namespace Announcement.Api {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
+
+            // CORS
+            app.UseCors(options => options.AllowAnyOrigin());  
 
             app.UseRouting();
 
