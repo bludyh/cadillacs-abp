@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Announcement.Api.Models
+namespace Announcement.Api.Dtos
 {
-    public class Employee
+    public class EmployeeReadDto
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Initials { get; set; }
-
-        public List<Announcement> Announcements { get; set; }
     }
 }

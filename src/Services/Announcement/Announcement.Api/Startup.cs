@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Announcement.Api.Data;
+using Announcement.Api.Mappings;
 using Announcement.Api.Models;
+using Announcement.Api.Services;
+using AutoMapper;
+using Infrastructure.Common.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,9 +32,18 @@ namespace Announcement.Api {
             services.AddDbContext<AnnouncementContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Announcement")));
 
-            services.AddControllers();
-                //.AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            // Add AutoMapper
+            services.AddAutoMapper(typeof(MappingProfile));
 
+            // Add Services
+            services.AddScoped<IAnnouncementService, AnnouncementService>();
+            services.AddScoped<IClassService, ClassService>();
+
+            // CORS
+            services.AddCors();
+
+            services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,9 +52,10 @@ namespace Announcement.Api {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
+            // CORS
+            app.UseCors(options => options.AllowAnyOrigin());  
 
-            //app.UseAuthentication();
+            app.UseRouting();
 
             app.UseAuthorization();
 
