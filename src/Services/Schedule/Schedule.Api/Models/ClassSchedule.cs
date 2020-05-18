@@ -7,26 +7,18 @@ namespace Schedule.Api.Models
 {
     public class ClassSchedule
     {
-        public string Day { get; set; }
-        public DateTime StartTime { get; set; }
-    
-        public DateTime EndTime { get; set; }
-
-        public int ClassId { get; set; }
-
-        public int Semester { get; set; }
-
-        public int Year { get; set; }
-
-        public int CourseId { get; set; }
-
+        public int TimeSlotId { get; set; }
+        public DateTime Date { get; set; }
         public string RoomId { get; set; }
+        public string RoomBuildingId { get; set; }
 
-        public string Building { get; set; }
+        public string ClassId { get; set; }
+        public int ClassSemester { get; set; }
+        public int ClassYear { get; set; }
+        public string ClassCourseId { get; set; }
 
-        public Class Class { get; set; }
-
+        public TimeSlot TimeSlot { get; set; }
         public Room Room { get; set; }
-
+        public Class Class { get; set; }
     }
 }

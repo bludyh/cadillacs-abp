@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Schedule.Api.Models
+namespace Schedule.Api.Dtos
 {
-    public class Class
+    public class ClassReadDto
     {
         public string Id { get; set; }
         public int Semester { get; set; }
@@ -15,7 +15,5 @@ namespace Schedule.Api.Models
         public string CourseName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-
-        public List<ClassSchedule> ClassSchedules { get; set; }
     }
 }

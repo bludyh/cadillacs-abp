@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Infrastructure.Common.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Schedule.Api.Data;
+using Schedule.Api.Mappings;
+using Schedule.Api.Services;
 
 namespace Schedule.Api {
     public class Startup {
@@ -26,7 +30,15 @@ namespace Schedule.Api {
             services.AddDbContext<ScheduleContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Schedule")));
 
-            services.AddControllers();
+            services.AddAutoMapper(typeof(MappingProfile));
+
+            services.AddScoped<IClassService, ClassService>();
+
+            // CORS
+            services.AddCors();
+
+            services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,6 +46,9 @@ namespace Schedule.Api {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
+
+            // CORS
+            app.UseCors(options => options.AllowAnyOrigin());  
 
             app.UseRouting();
 

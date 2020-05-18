@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 
 namespace Schedule.Api.Models
 {
-    public class Room
+    public class TimeSlot
     {
-        public string Id { get; set; }
-        public string BuildingId { get; set; }
+        public int Id { get; set; }
+
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
 
         public List<ClassSchedule> ClassSchedules { get; set; }
     }
