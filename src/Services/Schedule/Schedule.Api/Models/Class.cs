@@ -16,8 +16,6 @@ namespace Schedule.Api.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public List<Enrollment> Enrollments { get; set; }
-        public List<Lecturer> Lecturers { get; set; }
         public List<ClassSchedule> ClassSchedules { get; set; }
     }
 }

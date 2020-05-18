@@ -16,8 +16,8 @@ namespace Schedule.Api.Services
     public interface IClassService
     {
         public Task<List<ClassScheduleReadDto>> GetClassSchedulesAsync(string classCourseId, string classId, int classSemester, int classYear);
-        public Task<ClassScheduleReadDto> AddClassScheduleAsync(string classCourseId, string classId, int classSemester, int classYear, ClassClassScheduleCreateDeleteDto dto);
-        public Task<ClassScheduleReadDto> RemoveClassScheduleAsync(string classCourseId, string classId, int classSemester, int classYear, ClassClassScheduleCreateDeleteDto dto);
+        public Task<ClassScheduleReadDto> AddClassScheduleAsync(string classCourseId, string classId, int classSemester, int classYear, ClassClassScheduleCreateDto dto);
+        public Task<ClassScheduleReadDto> RemoveClassScheduleAsync(string classCourseId, string classId, int classSemester, int classYear, int timeSlotId, DateTime date, string roomId, string buildingId);
     }
 
     public class ClassService : ServiceBase, IClassService
@@ -43,12 +43,13 @@ namespace Schedule.Api.Services
             return await _mapper.ProjectTo<ClassScheduleReadDto>(inputClass.ClassSchedules.AsQueryable()).ToListAsyncFallback();
         }
 
-        public async Task<ClassScheduleReadDto> AddClassScheduleAsync(string classCourseId, string classId, int classSemester, int classYear, ClassClassScheduleCreateDeleteDto dto)
+        public async Task<ClassScheduleReadDto> AddClassScheduleAsync(string classCourseId, string classId, int classSemester, int classYear, ClassClassScheduleCreateDto dto)
         {
             //Validations
             var inputClass = await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
-            await ValidateExistenceAsync<TimeSlot>(dto.TimeSlotId);
-            await ValidateExistenceAsync<Room>(dto.RoomId, dto.RoomBuildingId);
+
+            await ValidateForeignKeyAsync<TimeSlot>(dto.TimeSlotId);
+            await ValidateForeignKeyAsync<Room>(dto.RoomId, dto.RoomBuildingId);
 
             await ValidateDuplicationAsync<ClassSchedule>(dto.TimeSlotId, dto.Date, dto.RoomId, dto.RoomBuildingId);
 
@@ -69,20 +70,25 @@ namespace Schedule.Api.Services
             return _mapper.Map<ClassScheduleReadDto>(schedule);
         }
 
-        public async Task<ClassScheduleReadDto> RemoveClassScheduleAsync(string classCourseId, string classId, int classSemester, int classYear, ClassClassScheduleCreateDeleteDto dto)
+        public async Task<ClassScheduleReadDto> RemoveClassScheduleAsync(string classCourseId, string classId, int classSemester, int classYear, int timeSlotId, DateTime date, string roomId, string buildingId)
         {
             //Validations
             await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
-            await ValidateExistenceAsync<TimeSlot>(dto.TimeSlotId);
-            await ValidateExistenceAsync<Room>(dto.RoomId, dto.RoomBuildingId);
 
-            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<TimeSlot>(timeSlotId);
+            await ValidateForeignKeyAsync<Room>(roomId, buildingId);
 
-            var classSchedule = await ValidateExistenceAsync<ClassSchedule>(dto.TimeSlotId, dto.Date, dto.RoomId, dto.RoomBuildingId);
+            var classSchedule = await ValidateExistenceAsync<ClassSchedule>(timeSlotId, date, roomId, buildingId);
+
+            //Links the relevant properties and subclasses before removing
+            await _context.Entry(classSchedule).Reference(e => e.TimeSlot).LoadAsync();
+            await _context.Entry(classSchedule).Reference(e => e.Room).LoadAsync();
+            await _context.Entry(classSchedule).Reference(e => e.Class).LoadAsync();
 
             _context.Remove(classSchedule);
             await _context.SaveChangesAsync();
 
+            //Returns the readDto
             return _mapper.Map<ClassScheduleReadDto>(classSchedule);
         }
     }

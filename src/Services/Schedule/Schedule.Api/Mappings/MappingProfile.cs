@@ -14,7 +14,7 @@ namespace Schedule.Api.Mappings
         public MappingProfile()
         {
             CreateMap<ClassSchedule, ClassScheduleReadDto>();
-            CreateMap<ClassClassScheduleCreateDeleteDto, ClassSchedule>(MemberList.Source);
+            CreateMap<ClassClassScheduleCreateDto, ClassSchedule>(MemberList.Source);
 
             CreateMap<Class, ClassReadDto>();
             CreateMap<Room, RoomReadDto>();

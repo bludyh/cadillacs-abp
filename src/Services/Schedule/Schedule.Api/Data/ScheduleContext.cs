@@ -18,18 +18,6 @@ namespace Schedule.Api.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .Property(u => u.Id)
-                .ValueGeneratedNever();
-
-            modelBuilder.Entity<Enrollment>(e => {
-                e.HasKey(e => new { e.StudentId, e.ClassId, e.ClassSemester, e.ClassYear, e.ClassCourseId });
-            });
-
-            modelBuilder.Entity<Lecturer>(l => {
-                l.HasKey(l => new { l.TeacherId, l.ClassId, l.ClassSemester, l.ClassYear, l.ClassCourseId });
-            });
-
             modelBuilder.Entity<Class>(c => {
                 c.HasKey(c => new { c.Id, c.Semester, c.Year, c.CourseId});
             });
@@ -44,16 +32,6 @@ namespace Schedule.Api.Data
         }
 
         //entities
-        public DbSet<User> Users { get; set; }
-
-        public DbSet<Student> Students { get; set; }
-
-        public DbSet<Enrollment> Enrollments { get; set; }
-
-        public DbSet<Teacher> Teachers { get; set; }
-
-        public DbSet<Lecturer> Lecturers { get; set; }
-
         public DbSet<Class> Classes { get; set; }
 
         public DbSet<TimeSlot> TimeSlots { get; set; }
