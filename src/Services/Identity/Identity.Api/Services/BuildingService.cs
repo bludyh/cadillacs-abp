@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
-using Identity.Api.Data;
 using Identity.Api.Dtos;
-using Identity.Api.Models;
+using Identity.Common.Data;
+using Identity.Common.Models;
 using Infrastructure.Common;
 using Infrastructure.Common.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

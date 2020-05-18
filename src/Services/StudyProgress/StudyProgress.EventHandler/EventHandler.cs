@@ -3,11 +3,9 @@ using Infrastructure.Common.Events;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using Pitstop.Infrastructure.Messaging;
-using StudyProgress.EventHandler.Data;
-using StudyProgress.EventHandler.Models;
-using System;
+using StudyProgress.Common.Data;
+using StudyProgress.Common.Models;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -72,10 +70,28 @@ namespace StudyProgress.EventHandler
                 case "StudentUpdated":
                     await HandleAsync(messageObject.ToObject<StudentUpdated>());
                     break;
+                case "CourseCreated":
+                    await HandleAsync(messageObject.ToObject<CourseCreated>());
+                    break;
+                case "CourseDeleted":
+                    await HandleAsync(messageObject.ToObject<CourseDeleted>());
+                    break;
+                case "CourseUpdated":
+                    await HandleAsync(messageObject.ToObject<CourseUpdated>());
+                    break;
+                case "ClassCreated":
+                    await HandleAsync(messageObject.ToObject<ClassCreated>());
+                    break;
+                case "ClassDeleted":
+                    await HandleAsync(messageObject.ToObject<ClassDeleted>());
+                    break;
+                case "ClassUpdated":
+                    await HandleAsync(messageObject.ToObject<ClassUpdated>());
+                    break;
             }
 
             // always akcnowledge message - any errors need to be dealt with locally.
-            return true; 
+            return true;
         }
 
         private async Task<bool> HandleAsync(SchoolCreated e)
@@ -142,5 +158,68 @@ namespace StudyProgress.EventHandler
             return true;
         }
 
+        private async Task<bool> HandleAsync(CourseCreated e)
+        {
+            var course = _mapper.Map<Course>(e);
+
+            await _studyProgressContext.AddAsync(course);
+            await _studyProgressContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        private async Task<bool> HandleAsync(CourseDeleted e)
+        {
+            var course = await _studyProgressContext.FindAsync<Course>(e.Id);
+
+            _studyProgressContext.Remove(course);
+            await _studyProgressContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        private async Task<bool> HandleAsync(CourseUpdated e)
+        {
+            var course = await _studyProgressContext.FindAsync<Course>(e.Id);
+
+            _mapper.Map(e, course);
+
+            _studyProgressContext.Update(course);
+            await _studyProgressContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        private async Task<bool> HandleAsync(ClassCreated e)
+        {
+            var _class = _mapper.Map<Class>(e);
+
+            await _studyProgressContext.AddAsync(_class);
+            await _studyProgressContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        private async Task<bool> HandleAsync(ClassDeleted e)
+        {
+            var _class = await _studyProgressContext.FindAsync<Class>(e.Id, e.Semester, e.Year, e.CourseId);
+
+            _studyProgressContext.Remove(_class);
+            await _studyProgressContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        private async Task<bool> HandleAsync(ClassUpdated e)
+        {
+            var _class = await _studyProgressContext.FindAsync<Class>(e.Id, e.Semester, e.Year, e.CourseId);
+
+            _mapper.Map(e, _class);
+
+            _studyProgressContext.Update(_class);
+            await _studyProgressContext.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

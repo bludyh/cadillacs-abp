@@ -2,12 +2,11 @@
 using Infrastructure.Common;
 using Infrastructure.Common.Services;
 using Microsoft.EntityFrameworkCore;
-using Schedule.Api.Data;
 using Schedule.Api.Dtos;
-using Schedule.Api.Models;
+using Schedule.Common.Data;
+using Schedule.Common.Models;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 

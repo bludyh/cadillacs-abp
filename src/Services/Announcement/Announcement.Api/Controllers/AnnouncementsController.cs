@@ -1,11 +1,8 @@
-﻿using Announcement.Api.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Announcement.Api.Dtos;
+using Announcement.Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using Announcement.Api.Dtos;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Announcement.Api.Controllers
 {

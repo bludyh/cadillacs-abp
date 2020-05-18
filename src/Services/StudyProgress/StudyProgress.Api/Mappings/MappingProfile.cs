@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
 using Infrastructure.Common.Events;
 using StudyProgress.Api.Dtos;
-using StudyProgress.Api.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using StudyProgress.Common.Models;
 
 namespace StudyProgress.Api.Mappings
 {
@@ -13,9 +9,9 @@ namespace StudyProgress.Api.Mappings
     {
         public MappingProfile()
         {
-            CreateMap<Models.Program, ProgramReadDto>();
-            CreateMap<ProgramUpdateDto, Models.Program>(MemberList.Source);
-            CreateMap<ProgramCreateDto, Models.Program>(MemberList.Source);
+            CreateMap<Common.Models.Program, ProgramReadDto>();
+            CreateMap<ProgramUpdateDto, Common.Models.Program>(MemberList.Source);
+            CreateMap<ProgramCreateDto, Common.Models.Program>(MemberList.Source);
 
 
             CreateMap<Enrollment, StudentEnrollmentReadDto>();
@@ -30,9 +26,11 @@ namespace StudyProgress.Api.Mappings
             CreateMap<School, SchoolReadDto>();
 
             // Map events
-            CreateMap<Models.Program, ProgramCreated>();
-            CreateMap<Models.Program, ProgramDeleted>();
-            CreateMap<Models.Program, ProgramUpdated>();
+            CreateMap<Common.Models.Program, ProgramCreated>();
+            CreateMap<Common.Models.Program, ProgramDeleted>();
+            CreateMap<Common.Models.Program, ProgramUpdated>();
+            CreateMap<Enrollment, EnrollmentCreated>();
+            CreateMap<Enrollment, EnrollmentDeleted>();
         }
     }
 }

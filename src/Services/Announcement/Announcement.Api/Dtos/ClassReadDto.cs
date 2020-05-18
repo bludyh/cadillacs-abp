@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Announcement.Api.Dtos
+﻿namespace Announcement.Api.Dtos
 {
     public class ClassReadDto
     {

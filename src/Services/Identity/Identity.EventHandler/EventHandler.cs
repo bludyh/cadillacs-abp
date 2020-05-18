@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
-using Identity.EventHandler.Data;
-using Identity.EventHandler.Models;
+using Identity.Common.Data;
 using Infrastructure.Common.Events;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using Pitstop.Infrastructure.Messaging;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -52,7 +49,7 @@ namespace Identity.EventHandler
         {
             JObject messageObject = MessageSerializer.Deserialize(message);
 
-            switch(messageType)
+            switch (messageType)
             {
                 case "ProgramCreated":
                     await HandleAsync(messageObject.ToObject<ProgramCreated>());
@@ -70,7 +67,7 @@ namespace Identity.EventHandler
 
         private async Task<bool> HandleAsync(ProgramCreated e)
         {
-            var program = _mapper.Map<Models.Program>(e);
+            var program = _mapper.Map<Common.Models.Program>(e);
 
             await _identityContext.AddAsync(program);
             await _identityContext.SaveChangesAsync();
@@ -80,7 +77,7 @@ namespace Identity.EventHandler
 
         private async Task<bool> HandleAsync(ProgramDeleted e)
         {
-            var program = await _identityContext.FindAsync<Models.Program>(e.Id);
+            var program = await _identityContext.FindAsync<Common.Models.Program>(e.Id);
 
             _identityContext.Remove(program);
             await _identityContext.SaveChangesAsync();
@@ -90,7 +87,7 @@ namespace Identity.EventHandler
 
         private async Task<bool> HandleAsync(ProgramUpdated e)
         {
-            var program = await _identityContext.FindAsync<Models.Program>(e.Id);
+            var program = await _identityContext.FindAsync<Common.Models.Program>(e.Id);
 
             _mapper.Map(e, program);
 

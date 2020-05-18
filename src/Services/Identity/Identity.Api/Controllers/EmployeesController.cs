@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Identity.Api.Data;
-using Identity.Api.Models;
-using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using Identity.Api.Dtos;
-using Infrastructure.Common;
-using System.ComponentModel.DataAnnotations;
+﻿using Identity.Api.Dtos;
 using Identity.Api.Services;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace Identity.Api.Controllers
 {

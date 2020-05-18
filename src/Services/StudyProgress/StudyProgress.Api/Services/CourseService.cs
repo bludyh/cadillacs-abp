@@ -3,10 +3,9 @@ using Infrastructure.Common;
 using Infrastructure.Common.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using StudyProgress.Api.Data;
 using StudyProgress.Api.Dtos;
-using StudyProgress.Api.Models;
-using System;
+using StudyProgress.Common.Data;
+using StudyProgress.Common.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,7 +53,7 @@ namespace StudyProgress.Api.Services
         {
             await ValidateExistenceAsync<Course>(courseId);
 
-            await ValidateForeignKeyAsync<Models.Program>(programId);
+            await ValidateForeignKeyAsync<Common.Models.Program>(programId);
 
             await ValidateDuplicationAsync<ProgramCourse>(programId, courseId);
 
@@ -63,7 +62,7 @@ namespace StudyProgress.Api.Services
             await _context.AddAsync(pc);
             await _context.SaveChangesAsync();
 
-            var program = await _context.FindAsync<Models.Program>(programId);
+            var program = await _context.FindAsync<Common.Models.Program>(programId);
 
             return _mapper.Map<ProgramReadDto>(program);
         }
@@ -72,7 +71,7 @@ namespace StudyProgress.Api.Services
         {
             await ValidateExistenceAsync<Course>(courseId);
 
-            await ValidateForeignKeyAsync<Models.Program>(programId);
+            await ValidateForeignKeyAsync<Common.Models.Program>(programId);
 
             var pc = await _context.FindAsync<ProgramCourse>(programId, courseId);
             Validate(
@@ -83,7 +82,7 @@ namespace StudyProgress.Api.Services
             _context.Remove(pc);
             await _context.SaveChangesAsync();
 
-            var program = await _context.FindAsync<Models.Program>(programId);
+            var program = await _context.FindAsync<Common.Models.Program>(programId);
 
             return _mapper.Map<ProgramReadDto>(program);
         }

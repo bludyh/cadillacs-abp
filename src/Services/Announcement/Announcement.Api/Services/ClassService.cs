@@ -1,11 +1,10 @@
-﻿using Announcement.Api.Data;
-using Announcement.Api.Dtos;
-using Announcement.Api.Models;
+﻿using Announcement.Api.Dtos;
+using Announcement.Common.Data;
+using Announcement.Common.Models;
 using AutoMapper;
 using Infrastructure.Common;
 using Infrastructure.Common.Services;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -61,7 +60,7 @@ namespace Announcement.Api.Services
         {
             var inputClass = await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
 
-            await ValidateExistenceAsync<Models.Announcement>(announcementId);
+            await ValidateExistenceAsync<Common.Models.Announcement>(announcementId);
 
             await ValidateDuplicationAsync<ClassAnnouncement>(announcementId, classId, classSemester, classYear, classCourseId);
 

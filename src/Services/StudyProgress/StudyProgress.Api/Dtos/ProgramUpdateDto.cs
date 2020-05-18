@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StudyProgress.Api.Dtos
 {
@@ -12,7 +8,7 @@ namespace StudyProgress.Api.Dtos
         public string Name { get; set; }
 
         public string Description { get; set; }
-        
+
         [Required]
         public int? TotalCredit { get; set; }
     }

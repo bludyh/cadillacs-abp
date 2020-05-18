@@ -1,34 +1,31 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Infrastructure.Common.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Pitstop.Infrastructure.Messaging.Configuration;
-using StudyProgress.Api.Data;
 using StudyProgress.Api.Mappings;
 using StudyProgress.Api.Services;
+using StudyProgress.Common.Data;
 
-namespace StudyProgress.Api {
-    public class Startup {
-        public Startup(IConfiguration configuration) {
+namespace StudyProgress.Api
+{
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services) {
-            services.AddDbContext<StudyProgressContext>(options => 
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddDbContext<StudyProgressContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("StudyProgress")));
 
             // Add AutoMapper
@@ -49,7 +46,8 @@ namespace StudyProgress.Api {
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             // Swagger
-            services.AddSwaggerGen(c => {
+            services.AddSwaggerGen(c =>
+            {
                 c.SwaggerDoc("studyprogress", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Study Progress API" });
             });
 
@@ -57,8 +55,10 @@ namespace StudyProgress.Api {
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
-            if (env.IsDevelopment()) {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
             }
 
@@ -67,7 +67,8 @@ namespace StudyProgress.Api {
 
             // Swagger
             app.UseSwagger();
-            app.UseSwaggerUI(c => {
+            app.UseSwaggerUI(c =>
+            {
                 c.SwaggerEndpoint("/swagger/studyprogress/swagger.json", "Study Progress API");
             });
 
@@ -75,7 +76,8 @@ namespace StudyProgress.Api {
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapControllers();
             });
         }

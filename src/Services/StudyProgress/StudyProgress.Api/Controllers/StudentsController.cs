@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StudyProgress.Api.Dtos;
 using StudyProgress.Api.Services;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace StudyProgress.Api.Controllers

@@ -1,14 +1,9 @@
-﻿using Identity.Api.Data;
-using Identity.Api.Models;
-using Infrastructure.Common;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Identity.Api.Dtos {
-    public class StudentUpdateDto {
+namespace Identity.Api.Dtos
+{
+    public class StudentUpdateDto
+    {
 
         [Required]
         public string FirstName { get; set; }

@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using Identity.Api.Data;
 using Identity.Api.Dtos;
-using Identity.Api.Models;
+using Identity.Common.Data;
+using Identity.Common.Models;
 using Infrastructure.Common;
 using Infrastructure.Common.Services;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,7 +30,7 @@ namespace Identity.Api.Services
 
         public async Task<EmployeeReadDto> AddEmployeeAsync(string programId, int employeeId)
         {
-            var program = await ValidateExistenceAsync<Models.Program>(programId);
+            var program = await ValidateExistenceAsync<Common.Models.Program>(programId);
             var employee = await ValidateForeignKeyAsync<Employee>(employeeId);
             await ValidateDuplicationAsync<EmployeeProgram>(employeeId, programId);
 
@@ -55,7 +54,7 @@ namespace Identity.Api.Services
 
         public async Task<List<EmployeeReadDto>> GetEmployeesAsync(string programId)
         {
-            var program = await ValidateExistenceAsync<Models.Program>(programId);
+            var program = await ValidateExistenceAsync<Common.Models.Program>(programId);
 
             await _context.Entry(program)
                 .Collection(p => p.EmployeePrograms)
@@ -69,7 +68,7 @@ namespace Identity.Api.Services
 
         public async Task<EmployeeReadDto> RemoveEmployeeAsync(string programId, int employeeId)
         {
-            await ValidateExistenceAsync<Models.Program>(programId);
+            await ValidateExistenceAsync<Common.Models.Program>(programId);
             var employee = await ValidateForeignKeyAsync<Employee>(employeeId);
             var ep = await ValidateExistenceAsync<EmployeeProgram>(employeeId, programId);
 

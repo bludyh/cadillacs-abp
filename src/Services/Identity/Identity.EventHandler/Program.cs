@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
+using Identity.Common.Data;
+using Identity.EventHandler.Mappings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Pitstop.Infrastructure.Messaging.Configuration;
-using Identity.EventHandler.Data;
-using Identity.EventHandler.Mappings;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 

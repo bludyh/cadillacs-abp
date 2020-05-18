@@ -4,9 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Pitstop.Infrastructure.Messaging.Configuration;
-using StudyProgress.EventHandler.Data;
+using StudyProgress.Common.Data;
 using StudyProgress.EventHandler.Mappings;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 

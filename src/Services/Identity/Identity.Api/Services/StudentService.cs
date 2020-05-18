@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Identity.Api.Data;
 using Identity.Api.Dtos;
-using Identity.Api.Models;
+using Identity.Common.Data;
+using Identity.Common.Models;
 using Infrastructure.Common;
 using Infrastructure.Common.Events;
 using Infrastructure.Common.Services;
@@ -24,8 +24,8 @@ namespace Identity.Api.Services
         public Task UpdateAsync(int studentId, StudentUpdateDto dto);
         public Task<StudentReadDto> CreateAsync(StudentCreateDto dto);
         public Task<StudentReadDto> DeleteAsync(int studentId);
-        public Task<List<RoleReadDto>> GetRolesAsync(int studentId); 
-        public Task<RoleReadDto> AddRoleAsync(int studentId, string roleName); 
+        public Task<List<RoleReadDto>> GetRolesAsync(int studentId);
+        public Task<RoleReadDto> AddRoleAsync(int studentId, string roleName);
         public Task<RoleReadDto> RemoveRoleAsync(int studentId, string roleName);
         public Task<List<StudentMentorReadDto>> GetMentorsAsync(int studentId);
         public Task<StudentMentorReadDto> AddMentorAsync(int studentId, StudentMentorCreateDto dto);
@@ -104,7 +104,7 @@ namespace Identity.Api.Services
                 message: $"Student with email '{dto.Email}' already exists.",
                 status: StatusCodes.Status409Conflict);
 
-            await ValidateForeignKeyAsync<Models.Program>(dto.ProgramId);
+            await ValidateForeignKeyAsync<Common.Models.Program>(dto.ProgramId);
 
             var student = _mapper.Map<Student>(dto);
             student.UserName = await ((IdentityContext)_context).GetNextPcn();
@@ -236,7 +236,7 @@ namespace Identity.Api.Services
         {
             var student = await ValidateExistenceAsync<Student>(studentId);
 
-            await ValidateForeignKeyAsync<Models.Program>(dto.ProgramId);
+            await ValidateForeignKeyAsync<Common.Models.Program>(dto.ProgramId);
 
             _mapper.Map(dto, student);
 

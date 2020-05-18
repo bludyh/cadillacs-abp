@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Identity.Api.Dtos {
-    public class EmployeeReadDto {
+﻿namespace Identity.Api.Dtos
+{
+    public class EmployeeReadDto
+    {
 
         public int Id { get; set; }
         public string Pcn { get; set; }

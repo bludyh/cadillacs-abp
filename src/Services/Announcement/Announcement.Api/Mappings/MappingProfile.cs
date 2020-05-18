@@ -1,10 +1,6 @@
 ﻿using Announcement.Api.Dtos;
-using Announcement.Api.Models;
+using Announcement.Common.Models;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Announcement.Api.Mappings
 {
@@ -12,11 +8,11 @@ namespace Announcement.Api.Mappings
     {
         public MappingProfile()
         {
-            CreateMap<Models.Announcement, AnnouncementReadDto>();
-            CreateMap<AnnouncementCreateUpdateDto, Models.Announcement>(MemberList.Source);
+            CreateMap<Common.Models.Announcement, AnnouncementReadDto>();
+            CreateMap<AnnouncementCreateUpdateDto, Common.Models.Announcement>(MemberList.Source);
 
             CreateMap<ClassAnnouncement, ClassAnnouncementReadDto>();
-            
+
             CreateMap<Class, ClassReadDto>();
             CreateMap<Employee, EmployeeReadDto>();
         }

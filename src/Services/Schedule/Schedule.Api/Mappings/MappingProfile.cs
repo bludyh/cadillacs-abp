@@ -1,11 +1,6 @@
-﻿using Schedule.Api.Models;
+﻿using AutoMapper;
 using Schedule.Api.Dtos;
-using AutoMapper;
-using Infrastructure.Common.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Schedule.Common.Models;
 
 namespace Schedule.Api.Mappings
 {

@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Schedule.Api.Dtos;
-using Schedule.Api.Models;
 using Schedule.Api.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Schedule.Api.Controllers
@@ -34,7 +32,7 @@ namespace Schedule.Api.Controllers
         // POST: api/Courses/prc1/Classes/e-s71/1/2020/Schedules
         [HttpPost("{classCourseId}/[controller]/{classId}/{classSemester}/{classYear}/schedules")]
         public async Task<ActionResult<ClassScheduleReadDto>> AddClassSchedules(
-            [FromRoute] string classCourseId, 
+            [FromRoute] string classCourseId,
             [FromRoute] string classId,
             [FromRoute] int classSemester,
             [FromRoute] int classYear,

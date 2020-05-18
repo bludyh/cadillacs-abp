@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Identity.Api.Data;
 using Identity.Api.Dtos;
-using Identity.Api.Models;
+using Identity.Common.Data;
+using Identity.Common.Models;
 using Infrastructure.Common;
 using Infrastructure.Common.Services;
 using Microsoft.AspNetCore.Http;
@@ -21,8 +21,8 @@ namespace Identity.Api.Services
         public Task UpdateAsync(int employeeId, EmployeeUpdateDto dto);
         public Task<EmployeeReadDto> CreateAsync(EmployeeCreateDto dto);
         public Task<EmployeeReadDto> DeleteAsync(int employeeId);
-        public Task<List<RoleReadDto>> GetRolesAsync(int employeeId); 
-        public Task<RoleReadDto> AddRoleAsync(int employeeId, string roleName); 
+        public Task<List<RoleReadDto>> GetRolesAsync(int employeeId);
+        public Task<RoleReadDto> AddRoleAsync(int employeeId, string roleName);
         public Task<RoleReadDto> RemoveRoleAsync(int employeeId, string roleName);
         public Task<List<ProgramReadDto>> GetProgramsAsync(int employeeId);
         public Task<ProgramReadDto> AddProgramAsync(int employeeId, string programId);
@@ -112,7 +112,7 @@ namespace Identity.Api.Services
             return _mapper.Map<EmployeeReadDto>(employee);
         }
 
-        public async Task<EmployeeReadDto> DeleteAsync(int employeeId) 
+        public async Task<EmployeeReadDto> DeleteAsync(int employeeId)
         {
             var employee = await ValidateExistenceAsync<T>(employeeId);
 
@@ -196,7 +196,7 @@ namespace Identity.Api.Services
         {
             await ValidateExistenceAsync<T>(employeeId);
 
-            await ValidateForeignKeyAsync<Models.Program>(programId);
+            await ValidateForeignKeyAsync<Common.Models.Program>(programId);
 
             await ValidateDuplicationAsync<EmployeeProgram>(employeeId, programId);
 
@@ -205,7 +205,7 @@ namespace Identity.Api.Services
             await _context.AddAsync(ep);
             await _context.SaveChangesAsync();
 
-            var program = await _context.FindAsync<Models.Program>(programId);
+            var program = await _context.FindAsync<Common.Models.Program>(programId);
 
             await _context.Entry(program)
                 .Reference(p => p.School)
@@ -218,7 +218,7 @@ namespace Identity.Api.Services
         {
             await ValidateExistenceAsync<T>(employeeId);
 
-            await ValidateForeignKeyAsync<Models.Program>(programId);
+            await ValidateForeignKeyAsync<Common.Models.Program>(programId);
 
             var ep = await _context.FindAsync<EmployeeProgram>(employeeId, programId);
             Validate(
@@ -229,7 +229,7 @@ namespace Identity.Api.Services
             _context.Remove(ep);
             await _context.SaveChangesAsync();
 
-            var program = await _context.FindAsync<Models.Program>(programId);
+            var program = await _context.FindAsync<Common.Models.Program>(programId);
 
             await _context.Entry(program)
                 .Reference(p => p.School)

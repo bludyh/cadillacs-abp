@@ -1,12 +1,11 @@
-﻿using Announcement.Api.Data;
-using Announcement.Api.Dtos;
-using Announcement.Api.Models;
+﻿using Announcement.Api.Dtos;
+using Announcement.Common.Data;
+using Announcement.Common.Models;
 using AutoMapper;
 using Infrastructure.Common;
 using Infrastructure.Common.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Announcement.Api.Services
@@ -31,12 +30,12 @@ namespace Announcement.Api.Services
         #region Announcements
         public async Task<List<AnnouncementReadDto>> GetAllAsync()
         {
-            return await _mapper.ProjectTo<AnnouncementReadDto>(_context.Set<Models.Announcement>()).ToListAsyncFallback();
+            return await _mapper.ProjectTo<AnnouncementReadDto>(_context.Set<Common.Models.Announcement>()).ToListAsyncFallback();
         }
 
         public async Task<AnnouncementReadDto> GetAsync(int announcementId)
         {
-            var announcement = await ValidateExistenceAsync<Models.Announcement>(announcementId);
+            var announcement = await ValidateExistenceAsync<Common.Models.Announcement>(announcementId);
 
             await _context.Entry(announcement)
                 .Reference(a => a.Employee)
@@ -47,7 +46,7 @@ namespace Announcement.Api.Services
 
         public async Task UpdateAsync(int announcementId, AnnouncementCreateUpdateDto dto)
         {
-            var announcement = await ValidateExistenceAsync<Models.Announcement>(announcementId);
+            var announcement = await ValidateExistenceAsync<Common.Models.Announcement>(announcementId);
 
             _mapper.Map(dto, announcement);
 
@@ -59,7 +58,7 @@ namespace Announcement.Api.Services
         {
             await ValidateForeignKeyAsync<Employee>(dto.EmployeeId);
 
-            var announcement = _mapper.Map<Models.Announcement>(dto);
+            var announcement = _mapper.Map<Common.Models.Announcement>(dto);
 
             // Add current DateTime at announcement creation, formatted to Sortable ("s") format to remove milliseconds.
             announcement.DateTime = Convert.ToDateTime(DateTime.Now.ToString("s"));
@@ -72,7 +71,7 @@ namespace Announcement.Api.Services
 
         public async Task<AnnouncementReadDto> DeleteAsync(int announcementId)
         {
-            var announcement = await ValidateExistenceAsync<Models.Announcement>(announcementId);
+            var announcement = await ValidateExistenceAsync<Common.Models.Announcement>(announcementId);
 
             await _context.Entry(announcement)
                 .Reference(a => a.Employee)

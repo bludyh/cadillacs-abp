@@ -1,17 +1,16 @@
 ﻿using AutoMapper;
 using Identity.Api.Dtos;
-using Identity.Api.Models;
+using Identity.Common.Models;
 using Infrastructure.Common.Events;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Identity.Api.Mappings {
-    public class MappingProfile : Profile {
+namespace Identity.Api.Mappings
+{
+    public class MappingProfile : Profile
+    {
 
-        public MappingProfile() {
+        public MappingProfile()
+        {
             CreateMap<School, SchoolCreateReadDto>().ReverseMap();
             CreateMap<SchoolUpdateDto, School>(MemberList.Source);
 
@@ -25,7 +24,7 @@ namespace Identity.Api.Mappings {
             CreateMap<EmployeeUpdateDto, Employee>(MemberList.Source);
             CreateMap<EmployeeCreateDto, Employee>(MemberList.Source);
 
-            CreateMap<Models.Program, ProgramReadDto>();
+            CreateMap<Common.Models.Program, ProgramReadDto>();
 
             CreateMap<Room, RoomReadDto>();
 
