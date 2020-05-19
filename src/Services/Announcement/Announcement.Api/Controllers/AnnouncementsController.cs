@@ -27,14 +27,14 @@ namespace Announcement.Api.Controllers
 
         // GET: api/Announcements/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AnnouncementReadDto>> GetAnnouncement(int id)
+        public async Task<ActionResult<AnnouncementReadDto>> GetAnnouncement([FromRoute] int id)
         {
             return await _announcementService.GetAsync(id);
         }
 
         // PUT: api/Announcements/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutAnnouncement(int id, AnnouncementCreateUpdateDto dto)
+        public async Task<ActionResult> PutAnnouncement([FromRoute] int id, [FromBody] AnnouncementCreateUpdateDto dto)
         {
             await _announcementService.UpdateAsync(id, dto);
 
@@ -43,7 +43,7 @@ namespace Announcement.Api.Controllers
 
         // POST: api/Announcements
         [HttpPost]
-        public async Task<ActionResult<AnnouncementReadDto>> PostAnnouncement(AnnouncementCreateUpdateDto dto)
+        public async Task<ActionResult<AnnouncementReadDto>> PostAnnouncement([FromBody] AnnouncementCreateUpdateDto dto)
         {
             var announcement = await _announcementService.CreateAsync(dto);
 
@@ -52,7 +52,7 @@ namespace Announcement.Api.Controllers
 
         // DELETE: api/Announcements/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<AnnouncementReadDto>> DeleteAnnouncement(int id)
+        public async Task<ActionResult<AnnouncementReadDto>> DeleteAnnouncement([FromRoute] int id)
         {
             return await _announcementService.DeleteAsync(id);
         }
