@@ -36,6 +36,13 @@ namespace Schedule.Api
 
             services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            // Swagger
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("schedule", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Schedule API" });
+            });
+
+            services.AddSwaggerGenNewtonsoftSupport();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +55,12 @@ namespace Schedule.Api
 
             // CORS
             app.UseCors(options => options.AllowAnyOrigin());
+
+            // Swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/schedule/swagger.json", "Schedule API");
+            });
 
             app.UseRouting();
 
