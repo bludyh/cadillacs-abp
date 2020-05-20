@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Identity.Api.Data;
-using Identity.Api.Models;
+﻿using Identity.Api.Dtos;
 using Identity.Api.Services;
-using Identity.Api.Dtos;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace Identity.Api.Controllers
 {
@@ -25,13 +19,13 @@ namespace Identity.Api.Controllers
         }
 
         [HttpGet("{programId}/employees")]
-        public async Task<ActionResult<IEnumerable<EmployeeReadDto>>> GetEmployees(string programId)
+        public async Task<ActionResult<IEnumerable<EmployeeReadDto>>> GetEmployees([FromRoute] string programId)
         {
             return await _programService.GetEmployeesAsync(programId);
         }
 
         [HttpPost("{programId}/employees")]
-        public async Task<ActionResult<EmployeeReadDto>> AddEmployee(string programId, [FromBody, Required] int employeeId)
+        public async Task<ActionResult<EmployeeReadDto>> AddEmployee([FromRoute] string programId, [FromBody, Required] int employeeId)
         {
             var employee = await _programService.AddEmployeeAsync(programId, employeeId);
 
@@ -39,7 +33,7 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{programId}/employees/{employeeId}")]
-        public async Task<ActionResult<EmployeeReadDto>> DeleteProgram(string programId, int employeeId)
+        public async Task<ActionResult<EmployeeReadDto>> DeleteProgram([FromRoute] string programId, [FromRoute] int employeeId)
         {
             return await _programService.RemoveEmployeeAsync(programId, employeeId);
         }

@@ -1,55 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Schedule.Api.Data;
 
-namespace Schedule.Api {
-    public class Program {
-        public static void Main(string[] args) {
-            var host = CreateHostBuilder(args).Build();
-
-            using var scope = host.Services.CreateScope();
-            var services = scope.ServiceProvider;
-            var env = services.GetRequiredService<IWebHostEnvironment>();
-            if (env.IsDevelopment())
-            {
-                CreateDb(host);
-
-                // TODO: Add Seed.
-            }
-
-            host.Run();
-        }
-
-        private static void CreateDb(IHost host)
+namespace Schedule.Api
+{
+    public class Program
+    {
+        public static void Main(string[] args)
         {
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-
-                try
-                {
-                    var context = services.GetRequiredService<ScheduleContext>();
-                    context.Database.EnsureDeleted();
-                    context.Database.EnsureCreated();
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred creating the DB.");
-                }
-            }
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => {
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
                     webBuilder.UseStartup<Startup>();
                 });
     }

@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using Infrastructure.Common;
+using Infrastructure.Common.Events;
 using Infrastructure.Common.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using StudyProgress.Api.Data;
+using Pitstop.Infrastructure.Messaging;
 using StudyProgress.Api.Dtos;
-using StudyProgress.Api.Models;
-using System;
+using StudyProgress.Common.Data;
+using StudyProgress.Common.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,18 +19,18 @@ namespace StudyProgress.Api.Services
         public Task<List<StudentEnrollmentReadDto>> GetEnrollmentsAsync(int studentId);
         public Task<StudentEnrollmentReadDto> AddEnrollmentAsync(int studentId, StudentEnrollmentCreateDto dto);
         public Task<StudentEnrollmentReadDto> RemoveEnrollmentAsync(int studentId, string ClassId, int ClassSemester, int ClassYear, string ClassCourseId);
-
-
     }
 
     public class StudentService : ServiceBase, IStudentService
     {
         private readonly IMapper _mapper;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public StudentService(StudyProgressContext context, IMapper mapper)
+        public StudentService(StudyProgressContext context, IMapper mapper, IMessagePublisher messagePublisher)
             : base(context)
         {
             _mapper = mapper;
+            _messagePublisher = messagePublisher;
         }
 
 
@@ -66,6 +67,9 @@ namespace StudyProgress.Api.Services
             await _context.Entry(enrollment).Reference(e => e.Student).LoadAsync();
             await _context.Entry(enrollment).Reference(e => e.Class).Query().Include(c => c.Course).LoadAsync();
 
+            // Publish event
+            var e = _mapper.Map<EnrollmentCreated>(enrollment);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
 
             //Returns the readDto
             return _mapper.Map<StudentEnrollmentReadDto>(enrollment);
@@ -85,6 +89,10 @@ namespace StudyProgress.Api.Services
 
             _context.Remove(enrollment);
             await _context.SaveChangesAsync();
+
+            // Publish event
+            var e = _mapper.Map<EnrollmentDeleted>(enrollment);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
 
             return _mapper.Map<StudentEnrollmentReadDto>(enrollment);
 

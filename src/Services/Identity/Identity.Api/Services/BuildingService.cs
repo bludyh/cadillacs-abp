@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using Identity.Api.Data;
 using Identity.Api.Dtos;
-using Identity.Api.Models;
+using Identity.Common.Data;
+using Identity.Common.Models;
 using Infrastructure.Common;
+using Infrastructure.Common.Events;
 using Infrastructure.Common.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
-using System;
+using Pitstop.Infrastructure.Messaging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,10 +33,12 @@ namespace Identity.Api.Services
     public class BuildingService : ServiceBase, IBuildingService
     {
         private readonly IMapper _mapper;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public BuildingService(IdentityContext context, IMapper mapper) : base(context)
+        public BuildingService(IdentityContext context, IMapper mapper, IMessagePublisher messagePublisher) : base(context)
         {
             _mapper = mapper;
+            _messagePublisher = messagePublisher;
         }
 
         public async Task<RoomReadDto> AddRoomAsync(string buildingId, string roomId)
@@ -52,6 +54,10 @@ namespace Identity.Api.Services
             await _context.Entry(room)
                 .Reference(r => r.Building)
                 .LoadAsync();
+
+            // Publish event
+            var e = _mapper.Map<RoomCreated>(room);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
 
             return _mapper.Map<RoomReadDto>(room);
         }
@@ -149,6 +155,10 @@ namespace Identity.Api.Services
 
             _context.Remove(room);
             await _context.SaveChangesAsync();
+
+            // Publish event
+            var e = _mapper.Map<RoomDeleted>(room);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
 
             return _mapper.Map<RoomReadDto>(room);
         }

@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Identity.Api.Data;
-using Identity.Api.Models;
-using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using Identity.Api.Dtos;
-using Infrastructure.Common;
+﻿using Identity.Api.Dtos;
 using Identity.Api.Services;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace Identity.Api.Controllers
 {
@@ -36,7 +27,7 @@ namespace Identity.Api.Controllers
 
         // GET: api/Teachers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<EmployeeReadDto>> GetTeacher(int id)
+        public async Task<ActionResult<EmployeeReadDto>> GetTeacher([FromRoute] int id)
         {
             return await _teacherService.GetAsync(id);
         }
@@ -45,7 +36,7 @@ namespace Identity.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeacher(int id, EmployeeUpdateDto dto)
+        public async Task<IActionResult> PutTeacher([FromRoute] int id, [FromBody] EmployeeUpdateDto dto)
         {
             await _teacherService.UpdateAsync(id, dto);
 
@@ -56,7 +47,7 @@ namespace Identity.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<EmployeeReadDto>> PostTeacher(EmployeeCreateDto dto)
+        public async Task<ActionResult<EmployeeReadDto>> PostTeacher([FromBody] EmployeeCreateDto dto)
         {
             var teacher = await _teacherService.CreateAsync(dto);
 
@@ -65,7 +56,7 @@ namespace Identity.Api.Controllers
 
         // DELETE: api/Teachers/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<EmployeeReadDto>> DeleteTeacher(int id)
+        public async Task<ActionResult<EmployeeReadDto>> DeleteTeacher([FromRoute] int id)
         {
             return await _teacherService.DeleteAsync(id);
         }
@@ -73,13 +64,13 @@ namespace Identity.Api.Controllers
         // Roles
 
         [HttpGet("{id}/roles")]
-        public async Task<ActionResult<IEnumerable<RoleReadDto>>> GetRoles(int id)
+        public async Task<ActionResult<IEnumerable<RoleReadDto>>> GetRoles([FromRoute] int id)
         {
             return await _teacherService.GetRolesAsync(id);
         }
 
         [HttpPost("{id}/roles")]
-        public async Task<ActionResult<RoleReadDto>> AddRole(int id, [FromBody, Required] string roleName)
+        public async Task<ActionResult<RoleReadDto>> AddRole([FromRoute] int id, [FromBody, Required] string roleName)
         {
             var role = await _teacherService.AddRoleAsync(id, roleName);
 
@@ -87,7 +78,7 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{teacherId}/roles/{roleName}")]
-        public async Task<ActionResult<RoleReadDto>> RemoveRole(int teacherId, string roleName)
+        public async Task<ActionResult<RoleReadDto>> RemoveRole([FromRoute] int teacherId, [FromRoute] string roleName)
         {
             return await _teacherService.RemoveRoleAsync(teacherId, roleName);
         }
@@ -95,13 +86,13 @@ namespace Identity.Api.Controllers
         // Programs
 
         [HttpGet("{id}/programs")]
-        public async Task<ActionResult<IEnumerable<ProgramReadDto>>> GetPrograms(int id)
+        public async Task<ActionResult<IEnumerable<ProgramReadDto>>> GetPrograms([FromRoute] int id)
         {
             return await _teacherService.GetProgramsAsync(id);
         }
 
         [HttpPost("{id}/programs")]
-        public async Task<ActionResult<ProgramReadDto>> AddProgram(int id, [FromBody, Required] string programId)
+        public async Task<ActionResult<ProgramReadDto>> AddProgram([FromRoute] int id, [FromBody, Required] string programId)
         {
             var program = await _teacherService.AddProgramAsync(id, programId);
 
@@ -109,19 +100,19 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{teacherId}/programs/{programId}")]
-        public async Task<ActionResult<ProgramReadDto>> RemoveProgram(int teacherId, string programId)
+        public async Task<ActionResult<ProgramReadDto>> RemoveProgram([FromRoute] int teacherId, [FromRoute] string programId)
         {
             return await _teacherService.RemoveProgramAsync(teacherId, programId);
         }
 
         [HttpGet("{id}/mentors")]
-        public async Task<ActionResult<IEnumerable<TeacherMentorReadDto>>> GetMentors(int id)
+        public async Task<ActionResult<IEnumerable<TeacherMentorReadDto>>> GetMentors([FromRoute] int id)
         {
             return await _teacherService.GetMentorsAsync(id);
         }
 
         [HttpPost("{id}/mentors")]
-        public async Task<ActionResult<TeacherMentorReadDto>> AddMentor(int id, TeacherMentorCreateDto dto)
+        public async Task<ActionResult<TeacherMentorReadDto>> AddMentor([FromRoute] int id, [FromBody] TeacherMentorCreateDto dto)
         {
             var mentor = await _teacherService.AddMentorAsync(id, dto);
 
@@ -129,7 +120,7 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{id}/mentors")]
-        public async Task<ActionResult<TeacherMentorReadDto>> RemoveMentor(int id, [FromQuery, Required] int studentId, [FromQuery, Required] string mentorType)
+        public async Task<ActionResult<TeacherMentorReadDto>> RemoveMentor([FromRoute] int id, [FromQuery, Required] int studentId, [FromQuery, Required] string mentorType)
         {
             return await _teacherService.RemoveMentorAsync(id, studentId, mentorType);
         }

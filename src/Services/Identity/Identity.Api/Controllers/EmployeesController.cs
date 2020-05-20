@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Identity.Api.Data;
-using Identity.Api.Models;
-using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using Identity.Api.Dtos;
-using Infrastructure.Common;
-using System.ComponentModel.DataAnnotations;
+﻿using Identity.Api.Dtos;
 using Identity.Api.Services;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace Identity.Api.Controllers
 {
@@ -36,7 +27,7 @@ namespace Identity.Api.Controllers
 
         // GET: api/Employees/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<EmployeeReadDto>> GetEmployee(int id)
+        public async Task<ActionResult<EmployeeReadDto>> GetEmployee([FromRoute] int id)
         {
             return await _employeeService.GetAsync(id);
         }
@@ -45,7 +36,7 @@ namespace Identity.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEmployee(int id, EmployeeUpdateDto dto)
+        public async Task<IActionResult> PutEmployee([FromRoute] int id, [FromBody] EmployeeUpdateDto dto)
         {
             await _employeeService.UpdateAsync(id, dto);
 
@@ -56,7 +47,7 @@ namespace Identity.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<EmployeeReadDto>> PostEmployee(EmployeeCreateDto dto)
+        public async Task<ActionResult<EmployeeReadDto>> PostEmployee([FromBody] EmployeeCreateDto dto)
         {
             var employee = await _employeeService.CreateAsync(dto);
 
@@ -65,7 +56,7 @@ namespace Identity.Api.Controllers
 
         // DELETE: api/Employees/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<EmployeeReadDto>> DeleteEmployee(int id)
+        public async Task<ActionResult<EmployeeReadDto>> DeleteEmployee([FromRoute] int id)
         {
             return await _employeeService.DeleteAsync(id);
         }
@@ -73,13 +64,13 @@ namespace Identity.Api.Controllers
         // Roles
 
         [HttpGet("{id}/roles")]
-        public async Task<ActionResult<IEnumerable<RoleReadDto>>> GetRoles(int id)
+        public async Task<ActionResult<IEnumerable<RoleReadDto>>> GetRoles([FromRoute] int id)
         {
             return await _employeeService.GetRolesAsync(id);
         }
 
         [HttpPost("{id}/roles")]
-        public async Task<ActionResult<RoleReadDto>> AddRole(int id, [FromBody, Required] string roleName)
+        public async Task<ActionResult<RoleReadDto>> AddRole([FromRoute] int id, [FromBody, Required] string roleName)
         {
             var role = await _employeeService.AddRoleAsync(id, roleName);
 
@@ -87,7 +78,7 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{employeeId}/roles/{roleName}")]
-        public async Task<ActionResult<RoleReadDto>> RemoveRole(int employeeId, string roleName)
+        public async Task<ActionResult<RoleReadDto>> RemoveRole([FromRoute] int employeeId, [FromRoute] string roleName)
         {
             return await _employeeService.RemoveRoleAsync(employeeId, roleName);
         }
@@ -95,13 +86,13 @@ namespace Identity.Api.Controllers
         // Programs
 
         [HttpGet("{id}/programs")]
-        public async Task<ActionResult<IEnumerable<ProgramReadDto>>> GetPrograms(int id)
+        public async Task<ActionResult<IEnumerable<ProgramReadDto>>> GetPrograms([FromRoute] int id)
         {
             return await _employeeService.GetProgramsAsync(id);
         }
 
         [HttpPost("{id}/programs")]
-        public async Task<ActionResult<ProgramReadDto>> AddProgram(int id, [FromBody, Required] string programId)
+        public async Task<ActionResult<ProgramReadDto>> AddProgram([FromRoute] int id, [FromBody, Required] string programId)
         {
             var program = await _employeeService.AddProgramAsync(id, programId);
 
@@ -109,7 +100,7 @@ namespace Identity.Api.Controllers
         }
 
         [HttpDelete("{employeeId}/programs/{programId}")]
-        public async Task<ActionResult<ProgramReadDto>> RemoveProgram(int employeeId, string programId)
+        public async Task<ActionResult<ProgramReadDto>> RemoveProgram([FromRoute] int employeeId, [FromRoute] string programId)
         {
             return await _employeeService.RemoveProgramAsync(employeeId, programId);
         }

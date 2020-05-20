@@ -1,17 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Course.Api.Data;
+using Course.Common.Data;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 
-namespace Course.Api {
-    public class Program {
-        public static void Main(string[] args) {
+namespace Course.Api
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
             var host = CreateHostBuilder(args).Build();
 
             using var scope = host.Services.CreateScope();
@@ -20,7 +19,7 @@ namespace Course.Api {
             if (env.IsDevelopment())
             {
                 CreateDb(host);
-                
+
                 // TODO: Add Seed.
             }
 
@@ -49,7 +48,8 @@ namespace Course.Api {
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => {
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
                     webBuilder.UseStartup<Startup>();
                 });
     }

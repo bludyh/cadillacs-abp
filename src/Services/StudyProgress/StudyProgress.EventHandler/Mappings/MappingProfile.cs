@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using Infrastructure.Common.Events;
-using StudyProgress.EventHandler.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using StudyProgress.Common.Models;
 
 namespace StudyProgress.EventHandler.Mappings
 {
@@ -15,6 +12,10 @@ namespace StudyProgress.EventHandler.Mappings
             CreateMap<SchoolUpdated, School>();
             CreateMap<StudentCreated, Student>();
             CreateMap<StudentUpdated, Student>();
+            CreateMap<CourseCreated, Course>();
+            CreateMap<CourseUpdated, Course>();
+            CreateMap<ClassCreated, Class>();
+            CreateMap<ClassUpdated, Class>();
         }
     }
 }

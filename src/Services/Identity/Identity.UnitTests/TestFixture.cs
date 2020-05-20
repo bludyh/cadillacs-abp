@@ -1,26 +1,28 @@
 ﻿using AutoMapper;
-using Identity.Api.Data;
 using Identity.Api.Mappings;
-using Identity.Api.Models;
+using Identity.Common.Data;
+using Identity.Common.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
-namespace Identity.UnitTests {
-    public class TestFixture : IDisposable {
+namespace Identity.UnitTests
+{
+    public class TestFixture : IDisposable
+    {
 
         // Setup 
         // Runs before all tests among all test classes
-        public TestFixture() {
+        public TestFixture()
+        {
             DbContextOptions = new DbContextOptionsBuilder<IdentityContext>()
                 .UseInMemoryDatabase("test")
                 .Options;
 
-            var config = new MapperConfiguration(c => {
+            var config = new MapperConfiguration(c =>
+            {
                 c.AddProfile(new MappingProfile());
             });
             config.AssertConfigurationIsValid();

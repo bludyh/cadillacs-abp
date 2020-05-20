@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 
-namespace Identity.Api.Dtos {
-    public class StudentReadDto {
+namespace Identity.Api.Dtos
+{
+    public class StudentReadDto
+    {
 
         public int Id { get; set; }
         public string Pcn { get; set; }

@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StudyProgress.Api.Dtos;
 using StudyProgress.Api.Services;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace StudyProgress.Api.Controllers
@@ -25,13 +23,13 @@ namespace StudyProgress.Api.Controllers
         // Enrollments
 
         [HttpGet("{id}/enrollments")]
-        public async Task<ActionResult<IEnumerable<StudentEnrollmentReadDto>>> GetEnrollments(int id)
+        public async Task<ActionResult<IEnumerable<StudentEnrollmentReadDto>>> GetEnrollments([FromRoute] int id)
         {
             return await _studentService.GetEnrollmentsAsync(id);
         }
 
         [HttpPost("{id}/enrollments")]
-        public async Task<ActionResult<StudentEnrollmentReadDto>> AddEnrollment(int id, StudentEnrollmentCreateDto dto)
+        public async Task<ActionResult<StudentEnrollmentReadDto>> AddEnrollment([FromRoute] int id, [FromBody] StudentEnrollmentCreateDto dto)
         {
             var enrollment = await _studentService.AddEnrollmentAsync(id, dto);
 
@@ -40,7 +38,7 @@ namespace StudyProgress.Api.Controllers
 
         [HttpDelete("{id}/enrollments")]
         public async Task<ActionResult<StudentEnrollmentReadDto>> RemoveEnrollment(
-            int id,
+            [FromRoute] int id,
             [FromQuery, Required] string classId,
             [FromQuery, Required] int classSemester,
             [FromQuery, Required] int classYear,

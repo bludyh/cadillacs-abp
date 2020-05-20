@@ -1,31 +1,27 @@
-using Identity.Api.Controllers;
-using Identity.Api.Data;
-using Identity.Api.Dtos;
-using Identity.Api.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Identity.Common.Data;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace Identity.UnitTests {
+namespace Identity.UnitTests
+{
 
     [Collection("Tests")]
-    public class SchoolsControllerTest : IDisposable {
+    public class SchoolsControllerTest : IDisposable
+    {
 
         private readonly TestFixture _fixture;
 
         // Setup
         // Runs before each test in this test class
-        public SchoolsControllerTest(TestFixture fixture) {
+        public SchoolsControllerTest(TestFixture fixture)
+        {
             _fixture = fixture;
         }
 
         // Cleanup
         // Runs after each test in this test class
-        public void Dispose() {
+        public void Dispose()
+        {
             using var context = new IdentityContext(_fixture.DbContextOptions);
             context.Database.EnsureDeleted();
         }

@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
-using Identity.Api.Data;
 using Identity.Api.Dtos;
-using Identity.Api.Models;
+using Identity.Common.Data;
+using Identity.Common.Models;
 using Infrastructure.Common;
+using Infrastructure.Common.Events;
 using Infrastructure.Common.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Pitstop.Infrastructure.Messaging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,8 +23,8 @@ namespace Identity.Api.Services
         public Task UpdateAsync(int employeeId, EmployeeUpdateDto dto);
         public Task<EmployeeReadDto> CreateAsync(EmployeeCreateDto dto);
         public Task<EmployeeReadDto> DeleteAsync(int employeeId);
-        public Task<List<RoleReadDto>> GetRolesAsync(int employeeId); 
-        public Task<RoleReadDto> AddRoleAsync(int employeeId, string roleName); 
+        public Task<List<RoleReadDto>> GetRolesAsync(int employeeId);
+        public Task<RoleReadDto> AddRoleAsync(int employeeId, string roleName);
         public Task<RoleReadDto> RemoveRoleAsync(int employeeId, string roleName);
         public Task<List<ProgramReadDto>> GetProgramsAsync(int employeeId);
         public Task<ProgramReadDto> AddProgramAsync(int employeeId, string programId);
@@ -35,13 +37,15 @@ namespace Identity.Api.Services
         protected readonly IMapper _mapper;
         protected readonly UserManager<User> _userManager;
         protected readonly RoleManager<IdentityRole<int>> _roleManager;
+        protected readonly IMessagePublisher _messagePublisher;
 
-        public EmployeeService(IdentityContext context, IMapper mapper, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager)
+        public EmployeeService(IdentityContext context, IMapper mapper, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, IMessagePublisher messagePublisher)
             : base(context)
         {
             _mapper = mapper;
             _userManager = userManager;
             _roleManager = roleManager;
+            _messagePublisher = messagePublisher;
         }
 
         public async Task<List<EmployeeReadDto>> GetAllAsync()
@@ -78,6 +82,10 @@ namespace Identity.Api.Services
 
             _context.Update(employee);
             await _context.SaveChangesAsync();
+
+            // Publish event
+            var e = _mapper.Map<EmployeeUpdated>(employee);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
         }
 
         public async Task<EmployeeReadDto> CreateAsync(EmployeeCreateDto dto)
@@ -109,10 +117,14 @@ namespace Identity.Api.Services
                 .Include(r => r.Building)
                 .LoadAsync();
 
+            // Publish event
+            var e = _mapper.Map<EmployeeCreated>(employee);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
+
             return _mapper.Map<EmployeeReadDto>(employee);
         }
 
-        public async Task<EmployeeReadDto> DeleteAsync(int employeeId) 
+        public async Task<EmployeeReadDto> DeleteAsync(int employeeId)
         {
             var employee = await ValidateExistenceAsync<T>(employeeId);
 
@@ -128,6 +140,10 @@ namespace Identity.Api.Services
 
             _context.Remove(employee);
             await _context.SaveChangesAsync();
+
+            // Publish event
+            var e = _mapper.Map<EmployeeDeleted>(employee);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
 
             return _mapper.Map<EmployeeReadDto>(employee);
         }
@@ -196,7 +212,7 @@ namespace Identity.Api.Services
         {
             await ValidateExistenceAsync<T>(employeeId);
 
-            await ValidateForeignKeyAsync<Models.Program>(programId);
+            await ValidateForeignKeyAsync<Common.Models.Program>(programId);
 
             await ValidateDuplicationAsync<EmployeeProgram>(employeeId, programId);
 
@@ -205,7 +221,7 @@ namespace Identity.Api.Services
             await _context.AddAsync(ep);
             await _context.SaveChangesAsync();
 
-            var program = await _context.FindAsync<Models.Program>(programId);
+            var program = await _context.FindAsync<Common.Models.Program>(programId);
 
             await _context.Entry(program)
                 .Reference(p => p.School)
@@ -218,7 +234,7 @@ namespace Identity.Api.Services
         {
             await ValidateExistenceAsync<T>(employeeId);
 
-            await ValidateForeignKeyAsync<Models.Program>(programId);
+            await ValidateForeignKeyAsync<Common.Models.Program>(programId);
 
             var ep = await _context.FindAsync<EmployeeProgram>(employeeId, programId);
             Validate(
@@ -229,7 +245,7 @@ namespace Identity.Api.Services
             _context.Remove(ep);
             await _context.SaveChangesAsync();
 
-            var program = await _context.FindAsync<Models.Program>(programId);
+            var program = await _context.FindAsync<Common.Models.Program>(programId);
 
             await _context.Entry(program)
                 .Reference(p => p.School)

@@ -5,10 +5,9 @@ using Infrastructure.Common.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Pitstop.Infrastructure.Messaging;
-using StudyProgress.Api.Data;
 using StudyProgress.Api.Dtos;
-using StudyProgress.Api.Models;
-using System;
+using StudyProgress.Common.Data;
+using StudyProgress.Common.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,12 +41,12 @@ namespace StudyProgress.Api.Services
         #region Programs
         public async Task<List<ProgramReadDto>> GetAllAsync()
         {
-            return await _mapper.ProjectTo<ProgramReadDto>(_context.Set<Models.Program>()).ToListAsyncFallback();
+            return await _mapper.ProjectTo<ProgramReadDto>(_context.Set<Common.Models.Program>()).ToListAsyncFallback();
         }
 
         public async Task<ProgramReadDto> GetAsync(string programId)
         {
-            var program = await ValidateExistenceAsync<Models.Program>(programId);
+            var program = await ValidateExistenceAsync<Common.Models.Program>(programId);
 
             await _context.Entry(program)
                 .Reference(p => p.School)
@@ -58,7 +57,7 @@ namespace StudyProgress.Api.Services
 
         public async Task UpdateAsync(string programId, ProgramUpdateDto dto)
         {
-            var program = await ValidateExistenceAsync<Models.Program>(programId);
+            var program = await ValidateExistenceAsync<Common.Models.Program>(programId);
 
             _mapper.Map(dto, program);
 
@@ -72,11 +71,11 @@ namespace StudyProgress.Api.Services
 
         public async Task<ProgramReadDto> CreateAsync(ProgramCreateDto dto)
         {
-            await ValidateDuplicationAsync<Models.Program>(dto.Id);
+            await ValidateDuplicationAsync<Common.Models.Program>(dto.Id);
 
             await ValidateForeignKeyAsync<School>(dto.SchoolId);
 
-            var program = _mapper.Map<Models.Program>(dto);
+            var program = _mapper.Map<Common.Models.Program>(dto);
 
             await _context.AddAsync(program);
             await _context.SaveChangesAsync();
@@ -90,7 +89,7 @@ namespace StudyProgress.Api.Services
 
         public async Task<ProgramReadDto> DeleteAsync(string programId)
         {
-            var program = await ValidateExistenceAsync<Models.Program>(programId);
+            var program = await ValidateExistenceAsync<Common.Models.Program>(programId);
 
             await _context.Entry(program)
                 .Reference(p => p.School)
@@ -110,7 +109,7 @@ namespace StudyProgress.Api.Services
         #region Courses
         public async Task<List<CourseReadDto>> GetCoursesAsync(string programId)
         {
-            var program = await ValidateExistenceAsync<Models.Program>(programId);
+            var program = await ValidateExistenceAsync<Common.Models.Program>(programId);
 
             await _context.Entry(program)
                 .Collection(p => p.ProgramCourses)
@@ -127,7 +126,7 @@ namespace StudyProgress.Api.Services
 
         public async Task<CourseReadDto> AddCourseAsync(string programId, string courseId)
         {
-            await ValidateExistenceAsync<Models.Program>(programId);
+            await ValidateExistenceAsync<Common.Models.Program>(programId);
 
             await ValidateForeignKeyAsync<Course>(courseId);
 
@@ -145,7 +144,7 @@ namespace StudyProgress.Api.Services
 
         public async Task<CourseReadDto> RemoveCourseAsync(string programId, string courseId)
         {
-            await ValidateExistenceAsync<Models.Program>(programId);
+            await ValidateExistenceAsync<Common.Models.Program>(programId);
 
             await ValidateForeignKeyAsync<Course>(courseId);
 
