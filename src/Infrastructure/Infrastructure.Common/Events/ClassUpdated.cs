@@ -9,6 +9,7 @@ namespace Infrastructure.Common.Events
         public int Semester { get; set; }
         public int Year { get; set; }
         public string CourseId { get; set; }
+        public string CourseName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
     }

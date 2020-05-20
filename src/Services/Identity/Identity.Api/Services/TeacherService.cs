@@ -6,6 +6,7 @@ using Infrastructure.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Pitstop.Infrastructure.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,8 +25,8 @@ namespace Identity.Api.Services
     public class TeacherService : EmployeeService<Teacher>, ITeacherService
     {
 
-        public TeacherService(IdentityContext context, IMapper mapper, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager)
-            : base(context, mapper, userManager, roleManager) { }
+        public TeacherService(IdentityContext context, IMapper mapper, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, IMessagePublisher messagePublisher)
+            : base(context, mapper, userManager, roleManager, messagePublisher) { }
 
         public async Task<TeacherMentorReadDto> AddMentorAsync(int teacherId, TeacherMentorCreateDto dto)
         {
