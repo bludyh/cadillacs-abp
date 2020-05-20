@@ -44,6 +44,8 @@ namespace Identity.Api.Mappings
             CreateMap<Student, StudentCreated>();
             CreateMap<Student, StudentDeleted>();
             CreateMap<Student, StudentUpdated>();
+            CreateMap<Room, RoomCreated>();
+            CreateMap<Room, RoomDeleted>();
             CreateMap<Employee, EmployeeCreated>();
             CreateMap<Employee, EmployeeDeleted>();
             CreateMap<Employee, EmployeeUpdated>();
