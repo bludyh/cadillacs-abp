@@ -37,7 +37,7 @@ namespace Identity.Api.Services
         protected readonly IMapper _mapper;
         protected readonly UserManager<User> _userManager;
         protected readonly RoleManager<IdentityRole<int>> _roleManager;
-        private readonly IMessagePublisher _messagePublisher;
+        protected readonly IMessagePublisher _messagePublisher;
 
         public EmployeeService(IdentityContext context, IMapper mapper, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, IMessagePublisher messagePublisher)
             : base(context)
