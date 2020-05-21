@@ -1,0 +1,62 @@
+version: '3.4'
+
+services:
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssql
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+
+  announcementapi:
+    image: ${DOCKER_REGISTRY:-i360147}/announcementapi:${TAG:-latest}
+    depends_on:
+      - mssql
+      - rabbitmq
+
+  announcementeventhandler:
+    image: ${DOCKER_REGISTRY:-i360147}/announcementeventhandler:${TAG:-latest}
+    depends_on:
+      - mssql
+      - rabbitmq
+
+  identityapi:
+    image: ${DOCKER_REGISTRY:-i360147}/identityapi:${TAG:-latest}
+    depends_on:
+      - mssql
+      - rabbitmq
+
+  identityeventhandler:
+    image: ${DOCKER_REGISTRY:-i360147}/identityeventhandler:${TAG:-latest}
+    depends_on:
+      - mssql
+      - rabbitmq
+
+  scheduleapi:
+    image: ${DOCKER_REGISTRY:-i360147}/scheduleapi:${TAG:-latest}
+    depends_on:
+      - mssql
+      - rabbitmq
+
+  scheduleeventhandler:
+    image: ${DOCKER_REGISTRY:-i360147}/scheduleeventhandler:${TAG:-latest}
+    depends_on:
+      - mssql
+      - rabbitmq
+
+  studyprogressapi:
+    image: ${DOCKER_REGISTRY:-i360147}/studyprogressapi:${TAG:-latest}
+    depends_on:
+      - mssql
+      - rabbitmq
+
+  studyprogresseventhandler:
+    image: ${DOCKER_REGISTRY:-i360147}/studyprogresseventhandler:${TAG:-latest}
+    depends_on:
+      - mssql
+      - rabbitmq
+
+  apigateway:
+    image: ${DOCKER_REGISTRY:-i360147}/apigateway:${TAG:-latest}

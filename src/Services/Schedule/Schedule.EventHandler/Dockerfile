@@ -1,6 +1,6 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 
 FROM base AS production
@@ -11,6 +11,8 @@ ENTRYPOINT ["dotnet", "Schedule.EventHandler.dll"]
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["Services/Schedule/Schedule.EventHandler/Schedule.EventHandler.csproj", "Services/Schedule/Schedule.EventHandler/"]
+COPY ["Services/Schedule/Schedule.Common/Schedule.Common.csproj", "Services/Schedule/Schedule.Common/"]
+COPY ["Infrastructure/Infrastructure.Common/Infrastructure.Common.csproj", "Infrastructure/Infrastructure.Common/"]
 RUN dotnet restore "Services/Schedule/Schedule.EventHandler/Schedule.EventHandler.csproj"
 COPY . .
 WORKDIR "/src/Services/Schedule/Schedule.EventHandler"

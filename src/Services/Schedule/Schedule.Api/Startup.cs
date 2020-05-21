@@ -39,7 +39,7 @@ namespace Schedule.Api
 
             // Swagger
             services.AddSwaggerGen(c => {
-                c.SwaggerDoc("schedule", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Schedule API" });
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Schedule API", Version = "v1" });
             });
 
             services.AddSwaggerGenNewtonsoftSupport();
@@ -59,7 +59,7 @@ namespace Schedule.Api
             // Swagger
             app.UseSwagger();
             app.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/schedule/swagger.json", "Schedule API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Schedule API v1");
             });
 
             app.UseRouting();

@@ -43,7 +43,7 @@ namespace Announcement.Api
             // Swagger
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("announcement", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Announcement API" });
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Announcement API", Version = "v1" });
             });
 
             services.AddSwaggerGenNewtonsoftSupport();
@@ -64,7 +64,7 @@ namespace Announcement.Api
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/announcement/swagger.json", "Announcement API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Announcement API v1");
             });
 
             app.UseRouting();
