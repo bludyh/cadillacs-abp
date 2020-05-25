@@ -6,7 +6,6 @@
 
         public int EvaluationId { get; set; }
         public Evaluation Evaluation { get; set; }
-
         public string Description { get; set; }
     }
 }

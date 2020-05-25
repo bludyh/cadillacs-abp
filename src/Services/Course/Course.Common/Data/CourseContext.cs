@@ -23,10 +23,10 @@ namespace Course.Common.Data
                 .HasForeignKey(cl => cl.CourseId);
 
             modelBuilder.Entity<Enrollment>().HasKey(e =>
-                new { e.ClassId, e.ClassSemester, e.ClassYear, e.ClassCourseId, e.StudentId });
+                new { e.StudentId, e.ClassId, e.ClassSemester, e.ClassYear, e.ClassCourseId });
 
             modelBuilder.Entity<ClassSchedule>().HasKey(cs =>
-                new { cs.StartTime, cs.ClassId, cs.ClassSemester, cs.ClassYear, cs.ClassCourseId });
+                new { cs.TimeSlotId, cs.RoomId, cs.RoomBuildingId });
 
             modelBuilder.Entity<Assignment>(a =>
             {
@@ -53,6 +53,7 @@ namespace Course.Common.Data
         //entities
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<AssignmentAttachment> AssignmentAttachments { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Class> Classes { get; set; }
         public DbSet<ClassSchedule> ClassSchedules { get; set; }
         public DbSet<Models.Course> Courses { get; set; }
@@ -67,5 +68,6 @@ namespace Course.Common.Data
         public DbSet<StudyMaterial> StudyMaterials { get; set; }
         public DbSet<StudyMaterialAttachment> StudyMaterialAttachments { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<TimeSlot> TimeSlots { get; set; }
     }
 }

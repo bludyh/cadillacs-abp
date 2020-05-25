@@ -18,11 +18,10 @@ namespace Course.Api
             var env = services.GetRequiredService<IWebHostEnvironment>();
             if (env.IsDevelopment())
             {
-                CreateDb(host);
-
+                
                 // TODO: Add Seed.
             }
-
+            //CreateDb(host);
             host.Run();
         }
 
@@ -35,7 +34,6 @@ namespace Course.Api
                 try
                 {
                     var context = services.GetRequiredService<CourseContext>();
-                    context.Database.EnsureDeleted();
                     context.Database.EnsureCreated();
                 }
                 catch (Exception ex)
