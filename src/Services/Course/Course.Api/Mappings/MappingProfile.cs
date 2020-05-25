@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Course.Api.Dtos;
+using Course.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,9 @@ namespace Course.Api.Mappings
             CreateMap<Common.Models.Course, CourseReadDto>();
             CreateMap<CourseUpdateDto, Common.Models.Course>(MemberList.Source);
             CreateMap<CourseCreateDto, Common.Models.Course>(MemberList.Source);
+
+            CreateMap<Class, ClassReadDto>();
+            CreateMap<ClassCreateDto, Class>(MemberList.Source);
         }
     }
 }

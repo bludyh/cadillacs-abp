@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Course.Api.Dtos;
 using Course.Common.Data;
+using Course.Common.Models;
 using Infrastructure.Common;
 using Infrastructure.Common.Services;
 using System;
@@ -17,6 +18,11 @@ namespace Course.Api.Services
         public Task UpdateAsync(string courseId, CourseUpdateDto dto);
         public Task<CourseReadDto> CreateAsync(CourseCreateDto dto);
         public Task<CourseReadDto> DeleteAsync(string courseId);
+
+        public Task<List<ClassReadDto>> GetClassesAsync(string classCourseId);
+        public Task<ClassReadDto> GetClassAsync(string classCourseId, string classId, int classSemester, int classYear);
+        public Task<ClassReadDto> CreateClassAsync(string classCourseId, ClassCreateDto dto);
+        public Task<ClassReadDto> DeleteClassAsync(string courseId, string classId, int classSemester, int classYear);
     }
 
     public class CourseService<T> : ServiceBase, ICourseService where T : Common.Models.Course
@@ -70,6 +76,70 @@ namespace Course.Api.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<CourseReadDto>(course);
+        }
+        #endregion
+
+        #region Classes
+        public async Task<List<ClassReadDto>> GetClassesAsync(string classCourseId)
+        {
+            var course = await ValidateExistenceAsync<T>(classCourseId);
+
+            await _context.Entry(course)
+                .Collection(c => c.Classes)
+                .LoadAsync();
+
+            return await _mapper.ProjectTo<ClassReadDto>(course.Classes.AsQueryable()).ToListAsyncFallback();
+        }
+
+        public async Task<ClassReadDto> GetClassAsync(string classCourseId, string classId, int classSemester, int classYear)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            var inputClass = await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+
+            await _context.Entry(inputClass)
+                .Reference(c => c.Course)
+                .LoadAsync();
+
+            return _mapper.Map<ClassReadDto>(inputClass);
+        }
+
+        public async Task<ClassReadDto> CreateClassAsync(string classCourseId, ClassCreateDto dto)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+
+            await ValidateDuplicationAsync<Class>(dto.Id, dto.Semester, dto.Year, classCourseId);
+
+            var inputClass = new Class 
+            { 
+                Id = dto.Id, 
+                Semester = (int) dto.Semester, 
+                Year = (int) dto.Year, 
+                CourseId = classCourseId 
+            };
+
+            await _context.AddAsync(inputClass);
+            await _context.SaveChangesAsync();
+
+            await _context.Entry(inputClass)
+                .Reference(c => c.Course)
+                .LoadAsync();
+
+            return _mapper.Map<ClassReadDto>(inputClass);
+        }
+
+        public async Task<ClassReadDto> DeleteClassAsync(string classCourseId, string classId, int classSemester, int classYear)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            var inputClass = await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+
+            await _context.Entry(inputClass)
+                .Reference(c => c.Course)
+                .LoadAsync();
+
+            _context.Remove(inputClass);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<ClassReadDto>(inputClass);
         }
         #endregion
     }
