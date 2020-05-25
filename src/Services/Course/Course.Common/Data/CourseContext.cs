@@ -26,13 +26,21 @@ namespace Course.Common.Data
                 new { e.StudentId, e.ClassId, e.ClassSemester, e.ClassYear, e.ClassCourseId });
 
             modelBuilder.Entity<ClassSchedule>().HasKey(cs =>
-                new { cs.TimeSlotId, cs.RoomId, cs.RoomBuildingId });
+                new { cs.TimeSlotId, cs.Date, cs.RoomId, cs.RoomBuildingId });
 
             modelBuilder.Entity<Assignment>(a =>
             {
                 a.Property(a => a.Type)
                     .HasConversion(new EnumToStringConverter<AssignmentType>());
             });
+
+            modelBuilder.Entity<Student>()
+                .Property(e => e.Id)
+                .ValueGeneratedNever();
+
+            modelBuilder.Entity<Teacher>()
+                .Property(e => e.Id)
+                .ValueGeneratedNever();
 
             modelBuilder.Entity<Lecturer>().HasKey(l =>
                 new { l.TeacherId, l.ClassId, l.ClassSemester, l.ClassYear, l.ClassCourseId });

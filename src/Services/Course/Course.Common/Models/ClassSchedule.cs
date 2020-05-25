@@ -6,6 +6,7 @@ namespace Course.Common.Models
     {
         public int TimeSlotId { get; set; }
         public TimeSlot TimeSlot { get; set; }
+        public DateTime Date { get; set; }
         public string RoomId { get; set; }
         public string RoomBuildingId { get; set; }
 

@@ -1,3 +1,6 @@
+using AutoMapper;
+using Course.Api.Mappings;
+using Course.Api.Services;
 using Course.Common.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,6 +25,12 @@ namespace Course.Api
         {
             services.AddDbContext<CourseContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Course")));
+
+            // Add AutoMapper
+            services.AddAutoMapper(typeof(MappingProfile));
+
+            // Add Services
+            services.AddScoped<ICourseService, CourseService<Common.Models.Course>>();
 
             services.AddControllers();
         }
