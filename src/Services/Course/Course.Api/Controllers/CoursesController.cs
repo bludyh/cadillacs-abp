@@ -374,5 +374,19 @@ namespace Course.Api.Controllers
                 classCourseId, classId, classSemester, classYear, groupId);
         }
         #endregion
+
+        #region Groups/Enrollments
+        // GET: api/Courses/prc1/Classes/e-s71/1/2020/Groups/{id}/Enrollments
+        [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/groups/{groupId}/enrollments")]
+        public async Task<ActionResult<IEnumerable<EnrollmentReadDto>>> GetGroupEnrollments(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int groupId)
+        {
+            return await _courseService.GetGroupEnrollmentsAsync(classCourseId, classId, classSemester, classYear, groupId);
+        }
+        #endregion
     }
 }

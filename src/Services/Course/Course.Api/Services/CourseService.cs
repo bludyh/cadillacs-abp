@@ -76,6 +76,11 @@ namespace Course.Api.Services
         public Task<GroupReadDto> DeleteGroupAsync(string classCourseId,
             string classId, int classSemester, int classYear, int groupId);
         #endregion
+
+        #region Groups/Enrollments
+        public Task<List<EnrollmentReadDto>> GetGroupEnrollmentsAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int groupId);
+        #endregion
     }
 
     public class CourseService<T> : ServiceBase, ICourseService where T : Common.Models.Course
@@ -568,6 +573,27 @@ namespace Course.Api.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<GroupReadDto>(group);
+        }
+        #endregion
+
+        #region Groups/Enrollments
+        public async Task<List<EnrollmentReadDto>> GetGroupEnrollmentsAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int groupId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            var group = await ValidateExistenceAsync<Group>(groupId);
+
+            await _context.Entry(group)
+                .Collection(c => c.Enrollments)
+                .Query()
+                .Include(e => e.Student)
+                .LoadAsync();
+
+            return await _mapper.ProjectTo<EnrollmentReadDto>(
+                group.Enrollments
+                .AsQueryable()
+            ).ToListAsyncFallback();
         }
         #endregion
     }
