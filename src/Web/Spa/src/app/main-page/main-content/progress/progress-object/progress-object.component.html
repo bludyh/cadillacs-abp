@@ -1,0 +1,10 @@
+<div class="card">
+    <div class="card-body">
+      <h5 class="card-title">{{progress.Description}}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">{{progress.CurrentECs}}/{{progress.TotalECs}} ECTS</h6>
+      <div class="progress mb-3">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" [class]="progressColor(progress.Percentage)" role="progressbar" [style.width.%]="progress.Percentage"   aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      <a href="#" class="card-link float-right">View detail</a>
+    </div>
+</div>

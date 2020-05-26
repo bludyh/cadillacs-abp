@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Student } from 'src/app/models/student';
+
 
 @Component({
   selector: 'app-navigation-bar',
@@ -8,13 +9,14 @@ import { Student } from 'src/app/models/student';
 })
 export class NavigationBarComponent implements OnInit {
 
-  constructor() { }
-  student : Student = {PCN:123321, FirstName: 'Bobby',LastName: 'Gramatikov'}
+  constructor() {
+    
+   }
+  @Input() student : Student = null;
    ngOnInit(): void {
    }
- 
    getUserName() : string {
-       return this.student.FirstName + this.student.LastName
+       return this.student.firstName+" "+this.student.lastName[0];
    }
 
 

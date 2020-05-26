@@ -1,0 +1,16 @@
+<div class="row row-height" >
+    <ng-template #popTitle  let-subject="subject">• {{subject}} Lesson</ng-template>
+    <ng-template #popContent let-date="date" let-time="time" let-teacherName="teacherName">
+      {{date}} - {{time}}
+      Teacher: {{teacherName}}
+    </ng-template>
+    <div class="col">
+      <p class="my-0"></p>
+      <div *ngFor="let subject of subjects"> <!--run for loop to initiate buttons-->
+        <button type="button" class="btn mb-1 {{colourTimeSlot(subject.Time)}} py-0 px-1 w-100 button-height text-left" placement="right"
+                [ngbPopover]="popContent" [popoverTitle]="popTitle" #pop1="ngbPopover" triggers="manual" (click)="scheduleToggle(pop1, subject.Subject, subject.Date, subject.Time, subject.TeacherName)">
+          <span>{{subject.Time}} - {{subject.Subject}}</span> <!--time & subject-->
+        </button>
+      </div>
+    </div>
+</div>

@@ -1,7 +1,7 @@
 <div class="container-fluid h-100">
     <div class="row">
         <div class="col-md-12 p-0 ">
-            <app-navigation-bar></app-navigation-bar>
+            <app-navigation-bar [student]="student"></app-navigation-bar>
         </div>
     </div>
     <div class="row h-100">
@@ -9,7 +9,7 @@
             <app-side-bar (setActiveFuncChange)="activateFunction($event)"></app-side-bar>
         </div>
         <div class="col-md-9">
-            <app-main-content [activeFunctions]="activeFuncs"></app-main-content>
+            <app-main-content [activeFunctions]="activeFuncs" [student]="student"></app-main-content>
         </div>
         <div class="col-md-2 p-0 bg-light">
             <app-notification-bar></app-notification-bar>
