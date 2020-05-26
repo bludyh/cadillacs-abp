@@ -13,5 +13,7 @@ namespace Course.Common.Models
         public string Phone { get; set; }
 
         public List<Lecturer> Lecturers { get; set; }
+        public List<StudentEvaluation> StudentEvaluations { get; set; }
+        public List<GroupEvaluation> GroupEvaluations { get; set; }
     }
 }

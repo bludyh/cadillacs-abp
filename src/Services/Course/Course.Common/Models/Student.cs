@@ -12,5 +12,6 @@ namespace Course.Common.Models
         public string Phone { get; set; }
 
         public List<Enrollment> Enrollments { get; set; }
+        public List<StudentEvaluation> StudentEvaluations { get; set; }
     }
 }

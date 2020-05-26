@@ -226,5 +226,79 @@ namespace Course.Api.Controllers
                 classCourseId, classId, classSemester, classYear, studentId);
         }
         #endregion
+
+        #region Assignments
+        // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments
+        [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments")]
+        public async Task<ActionResult<IEnumerable<AssignmentReadDto>>> GetAssignments(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear)
+        {
+            return await _courseService.GetAssignmentsAsync(classCourseId, classId, classSemester, classYear);
+        }
+
+        // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5
+        [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}")]
+        public async Task<ActionResult<AssignmentReadDto>> GetAssignment(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int assignmentId)
+        {
+            return await _courseService.GetAssignmentAsync(classCourseId, classId, classSemester, classYear, assignmentId);
+        }
+
+        // PUT: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5
+        [HttpPut("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}")]
+        public async Task<IActionResult> PutAssignment(string classCourseId, string classId,
+            int classSemester, int classYear, int assignmentId, [FromBody] AssignmentCreateUpdateDto dto)
+        {
+            await _courseService.UpdateAssignmentAsync(classCourseId, classId, classSemester,
+                classYear, assignmentId, dto);
+
+            return NoContent();
+        }
+
+        // POST: api/Courses/prc1/Classes/e-s71/1/2020/Assignments
+        [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments")]
+        public async Task<ActionResult<AssignmentReadDto>> CreateAssignment(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            [FromBody] AssignmentCreateUpdateDto dto)
+        {
+            var assignment = await _courseService.CreateAssignmentAsync(
+                classCourseId,
+                classId,
+                classSemester,
+                classYear,
+                dto);
+
+            return CreatedAtAction(nameof(GetAssignments), new
+            {
+                classCourseId,
+                classId,
+                classSemester,
+                classYear
+            }, assignment);
+        }
+
+        // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5
+        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}")]
+        public async Task<ActionResult<AssignmentReadDto>> DeleteAssignment(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int assignmentId)
+        {
+            return await _courseService.DeleteAssignmentAsync(
+                classCourseId, classId, classSemester, classYear, assignmentId);
+        }
+        #endregion
     }
 }

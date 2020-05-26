@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Course.Common.Models
 {
@@ -16,5 +17,9 @@ namespace Course.Common.Models
         public string Description { get; set; }
         public DateTime DeadlineDateTime { get; set; }
         public int Weight { get; set; }
+
+        public List<StudentEvaluation> StudentEvaluations { get; set; }
+        public List<GroupEvaluation> GroupEvaluations { get; set; }
+        public List<AssignmentAttachment> AssignmentAttachments { get; set; }
     }
 }
