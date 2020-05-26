@@ -18,6 +18,11 @@ namespace Course.Api.Mappings
 
             CreateMap<Class, ClassReadDto>();
             CreateMap<ClassCreateDto, Class>(MemberList.Source);
+
+            CreateMap<StudyMaterial, StudyMaterialReadDto>();
+            CreateMap<StudyMaterialCreateUpdateDto, StudyMaterial>(MemberList.Source);
+
+            CreateMap<StudyMaterialAttachment, StudyMaterialAttachmentReadDto>();
         }
     }
 }
