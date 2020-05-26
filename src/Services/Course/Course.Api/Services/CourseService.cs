@@ -63,6 +63,19 @@ namespace Course.Api.Services
         public Task<AssignmentReadDto> DeleteAssignmentAsync(string classCourseId,
             string classId, int classSemester, int classYear, int assignmentId);
         #endregion
+
+        #region Groups
+        public Task<List<GroupReadDto>> GetGroupsAsync(string classCourseId,
+           string classId, int classSemester, int classYear);
+        public Task<GroupReadDto> GetGroupAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int groupId);
+        public Task UpdateGroupAsync(string classCourseId, string classId, int classSemester,
+            int classYear, int groupId, GroupCreateUpdateDto dto);
+        public Task<GroupReadDto> CreateGroupAsync(string classCourseId,
+            string classId, int classSemester, int classYear, GroupCreateUpdateDto dto);
+        public Task<GroupReadDto> DeleteGroupAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int groupId);
+        #endregion
     }
 
     public class CourseService<T> : ServiceBase, ICourseService where T : Common.Models.Course
@@ -469,6 +482,92 @@ namespace Course.Api.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<AssignmentReadDto>(assignment);
+        }
+        #endregion
+
+        #region Groups
+        public async Task<List<GroupReadDto>> GetGroupsAsync(
+            string classCourseId, string classId, int classSemester, int classYear)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            var inputClass = await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+
+            await _context.Entry(inputClass)
+                .Collection(c => c.Groups)
+                .Query()
+                .LoadAsync();
+
+            return await _mapper.ProjectTo<GroupReadDto>(
+                inputClass.Groups
+                .AsQueryable()
+            ).ToListAsyncFallback();
+        }
+
+        public async Task<GroupReadDto> GetGroupAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int groupId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            var group = await ValidateExistenceAsync<Group>(groupId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+
+            return _mapper.Map<GroupReadDto>(group);
+        }
+
+        public async Task UpdateGroupAsync(
+            string classCourseId, string classId, int classSemester,
+            int classYear, int groupId, GroupCreateUpdateDto dto)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            var group = await ValidateExistenceAsync<Group>(groupId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+
+            _mapper.Map(dto, group);
+
+            _context.Update(group);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<GroupReadDto> CreateGroupAsync(string classCourseId,
+            string classId, int classSemester, int classYear, GroupCreateUpdateDto dto)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+
+            var group = new Group
+            {
+                ClassId = classId,
+                ClassSemester = classSemester,
+                ClassYear = classYear,
+                ClassCourseId = classCourseId,
+                Name = dto.Name,
+                MaxSize = (int)dto.MaxSize
+            };
+
+            await _context.AddAsync(group);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<GroupReadDto>(group);
+        }
+
+        public async Task<GroupReadDto> DeleteGroupAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int groupId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            var group = await ValidateExistenceAsync<Group>(groupId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+
+            _context.Remove(group);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<GroupReadDto>(group);
         }
         #endregion
     }

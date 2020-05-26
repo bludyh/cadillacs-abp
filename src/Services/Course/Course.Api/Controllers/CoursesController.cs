@@ -300,5 +300,79 @@ namespace Course.Api.Controllers
                 classCourseId, classId, classSemester, classYear, assignmentId);
         }
         #endregion
+
+        #region Groups
+        // GET: api/Courses/prc1/Classes/e-s71/1/2020/Groups
+        [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/groups")]
+        public async Task<ActionResult<IEnumerable<GroupReadDto>>> GetGroups(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear)
+        {
+            return await _courseService.GetGroupsAsync(classCourseId, classId, classSemester, classYear);
+        }
+
+        // GET: api/Courses/prc1/Classes/e-s71/1/2020/Groups/5
+        [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/groups/{groupId}")]
+        public async Task<ActionResult<GroupReadDto>> GetGroup(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int groupId)
+        {
+            return await _courseService.GetGroupAsync(classCourseId, classId, classSemester, classYear, groupId);
+        }
+
+        // PUT: api/Courses/prc1/Classes/e-s71/1/2020/Groups/5
+        [HttpPut("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/groups/{groupId}")]
+        public async Task<IActionResult> PutGroup(string classCourseId, string classId,
+            int classSemester, int classYear, int groupId, [FromBody] GroupCreateUpdateDto dto)
+        {
+            await _courseService.UpdateGroupAsync(classCourseId, classId, classSemester,
+                classYear, groupId, dto);
+
+            return NoContent();
+        }
+
+        // POST: api/Courses/prc1/Classes/e-s71/1/2020/Groups
+        [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/groups")]
+        public async Task<ActionResult<GroupReadDto>> CreateGroup(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            [FromBody] GroupCreateUpdateDto dto)
+        {
+            var group = await _courseService.CreateGroupAsync(
+                classCourseId,
+                classId,
+                classSemester,
+                classYear,
+                dto);
+
+            return CreatedAtAction(nameof(GetGroups), new
+            {
+                classCourseId,
+                classId,
+                classSemester,
+                classYear
+            }, group);
+        }
+
+        // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Groups/5
+        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/groups/{groupId}")]
+        public async Task<ActionResult<GroupReadDto>> DeleteGroup(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int groupId)
+        {
+            return await _courseService.DeleteGroupAsync(
+                classCourseId, classId, classSemester, classYear, groupId);
+        }
+        #endregion
     }
 }

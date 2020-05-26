@@ -26,7 +26,10 @@ namespace Course.Api.Mappings
 
             CreateMap<Enrollment, EnrollmentReadDto>();
             CreateMap<EnrollmentCreateDto, Enrollment>(MemberList.Source);
+
             CreateMap<Group, GroupReadDto>();
+            CreateMap<GroupCreateUpdateDto, Group>(MemberList.Source);
+
             CreateMap<Student, StudentReadDto>();
 
             CreateMap<Assignment, AssignmentReadDto>();
