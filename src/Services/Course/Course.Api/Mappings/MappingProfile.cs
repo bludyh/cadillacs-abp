@@ -23,6 +23,11 @@ namespace Course.Api.Mappings
             CreateMap<StudyMaterialCreateUpdateDto, StudyMaterial>(MemberList.Source);
 
             CreateMap<StudyMaterialAttachment, StudyMaterialAttachmentReadDto>();
+
+            CreateMap<Enrollment, EnrollmentReadDto>();
+            CreateMap<EnrollmentCreateDto, Enrollment>(MemberList.Source);
+            CreateMap<Group, GroupReadDto>();
+            CreateMap<Student, StudentReadDto>();
         }
     }
 }

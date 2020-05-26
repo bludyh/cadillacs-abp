@@ -175,5 +175,56 @@ namespace Course.Api.Controllers
                 classCourseId, classId, classSemester, classYear, studyMaterialId);
         }
         #endregion
+
+        #region Enrollments
+        // GET: api/Courses/prc1/Classes/e-s71/1/2020/Enrollments
+        [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/enrollments")]
+        public async Task<ActionResult<IEnumerable<EnrollmentReadDto>>> GetEnrollments(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear)
+        {
+            return await _courseService.GetEnrollmentsAsync(classCourseId, classId, classSemester, classYear);
+        }
+
+        // POST: api/Courses/prc1/Classes/e-s71/1/2020/Enrollments
+        [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/enrollments")]
+        public async Task<ActionResult<EnrollmentReadDto>> CreateEnrollment(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            [FromBody] EnrollmentCreateDto dto)
+        {
+            var enrollment = await _courseService.CreateEnrollmentAsync(
+                classCourseId,
+                classId,
+                classSemester,
+                classYear,
+                dto);
+
+            return CreatedAtAction(nameof(GetEnrollments), new
+            {
+                classCourseId,
+                classId,
+                classSemester,
+                classYear
+            }, enrollment);
+        }
+
+        // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Enrollments/5
+        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/enrollments/{studentId}")]
+        public async Task<ActionResult<EnrollmentReadDto>> DeleteEnrollment(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int studentId)
+        {
+            return await _courseService.DeleteEnrollmentAsync(
+                classCourseId, classId, classSemester, classYear, studentId);
+        }
+        #endregion
     }
 }

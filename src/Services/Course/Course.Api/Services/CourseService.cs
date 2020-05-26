@@ -14,17 +14,22 @@ namespace Course.Api.Services
 {
     public interface ICourseService
     {
+        #region Courses
         public Task<List<CourseReadDto>> GetAllAsync();
         public Task<CourseReadDto> GetAsync(string courseId);
         public Task UpdateAsync(string courseId, CourseUpdateDto dto);
         public Task<CourseReadDto> CreateAsync(CourseCreateDto dto);
         public Task<CourseReadDto> DeleteAsync(string courseId);
+        #endregion
 
+        #region Classes
         public Task<List<ClassReadDto>> GetClassesAsync(string classCourseId);
         public Task<ClassReadDto> GetClassAsync(string classCourseId, string classId, int classSemester, int classYear);
         public Task<ClassReadDto> CreateClassAsync(string classCourseId, ClassCreateDto dto);
         public Task<ClassReadDto> DeleteClassAsync(string courseId, string classId, int classSemester, int classYear);
+        #endregion
 
+        #region StudyMaterials
         public Task<List<StudyMaterialReadDto>> GetStudyMaterialsAsync(string classCourseId, 
             string classId, int classSemester, int classYear);
         public Task<StudyMaterialReadDto> GetStudyMaterialAsync(string classCourseId, 
@@ -35,6 +40,16 @@ namespace Course.Api.Services
             string classId, int classSemester, int classYear, StudyMaterialCreateUpdateDto dto);
         public Task<StudyMaterialReadDto> DeleteStudyMaterialAsync(string classCourseId,
             string classId, int classSemester, int classYear, int studyMaterialId);
+        #endregion
+
+        #region Enrollments
+        public Task<List<EnrollmentReadDto>> GetEnrollmentsAsync(string classCourseId,
+            string classId, int classSemester, int classYear);
+        public Task<EnrollmentReadDto> CreateEnrollmentAsync(string classCourseId,
+            string classId, int classSemester, int classYear, EnrollmentCreateDto dto);
+        public Task<EnrollmentReadDto> DeleteEnrollmentAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int studentId);
+        #endregion
     }
 
     public class CourseService<T> : ServiceBase, ICourseService where T : Common.Models.Course
@@ -250,6 +265,82 @@ namespace Course.Api.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<StudyMaterialReadDto>(studyMaterial);
+        }
+        #endregion
+
+        #region Enrollments
+        public async Task<List<EnrollmentReadDto>> GetEnrollmentsAsync(
+            string classCourseId, string classId, int classSemester, int classYear)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            var inputClass = await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+
+            await _context.Entry(inputClass)
+                .Collection(c => c.Enrollments)
+                .Query()
+                .Include(e => e.Student)
+                .Include(e => e.Group)
+                .LoadAsync();
+
+            return await _mapper.ProjectTo<EnrollmentReadDto>(
+                inputClass.Enrollments
+                .AsQueryable()
+            ).ToListAsyncFallback();
+        }
+
+        public async Task<EnrollmentReadDto> CreateEnrollmentAsync(string classCourseId,
+            string classId, int classSemester, int classYear, EnrollmentCreateDto dto)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateDuplicationAsync<Enrollment>(dto.StudentId, classId, classSemester, classYear, classCourseId);
+
+            var enrollment = new Enrollment
+            {
+                StudentId = (int)dto.StudentId, 
+                ClassId = classId,
+                ClassSemester = classSemester,
+                ClassYear = classYear,
+                ClassCourseId = classCourseId,
+                GroupId = (int)dto.GroupId
+            };
+
+            await _context.AddAsync(enrollment);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<EnrollmentReadDto>(enrollment);
+        }
+
+        public async Task<EnrollmentReadDto> DeleteEnrollmentAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int studentId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            var enrollment = await ValidateExistenceAsync<Enrollment>(
+                studentId, classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+
+            await _context.Entry(enrollment)
+                .Reference(e => e.Class)
+                .Query()
+                .Include(c => c.Course)
+                .LoadAsync();
+
+            await _context.Entry(enrollment)
+                .Reference(e => e.Group)
+                .LoadAsync();
+
+            await _context.Entry(enrollment)
+                .Reference(e => e.Student)
+                .LoadAsync();
+
+            _context.Remove(enrollment);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<EnrollmentReadDto>(enrollment);
         }
         #endregion
     }

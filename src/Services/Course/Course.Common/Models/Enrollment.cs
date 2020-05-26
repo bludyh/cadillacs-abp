@@ -13,6 +13,6 @@
         public int GroupId { get; set; }
         public Group Group { get; set; }
 
-        public double FinalGrade { get; set; }
+        public double? FinalGrade { get; set; }
     }
 }
