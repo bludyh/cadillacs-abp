@@ -388,5 +388,56 @@ namespace Course.Api.Controllers
             return await _courseService.GetGroupEnrollmentsAsync(classCourseId, classId, classSemester, classYear, groupId);
         }
         #endregion
+
+        #region Lecturers
+        // GET: api/Courses/prc1/Classes/e-s71/1/2020/Lecturers
+        [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/lecturers")]
+        public async Task<ActionResult<IEnumerable<LecturerReadDto>>> GetLecturers(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear)
+        {
+            return await _courseService.GetLecturersAsync(classCourseId, classId, classSemester, classYear);
+        }
+
+        // POST: api/Courses/prc1/Classes/e-s71/1/2020/Lecturers
+        [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/lecturers")]
+        public async Task<ActionResult<LecturerReadDto>> CreateLecturer(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            [FromBody] LecturerCreateDto dto)
+        {
+            var lecturer = await _courseService.CreateLecturerAsync(
+                classCourseId,
+                classId,
+                classSemester,
+                classYear,
+                dto);
+
+            return CreatedAtAction(nameof(GetLecturers), new
+            {
+                classCourseId,
+                classId,
+                classSemester,
+                classYear
+            }, lecturer);
+        }
+
+        // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Lecturers/5
+        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/Lecturers/{teacherId}")]
+        public async Task<ActionResult<LecturerReadDto>> DeleteLecturer(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int teacherId)
+        {
+            return await _courseService.DeleteLecturerAsync(
+                classCourseId, classId, classSemester, classYear, teacherId);
+        }
+        #endregion
     }
 }
