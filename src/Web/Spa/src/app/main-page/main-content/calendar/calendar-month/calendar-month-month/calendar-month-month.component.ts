@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {Moment} from "moment";
 import {CalendarSubjectObject} from "../../../../../models/calendarSubjectObject";
 
@@ -7,7 +7,7 @@ import {CalendarSubjectObject} from "../../../../../models/calendarSubjectObject
   templateUrl: './calendar-month-month.component.html',
   styleUrls: ['./calendar-month-month.component.css']
 })
-export class CalendarMonthMonthComponent implements OnInit {
+export class CalendarMonthMonthComponent implements OnChanges {
 
   @Input() allFirstDayOnWeeks = [];
   @Input() allWeekNumbers = [];
@@ -29,9 +29,10 @@ export class CalendarMonthMonthComponent implements OnInit {
     new CalendarSubjectObject('Web3', '30-04-2020', '02:30 PM', 'Mikaeil Shaghelani')
   ];
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.daysInMonth = this.GetDaysInMonth();
     this.currentWeekNumber = this.allWeekNumbers[0] - 1;
+    
   }
 
   IncreaseWeekNumber(){

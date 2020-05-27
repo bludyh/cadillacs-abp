@@ -10,10 +10,19 @@ export class CalendarComponent implements OnInit {
   activeCalendarStatus: Array<boolean> = [true, false, false];
   weekChangeValue = 0;
   dayChangeValue = 0;
+  monthChangeValue = 0;
 
   setActivePage(index: number) {
     for (let i = 0; i < this.activeCalendarStatus.length; i++) {
       this.activeCalendarStatus[i] = i === index;
+    }
+  }
+
+  ChangeCurrentMonth(UpOrDown:boolean){
+    if (UpOrDown) {
+      this.monthChangeValue += 1;
+    } else {
+      this.monthChangeValue -= 1;
     }
   }
 
@@ -27,6 +36,10 @@ export class CalendarComponent implements OnInit {
 
   ResetWeekChangeValue() {
     this.weekChangeValue = 0;
+  }
+
+  ResetMonthChangeValue() {
+    this.monthChangeValue = 0;
   }
 
   ChangeCurrentDay(UpOrDown: boolean) {

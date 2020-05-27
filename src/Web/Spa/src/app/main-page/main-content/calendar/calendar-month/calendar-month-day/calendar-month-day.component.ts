@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input, OnChanges} from '@angular/core';
 import { CalendarSubjectObject } from 'src/app/models/CalendarSubjectObject';
 
 @Component({
@@ -13,6 +13,7 @@ export class CalendarMonthDayComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
   }
   scheduleToggle(popover, subject: string, date: string, time: string, teacherName: string) {
     if (popover.isOpen()) {
