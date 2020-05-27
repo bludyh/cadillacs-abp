@@ -16,7 +16,10 @@ export class NavigationBarComponent implements OnInit {
    ngOnInit(): void {
    }
    getUserName() : string {
-       return this.student.firstName+" "+this.student.lastName[0];
+     if(this.student!=null){
+      return this.student.firstName+" "+this.student.lastName[0];
+     }
+     return "";
    }
 
 

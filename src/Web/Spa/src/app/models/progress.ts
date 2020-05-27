@@ -10,4 +10,11 @@ export class Progress{
         this.Percentage=(this.CurrentECs/this.TotalECs)*100;
         this.Description=description;
     }
+
+    public addEC(credit:number){
+        let updatedCredits=this.CurrentECs+credit;
+        if(updatedCredits<=this.TotalECs){
+            this.CurrentECs=updatedCredits;
+        }
+    }
 }

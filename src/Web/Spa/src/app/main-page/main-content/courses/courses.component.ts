@@ -17,29 +17,29 @@ export class CoursesComponent implements OnInit {
   @Input() isActive:boolean=true;
 
   enrollments:Enrollment[]=[];
-
+  courses:Course[]=[];
   
 
   constructor(private studyProgressService:StudyProgressService) { }
 
   ngOnInit(): void {
-    this.getEnrollments(1000030);
+    this.getEnrollments(this.student.id);
   }
 
   getEnrollments(studentID:number){
     this.studyProgressService.getEnrollments(studentID).subscribe(
       (enrolls:Enrollment[])=>{
         this.enrollments=enrolls;
-        console.log(this.enrollments);
+        this.getCourses(enrolls);
       }
     )
   }
 
-  getCourses(){
-    let courses:Course[]=[];
-    this.enrollments.forEach(enrollment => {
-      courses.push(enrollment.class.course);
+  getCourses(enrolls:Enrollment[]){
+    enrolls.forEach(enrollment => {
+      this.courses.push(enrollment.class.course);
     });
+    
   }
 
 }

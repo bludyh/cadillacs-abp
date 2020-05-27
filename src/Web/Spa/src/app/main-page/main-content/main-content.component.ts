@@ -15,7 +15,6 @@ export class MainContentComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log("FromMainContent:"+this.student);
   }
 
 }

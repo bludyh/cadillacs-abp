@@ -58,13 +58,8 @@ assignmentsCourse1: Assignment[]= [];
   }
 
   ngOnInit(): void {
-    console.log("onInit ")
-
-
     this.addAssignment(this.myCourse1, this.assignment);
     this.addAssignment(this.myCourse1, this.assignment1);
-
-
   }
 
   

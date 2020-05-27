@@ -28,6 +28,9 @@ import { ActivitiesComponent } from './main-page/main-content/dashboard/activiti
 import { ActivityComponent } from './main-page/main-content/dashboard/activities/activity/activity.component';
 import { EmailsComponent } from './main-page/main-content/dashboard/emails/emails.component';
 import { EmailComponent } from './main-page/main-content/dashboard/emails/email/email.component';
+import { NotificationComponent } from './main-page/notification-bar/notification/notification.component';
+import { EnrollCourseComponent } from './main-page/main-content/courses/enroll-course/enroll-course.component';
+import { FoundCourseComponent } from './main-page/main-content/courses/enroll-course/found-course/found-course.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +59,9 @@ import { EmailComponent } from './main-page/main-content/dashboard/emails/email/
     ActivityComponent,
     EmailsComponent,
     EmailComponent,
+    NotificationComponent,
+    EnrollCourseComponent,
+    FoundCourseComponent,
   ],
   imports: [
     BrowserModule,
