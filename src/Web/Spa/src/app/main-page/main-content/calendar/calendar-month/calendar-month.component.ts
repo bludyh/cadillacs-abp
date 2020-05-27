@@ -14,17 +14,23 @@ export class CalendarMonthComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.GetFirstDaysAndWeekNumber();
   }
 
-  testingFunction(){
-    let firstIsoWeekInMonth = moment().startOf('month').isoWeek();
-    let lastIsoweekInMonth = moment().endOf('month').isoWeek();
-    let something = "";
-
+  GetFirstDaysAndWeekNumber(){
+    let allFirstDaysOfWeekInMonth = [];
+    let isoWeekNumber = [];
+    let firstIsoWeekInMonth = moment().startOf('month').add(2,'M').isoWeek();
+    let lastIsoweekInMonth = moment().endOf('month').add(2,'M').isoWeek();
     for(let i = firstIsoWeekInMonth; i <= lastIsoweekInMonth; i++) {
-      something += i + " - " + moment().isoWeek(i).startOf('isoWeek').format('DD-MM-YYYY') + "___________";
+      allFirstDaysOfWeekInMonth.push(moment().isoWeek(i).startOf('isoWeek'));
+      isoWeekNumber.push(i);
     }
-    return something;
+
+    return {
+      allFirstDays: allFirstDaysOfWeekInMonth,
+      weekNumber: isoWeekNumber
+    };
   }
 
 

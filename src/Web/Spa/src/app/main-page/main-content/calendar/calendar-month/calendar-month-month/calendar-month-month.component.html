@@ -1,1 +1,27 @@
-<app-calendar-month-week></app-calendar-month-week>
+<table class="table mt-2">
+  <thead>
+    <tr>
+      <th class="text-center">Week #</th>
+      <th>Monday</th>
+      <th>Tuesday</th>
+      <th>Wednesday</th>
+      <th>Thursday</th>
+      <th>Friday</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let weeks of daysInMonth">
+      <td class="text-center font-weight-bold align-middle">{{IncreaseWeekNumber()}}</td>
+      <td class="pb-4" *ngFor="let d of weeks">
+        <h6>{{d}}</h6>
+        <app-calendar-month-day [subjects]="getDateSchedule(d)"></app-calendar-month-day>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+
+

@@ -28,7 +28,6 @@ import { ActivitiesComponent } from './main-page/main-content/dashboard/activiti
 import { ActivityComponent } from './main-page/main-content/dashboard/activities/activity/activity.component';
 import { EmailsComponent } from './main-page/main-content/dashboard/emails/emails.component';
 import { EmailComponent } from './main-page/main-content/dashboard/emails/email/email.component';
-import { CalendarMonthWeekComponent } from './main-page/main-content/calendar/calendar-month/calendar-month-week/calendar-month-week.component';
 import { CalendarMonthMonthComponent } from './main-page/main-content/calendar/calendar-month/calendar-month-month/calendar-month-month.component';
 
 @NgModule({
@@ -58,7 +57,6 @@ import { CalendarMonthMonthComponent } from './main-page/main-content/calendar/c
     ActivityComponent,
     EmailsComponent,
     EmailComponent,
-    CalendarMonthWeekComponent,
     CalendarMonthMonthComponent,
   ],
   imports: [
