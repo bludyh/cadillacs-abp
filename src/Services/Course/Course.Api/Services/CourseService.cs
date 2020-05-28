@@ -45,6 +45,8 @@ namespace Course.Api.Services
         #region Enrollments
         public Task<List<EnrollmentReadDto>> GetEnrollmentsAsync(string classCourseId,
             string classId, int classSemester, int classYear);
+        public Task UpdateEnrollmentAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int studentId, EnrollmentUpdateDto dto);
         public Task<EnrollmentReadDto> CreateEnrollmentAsync(string classCourseId,
             string classId, int classSemester, int classYear, EnrollmentCreateDto dto);
         public Task<EnrollmentReadDto> DeleteEnrollmentAsync(string classCourseId,
@@ -220,7 +222,7 @@ namespace Course.Api.Services
             await _context.Entry(inputClass)
                 .Collection(c => c.StudyMaterials)
                 .Query()
-                .Include(sm => sm.StudyMaterialAttachments)
+                .Include(sm => sm.Class)
                 .LoadAsync();
 
             return await _mapper.ProjectTo<StudyMaterialReadDto>(
@@ -239,7 +241,7 @@ namespace Course.Api.Services
             await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
 
             await _context.Entry(studyMaterial)
-                .Collection(sm => sm.StudyMaterialAttachments)
+                .Reference(sm => sm.Class)
                 .LoadAsync();
 
             return _mapper.Map<StudyMaterialReadDto>(studyMaterial);
@@ -328,6 +330,16 @@ namespace Course.Api.Services
             ).ToListAsyncFallback();
         }
 
+        public async Task UpdateEnrollmentAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int studentId, EnrollmentUpdateDto dto)
+        {
+            var enrollment = await ValidateExistenceAsync<Enrollment>(studentId, classId, classSemester, classYear, classCourseId);
+
+            _mapper.Map(dto, enrollment);
+            _context.Update(enrollment);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<EnrollmentReadDto> CreateEnrollmentAsync(string classCourseId,
             string classId, int classSemester, int classYear, EnrollmentCreateDto dto)
         {
@@ -394,9 +406,7 @@ namespace Course.Api.Services
             await _context.Entry(inputClass)
                 .Collection(c => c.Assignments)
                 .Query()
-                .Include(a => a.StudentEvaluations)
-                .Include(a => a.GroupEvaluations)
-                .Include(a => a.AssignmentAttachments)
+                .Include(a => a.Class)
                 .LoadAsync();
 
             return await _mapper.ProjectTo<AssignmentReadDto>(
@@ -415,15 +425,7 @@ namespace Course.Api.Services
             await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
 
             await _context.Entry(assignment)
-                .Collection(a => a.StudentEvaluations)
-                .LoadAsync();
-
-            await _context.Entry(assignment)
-                .Collection(a => a.GroupEvaluations)
-                .LoadAsync();
-
-            await _context.Entry(assignment)
-                .Collection(a => a.AssignmentAttachments)
+                .Reference(a => a.Class)
                 .LoadAsync();
 
             return _mapper.Map<AssignmentReadDto>(assignment);
@@ -481,15 +483,7 @@ namespace Course.Api.Services
             await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
 
             await _context.Entry(assignment)
-               .Collection(a => a.StudentEvaluations)
-               .LoadAsync();
-
-            await _context.Entry(assignment)
-                .Collection(a => a.GroupEvaluations)
-                .LoadAsync();
-
-            await _context.Entry(assignment)
-                .Collection(a => a.AssignmentAttachments)
+                .Reference(a => a.Class)
                 .LoadAsync();
 
             _context.Remove(assignment);

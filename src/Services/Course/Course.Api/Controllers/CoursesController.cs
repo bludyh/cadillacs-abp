@@ -188,6 +188,20 @@ namespace Course.Api.Controllers
             return await _courseService.GetEnrollmentsAsync(classCourseId, classId, classSemester, classYear);
         }
 
+        [HttpPut("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/enrollments/{studentId}")]
+        public async Task<IActionResult> PutEnrollment(
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int studentId,
+            [FromBody] EnrollmentUpdateDto dto)
+        {
+            await _courseService.UpdateEnrollmentAsync(classCourseId, classId, classSemester, classYear, studentId, dto);
+
+            return NoContent();
+        }
+
         // POST: api/Courses/prc1/Classes/e-s71/1/2020/Enrollments
         [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/enrollments")]
         public async Task<ActionResult<EnrollmentReadDto>> CreateEnrollment(

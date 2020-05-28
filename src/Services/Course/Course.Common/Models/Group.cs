@@ -16,6 +16,6 @@ namespace Course.Common.Models
 
 
         public List<Enrollment> Enrollments { get; set; }
-        public List<GroupEvaluation> GroupEvaluations { get; set; }
+        public List<GroupSubmission> GroupSubmissions { get; set; }
     }
 }

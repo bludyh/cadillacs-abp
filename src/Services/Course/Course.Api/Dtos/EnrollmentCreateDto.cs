@@ -11,7 +11,6 @@ namespace Course.Api.Dtos
         [Required]
         public int? StudentId { get; set; }
 
-        [Required]
         public int? GroupId { get; set; }
     }
 }

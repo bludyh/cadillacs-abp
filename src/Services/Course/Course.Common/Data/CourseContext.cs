@@ -45,12 +45,6 @@ namespace Course.Common.Data
             modelBuilder.Entity<Lecturer>().HasKey(l =>
                 new { l.TeacherId, l.ClassId, l.ClassSemester, l.ClassYear, l.ClassCourseId });
 
-            modelBuilder.Entity<StudentEvaluation>().HasKey(se =>
-                new { se.StudentId, se.TeacherId, se.AssignmentId, se.AttachmentId, se.EvaluationId });
-
-            modelBuilder.Entity<GroupEvaluation>().HasKey(ge =>
-                new { ge.GroupId, ge.TeacherId, ge.AssignmentId, ge.AttachmentId, ge.EvaluationId });
-
             modelBuilder.Entity<StudyMaterialAttachment>().HasKey(sma =>
                new { sma.StudyMaterialId, sma.AttachmentId });
 
@@ -66,16 +60,16 @@ namespace Course.Common.Data
         public DbSet<ClassSchedule> ClassSchedules { get; set; }
         public DbSet<Models.Course> Courses { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
-        public DbSet<Evaluation> Evaluations { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Group> Groups { get; set; }
-        public DbSet<GroupEvaluation> GroupEvaluations { get; set; }
         public DbSet<Lecturer> Lecturers { get; set; }
         public DbSet<Student> Students { get; set; }
-        public DbSet<StudentEvaluation> StudentEvaluations { get; set; }
         public DbSet<StudyMaterial> StudyMaterials { get; set; }
         public DbSet<StudyMaterialAttachment> StudyMaterialAttachments { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<TimeSlot> TimeSlots { get; set; }
+        public DbSet<Submission> Submissions { get; set; }
+        public DbSet<StudentSubmission> StudentSubmissions { get; set; }
+        public DbSet<GroupSubmission> GroupSubmissions { get; set; }
     }
 }
