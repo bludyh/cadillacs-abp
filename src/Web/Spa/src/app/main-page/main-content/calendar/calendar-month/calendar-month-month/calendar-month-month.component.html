@@ -10,9 +10,9 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let weeks of daysInMonth">
-      <td class="text-center font-weight-bold align-middle">zz</td>
-      <td class="pb-4" *ngFor="let d of weeks">
+    <tr *ngFor="let object of daysInMonthAndWeekNumber">
+      <td class="text-center font-weight-bold align-middle">{{object.ReturnWeekNumber()}}</td>
+      <td class="pb-4" *ngFor="let d of object.ReturnDaysInWeek()">
         <h6>{{d}}</h6>
         <app-calendar-month-day [subjects]="getDateSchedule(d)"></app-calendar-month-day>
       </td>

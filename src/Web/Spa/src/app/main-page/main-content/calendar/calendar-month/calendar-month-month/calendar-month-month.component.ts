@@ -1,21 +1,23 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, DoCheck, Input, OnChanges, OnInit, SimpleChange, SimpleChanges} from '@angular/core';
 import {Moment} from "moment";
 import {CalendarSubjectObject} from "../../../../../models/calendarSubjectObject";
+import {WeekDayAndWeekNumber} from "../../../../../models/WeekDayAndWeekNumber";
 
 @Component({
   selector: 'app-calendar-month-month',
   templateUrl: './calendar-month-month.component.html',
   styleUrls: ['./calendar-month-month.component.css']
 })
-export class CalendarMonthMonthComponent implements OnChanges {
+export class CalendarMonthMonthComponent implements OnInit {
 
   @Input() allFirstDayOnWeeks = [];
   @Input() allWeekNumbers = [];
   //array of arrays
-  daysInMonth = [];
-  currentWeekNumber:number;
+  @Input() daysInMonthAndWeekNumber:Array<WeekDayAndWeekNumber> = [];
 
-  constructor() { }
+  constructor() {
+
+  }
 
   subjects: Array<CalendarSubjectObject> = [
     new CalendarSubjectObject('CSA', '27-04-2020', '08:45 AM', 'Jaap Geurts'),
@@ -29,31 +31,10 @@ export class CalendarMonthMonthComponent implements OnChanges {
     new CalendarSubjectObject('Web3', '30-04-2020', '02:30 PM', 'Mikaeil Shaghelani')
   ];
 
-  ngOnChanges(): void {
-    this.daysInMonth = this.GetDaysInMonth();
-    this.currentWeekNumber = this.allWeekNumbers[0] - 1;
-    
+  ngOnInit(): void {
+
   }
 
-  IncreaseWeekNumber(){
-    this.currentWeekNumber++;
-    return this.currentWeekNumber;
-  }
-
-  GetDaysInMonth(){
-    let daysInMonthReturnArray = [];
-    this.allFirstDayOnWeeks.forEach(function (value) {
-      let daysInWeek = [];
-      //add first day of week
-      daysInWeek.push(value.format('DD-MM-YYYY'));
-      //add the rest
-      for (let i = 0; i < 4; i++){
-        daysInWeek.push(value.add(1,'days').format('DD-MM-YYYY'));
-      }
-      daysInMonthReturnArray.push(daysInWeek);
-    })
-    return daysInMonthReturnArray;
-  }
 
   getDateSchedule(date:string):CalendarSubjectObject[]{
     let output:CalendarSubjectObject[]=[];

@@ -26,6 +26,10 @@ export class CalendarComponent implements OnInit {
     }
   }
 
+  ResetMonthChangeValue() {
+    this.monthChangeValue = 0;
+  }
+
   ChangeCurrentWeek(UpOrDown: boolean) {
     if (UpOrDown) {
       this.weekChangeValue += 1;
@@ -38,9 +42,6 @@ export class CalendarComponent implements OnInit {
     this.weekChangeValue = 0;
   }
 
-  ResetMonthChangeValue() {
-    this.monthChangeValue = 0;
-  }
 
   ChangeCurrentDay(UpOrDown: boolean) {
     if (UpOrDown) {
@@ -57,5 +58,8 @@ export class CalendarComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.weekChangeValue = 0;
+    this.dayChangeValue = 0;
+    this.monthChangeValue = 0;
   }
 }
