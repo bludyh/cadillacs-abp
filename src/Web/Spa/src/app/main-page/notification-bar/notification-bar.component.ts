@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Announcement } from 'src/app/models/announcement';
 import { AnnouncementService } from 'src/app/announcement.service';
 
@@ -9,6 +9,7 @@ import { AnnouncementService } from 'src/app/announcement.service';
 })
 export class NotificationBarComponent implements OnInit {
 
+  @Input() isExpanded:boolean;
   announcements:Announcement[]=[];
 
   constructor(private announcementService:AnnouncementService) { }

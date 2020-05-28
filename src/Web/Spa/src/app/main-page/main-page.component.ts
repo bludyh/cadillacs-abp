@@ -11,6 +11,7 @@ import { IdentityService } from '../identity.service';
 export class MainPageComponent implements OnInit {
 
   student : Student = null;
+  mouseOverNotification:boolean=false;
 
   activeFuncs:boolean[]=[true,false,false,false,false];
 
@@ -19,7 +20,7 @@ export class MainPageComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.getStudent(1000033);
+    this.getStudent(1000033);//the student ID will be assigned after authentication
   }
 
   activateFunction(index:number){
@@ -38,5 +39,29 @@ export class MainPageComponent implements OnInit {
         this.student=student;
       }
     )
+  }
+
+  mouseOverNotificationEvent(){
+    this.mouseOverNotification=true;
+  }
+
+  mouseOutNotificationEvent(){
+    this.mouseOverNotification=false;
+  }
+
+  getClassForMainContent():string{
+    if(this.mouseOverNotification){
+      return "col-md-9";
+    }else{
+      return "col-md-10";
+    }
+  }
+
+  getClassForNotificationBar():string{
+    if(this.mouseOverNotification){
+      return "col-md-2 p-0 bg-light";
+    }else{
+      return "col-md-1 p-0 bg-light";
+    }
   }
 }
