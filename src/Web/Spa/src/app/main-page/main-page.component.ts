@@ -19,7 +19,7 @@ export class MainPageComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.getStudent(1000030);
+    this.getStudent(1000033);
   }
 
   activateFunction(index:number){

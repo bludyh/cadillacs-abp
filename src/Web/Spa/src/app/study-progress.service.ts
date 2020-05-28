@@ -18,6 +18,6 @@ export class StudyProgressService {
     return this.httpClient.get<Enrollment[]>(`${this.REST_API_SERVER}/Students/${studentID}/enrollments`);
   }
 
-
+  
 
 }

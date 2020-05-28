@@ -17,7 +17,7 @@ export class NavigationBarComponent implements OnInit {
    }
    getUserName() : string {
      if(this.student!=null){
-      return this.student.firstName+" "+this.student.lastName[0];
+      return this.student.firstName+" "+this.student.initials;
      }
      return "";
    }
