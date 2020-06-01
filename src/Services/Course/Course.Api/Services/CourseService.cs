@@ -77,6 +77,17 @@ namespace Course.Api.Services
             string classId, int classSemester, int classYear, int assignmentId);
         #endregion
 
+        #region Assignments/Attachments
+        public Task<List<AssignmentAttachmentReadDto>> GetAssignmentAttachmentsAsync(string classCourseId,
+           string classId, int classSemester, int classYear, int assignmentId);
+        public Task<AssignmentAttachmentReadDto> GetAssignmentAttachmentAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int assignmentId, int attachmentId);
+        public Task<AssignmentAttachmentReadDto> CreateAssignmentAttachmentAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int assignmentId, AssignmentAttachmentCreateDto dto);
+        public Task<AssignmentAttachmentReadDto> DeleteAssignmentAttachmentAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int studyMateassignmentIdrialId, int attachmentId);
+        #endregion
+
         #region Groups
         public Task<List<GroupReadDto>> GetGroupsAsync(string classCourseId,
            string classId, int classSemester, int classYear);
@@ -587,6 +598,92 @@ namespace Course.Api.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<AssignmentReadDto>(assignment);
+        }
+        #endregion
+
+        #region Assignments/Attachments
+        public async Task<List<AssignmentAttachmentReadDto>> GetAssignmentAttachmentsAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int assignmentId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            var assignment = await ValidateExistenceAsync<Assignment>(assignmentId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Assignment>(assignmentId);
+
+            await _context.Entry(assignment)
+                .Collection(a => a.AssignmentAttachments)
+                .Query()
+                .Include(aa => aa.Attachment)
+                .LoadAsync();
+
+            return await _mapper.ProjectTo<AssignmentAttachmentReadDto>(
+                assignment.AssignmentAttachments
+                .AsQueryable()
+            ).ToListAsyncFallback();
+        }
+
+        public async Task<AssignmentAttachmentReadDto> GetAssignmentAttachmentAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int assignmentId, int attachmentId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateExistenceAsync<Assignment>(assignmentId);
+            await ValidateExistenceAsync<Attachment>(attachmentId);
+            var assignmentAttachment = await ValidateExistenceAsync<AssignmentAttachment>(assignmentId, attachmentId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Assignment>(assignmentId);
+            await ValidateForeignKeyAsync<Attachment>(attachmentId);
+
+            await _context.Entry(assignmentAttachment)
+                .Reference(aa => aa.Attachment)
+                .LoadAsync();
+
+            return _mapper.Map<AssignmentAttachmentReadDto>(assignmentAttachment);
+        }
+
+        public async Task<AssignmentAttachmentReadDto> CreateAssignmentAttachmentAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int assignmentId, AssignmentAttachmentCreateDto dto)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateExistenceAsync<Assignment>(assignmentId);
+            await ValidateExistenceAsync<Attachment>(dto.AttachmentId);
+            await ValidateDuplicationAsync<AssignmentAttachment>(assignmentId, dto.AttachmentId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+
+            var assignmentAttachment = new AssignmentAttachment
+            {
+                AssignmentId = assignmentId,
+                AttachmentId = (int)dto.AttachmentId
+            };
+
+            await _context.AddAsync(assignmentAttachment);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<AssignmentAttachmentReadDto>(assignmentAttachment);
+        }
+
+        public async Task<AssignmentAttachmentReadDto> DeleteAssignmentAttachmentAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int assignmentId, int attachmentId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateExistenceAsync<Assignment>(assignmentId);
+            await ValidateExistenceAsync<Attachment>(attachmentId);
+            var assignmentAttachment = await ValidateExistenceAsync<AssignmentAttachment>(assignmentId, attachmentId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Assignment>(assignmentId);
+            await ValidateForeignKeyAsync<Attachment>(attachmentId);
+
+            _context.Remove(assignmentAttachment);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<AssignmentAttachmentReadDto>(assignmentAttachment);
         }
         #endregion
 

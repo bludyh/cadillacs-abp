@@ -385,6 +385,75 @@ namespace Course.Api.Controllers
         }
         #endregion
 
+        #region Assignments/Attachments
+        // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Attachments
+        [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/attachments")]
+        public async Task<ActionResult<IEnumerable<AssignmentAttachmentReadDto>>> GetAssignmentAttachments(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int assignmentId)
+        {
+            return await _courseService.GetAssignmentAttachmentsAsync(classCourseId, classId, classSemester, classYear, assignmentId);
+        }
+
+        // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Attachments/5
+        [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/attachments/{attachmentId}")]
+        public async Task<ActionResult<AssignmentAttachmentReadDto>> GetAssignmentAttachment(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int assignmentId,
+            int attachmentId)
+        {
+            return await _courseService.GetAssignmentAttachmentAsync(classCourseId, classId, classSemester, classYear, assignmentId, attachmentId);
+        }
+
+        // POST: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Attachments
+        [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/attachments")]
+        public async Task<ActionResult<AssignmentAttachmentReadDto>> CreateAssignmentAttachment(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int assignmentId,
+            [FromBody] AssignmentAttachmentCreateDto dto)
+        {
+            var assignmentAttachment = await _courseService.CreateAssignmentAttachmentAsync(
+                classCourseId,
+                classId,
+                classSemester,
+                classYear,
+                assignmentId,
+                dto);
+
+            return CreatedAtAction(nameof(GetAssignmentAttachments), new
+            {
+                classCourseId,
+                classId,
+                classSemester,
+                classYear,
+                assignmentId
+            }, assignmentAttachment);
+        }
+
+        // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Attachments
+        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/attachments")]
+        public async Task<ActionResult<AssignmentAttachmentReadDto>> DeleteAttachmentAttachment(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int assignmentId,
+            [FromQuery] int attachmentId)
+        {
+            return await _courseService.DeleteAssignmentAttachmentAsync(
+                classCourseId, classId, classSemester, classYear, assignmentId, attachmentId);
+        }
+        #endregion
+
         #region Groups
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Groups
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/groups")]
