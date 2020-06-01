@@ -35,7 +35,8 @@ namespace Course.Api.Mappings
             CreateMap<AssignmentCreateUpdateDto, Assignment>();
 
             CreateMap<Lecturer, LecturerReadDto>();
-            CreateMap<TeacherLecturerCreateDto, Lecturer>();
+            CreateMap<ClassLecturerCreateDto, Lecturer>(MemberList.Source);
+            CreateMap<TeacherLecturerCreateDto, Lecturer>(MemberList.Source);
 
             CreateMap<Teacher, TeacherReadDto>();
 

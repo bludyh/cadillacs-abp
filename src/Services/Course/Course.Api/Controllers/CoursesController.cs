@@ -15,6 +15,7 @@ namespace Course.Api.Controllers
     public class CoursesController : ControllerBase
     {
         private readonly ICourseService _courseService;
+
         public CoursesController(ICourseService courseService)
         {
             _courseService = courseService;

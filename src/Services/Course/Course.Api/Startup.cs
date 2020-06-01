@@ -33,6 +33,7 @@ namespace Course.Api
             // Add Services
             services.AddScoped<ICourseService, CourseService<Common.Models.Course>>();
             services.AddScoped<ITeacherService, TeacherService<Common.Models.Course>>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
 
             services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
