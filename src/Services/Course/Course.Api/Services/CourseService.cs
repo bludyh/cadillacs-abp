@@ -88,7 +88,7 @@ namespace Course.Api.Services
         public Task<List<LecturerReadDto>> GetLecturersAsync(string classCourseId,
             string classId, int classSemester, int classYear);
         public Task<LecturerReadDto> CreateLecturerAsync(string classCourseId,
-            string classId, int classSemester, int classYear, LecturerCreateDto dto);
+            string classId, int classSemester, int classYear, ClassLecturerCreateDto dto);
         public Task<LecturerReadDto> DeleteLecturerAsync(string classCourseId,
             string classId, int classSemester, int classYear, int teacherId);
         #endregion
@@ -620,7 +620,7 @@ namespace Course.Api.Services
         }
 
         public async Task<LecturerReadDto> CreateLecturerAsync(string classCourseId,
-            string classId, int classSemester, int classYear, LecturerCreateDto dto)
+            string classId, int classSemester, int classYear, ClassLecturerCreateDto dto)
         {
             await ValidateExistenceAsync<T>(classCourseId);
             await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);

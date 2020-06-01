@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Course.Api.Dtos
 {
-    public class LecturerCreateDto
+    public class ClassLecturerCreateDto
     {
         [Required]
         public int? TeacherId { get; set; }

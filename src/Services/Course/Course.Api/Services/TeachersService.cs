@@ -13,75 +13,78 @@ using Microsoft.AspNetCore.Http;
 
 namespace Course.Api.Services
 {
-    public class TeachersService
+    public interface ITeacherService
     {
-        public interface ITeacherService
+        public Task<List<LecturerReadDto>> GetLecturersAsync(int teacherId);
+        public Task<LecturerReadDto> AddLecturerAsync(int teacherId, TeacherLecturerCreateDto dto);
+        public Task<LecturerReadDto> RemoveLecturerAsync(int teacherId, string classId, int classSemester, int classYear, string classCourseId);
+    }
+
+    public class TeacherService<T> : ServiceBase, ITeacherService where T : Common.Models.Course
+    {
+        private readonly IMapper _mapper;
+
+        public TeacherService(CourseContext context, IMapper mapper) : base(context)
         {
-            public Task<List<LecturerReadDto>> GetLecturersAsync(int teacherId);
-            public Task<LecturerReadDto> AddLecturerAsync(int teacherId, LecturerCreateDto dto);
-            public Task<LecturerReadDto> RemoveLecturerAsync(int teacherId);
+            _mapper = mapper;
         }
 
-        public class TeacherService<T> : ServiceBase, ITeacherService where T : Common.Models.Course
+        public async Task<List<LecturerReadDto>> GetLecturersAsync(int teacherId)
         {
-            private readonly IMapper _mapper;
+            var teacher = await ValidateExistenceAsync<Teacher>(teacherId);
 
-            public TeacherService(CourseContext context, IMapper mapper) : base(context)
-            {
-                _mapper = mapper;
-            }
+            await _context.Entry(teacher)
+                .Collection(s => s.Lecturers)
+                .Query()
+                .Include(l => l.Class)
+                .ThenInclude(c => c.Course)
+                .LoadAsync();
 
-            public async Task<LecturerReadDto> AddLecturerAsync(int teacherId, LecturerCreateDto dto)
-            {
-                var teacher = await ValidateForeignKeyAsync<Teacher>(dto.TeacherId);
-                await ValidateDuplicationAsync<Lecturer>(dto.TeacherId);
+            return await _mapper.ProjectTo<LecturerReadDto>(teacher.Lecturers.AsQueryable()).ToListAsyncFallback();
 
+        }
 
-                var lecturer = new Lecturer { TeacherId = teacherId};
+        public async Task<LecturerReadDto> AddLecturerAsync(int teacherId, TeacherLecturerCreateDto dto)
+        {
+            await ValidateExistenceAsync<Common.Models.Course>(dto.ClassCourseId);
+            await ValidateExistenceAsync<Class>(dto.ClassId, dto.ClassSemester, dto.ClassYear, dto.ClassCourseId);
+            await ValidateExistenceAsync<Teacher>(teacherId);
+            await ValidateForeignKeyAsync<Common.Models.Course>(dto.ClassCourseId);
+            await ValidateForeignKeyAsync<Class>(dto.ClassId, dto.ClassSemester, dto.ClassYear, dto.ClassCourseId);
+            await ValidateForeignKeyAsync<Teacher>(teacherId);
 
-                await _context.AddAsync(lecturer);
-                await _context.SaveChangesAsync();
+            await ValidateDuplicationAsync<Lecturer>(teacherId, dto.ClassId, dto.ClassSemester, dto.ClassYear, dto.ClassCourseId);
 
-                await _context.Entry(teacher)
-                    .Collection(s => s.Lecturers)
-                    .Query()
-                    .Include(m => m.Teacher)
-                    .LoadAsync();
+            var lecturer = new Lecturer 
+            { 
+                TeacherId = teacherId,
+                ClassId = dto.ClassId,
+                ClassSemester = (int)dto.ClassSemester,
+                ClassYear = (int)dto.ClassYear,
+                ClassCourseId = dto.ClassCourseId
+            };
 
-                return _mapper.Map<LecturerReadDto>(lecturer);
-            }
+            await _context.AddAsync(lecturer);
+            await _context.SaveChangesAsync();
 
-            public async Task<List<LecturerReadDto>> GetLecturersAsync(int teacherId)
-            {
-                var teacher = await ValidateExistenceAsync<Teacher>(teacherId);
+            return _mapper.Map<LecturerReadDto>(lecturer);
+        }
 
-                await _context.Entry(teacher)
-                    .Collection(s => s.Lecturers)
-                    .Query()
-                    .Include(m => m.Teacher)
-                    .LoadAsync();
+        public async Task<LecturerReadDto> RemoveLecturerAsync(int teacherId, string classId, int classSemester, int classYear, string classCourseId)
+        {
+            await ValidateExistenceAsync<Common.Models.Course>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateExistenceAsync<Teacher>(teacherId);
+            var lecturer = await ValidateExistenceAsync<Lecturer>(
+                teacherId, classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Common.Models.Course>(classCourseId);
+            await ValidateForeignKeyAsync<Teacher>(teacherId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
 
-                return await _mapper.ProjectTo<LecturerReadDto>(teacher.Lecturers.AsQueryable()).ToListAsyncFallback();
+            _context.Remove(lecturer);
+            await _context.SaveChangesAsync();
 
-            }
-
-            public async Task<LecturerReadDto> RemoveLecturerAsync(int teacherId)
-            {
-                var teacher = await ValidateExistenceAsync<Teacher>(teacherId); //or Lecturer?
-
-                var lecturer = await _context.FindAsync<Lecturer>(teacherId);
-
-                await _context.Entry(teacher)
-                    .Collection(s => s.Lecturers)
-                    .Query()
-                    .Include(m => m.Teacher)
-                    .LoadAsync();
-
-                _context.Remove(lecturer);
-                await _context.SaveChangesAsync();
-
-                return _mapper.Map<LecturerReadDto>(lecturer);
-            }
+            return _mapper.Map<LecturerReadDto>(lecturer);
         }
     }
 }

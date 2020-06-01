@@ -422,7 +422,7 @@ namespace Course.Api.Controllers
             string classId,
             int classSemester,
             int classYear,
-            [FromBody] LecturerCreateDto dto)
+            [FromBody] ClassLecturerCreateDto dto)
         {
             var lecturer = await _courseService.CreateLecturerAsync(
                 classCourseId,

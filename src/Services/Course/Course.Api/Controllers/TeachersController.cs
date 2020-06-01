@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using static Course.Api.Services.TeachersService;
 
 namespace Course.Api.Controllers
 {
@@ -16,6 +15,10 @@ namespace Course.Api.Controllers
     {
         private readonly ITeacherService _teacherService;
 
+        public TeachersController(ITeacherService teacherService)
+        {
+            _teacherService = teacherService;
+        }
 
         [HttpGet("{id}/lecturers")]
         public async Task<ActionResult<IEnumerable<LecturerReadDto>>> GetLecturers([FromRoute] int id)
@@ -24,7 +27,7 @@ namespace Course.Api.Controllers
         }
 
         [HttpPost("{id}/lecturers")]
-        public async Task<ActionResult<LecturerReadDto>> AddLecturer([FromRoute] int id, [FromBody] LecturerCreateDto dto)
+        public async Task<ActionResult<LecturerReadDto>> AddLecturer([FromRoute] int id, [FromBody] TeacherLecturerCreateDto dto)
         {
             var lecturer = await _teacherService.AddLecturerAsync(id, dto);
 
@@ -32,9 +35,14 @@ namespace Course.Api.Controllers
         }
 
         [HttpDelete("{id}/lecturers")]
-        public async Task<ActionResult<LecturerReadDto>> RemoveLecturer([FromRoute] int id)
+        public async Task<ActionResult<LecturerReadDto>> RemoveLecturer(
+            [FromRoute] int id, 
+            [FromQuery] string classId, 
+            [FromQuery] int classSemester, 
+            [FromQuery] int classYear,
+            [FromQuery] string classCourseId)
         {
-            return await _teacherService.RemoveLecturerAsync(id);
+            return await _teacherService.RemoveLecturerAsync(id, classId, classSemester, classYear, classCourseId);
         }
     }
 }
