@@ -42,6 +42,9 @@ namespace Course.Api.Mappings
 
             CreateMap<Attachment, AttachmentReadDto>();
             CreateMap<AttachmentCreateUpdateDto, Attachment>(MemberList.Source);
+
+            CreateMap<StudyMaterialAttachment, StudyMaterialAttachmentReadDto>();
+            CreateMap<StudyMaterialAttachmentCreateDto, StudyMaterialAttachment>(MemberList.Source);
         }
     }
 }

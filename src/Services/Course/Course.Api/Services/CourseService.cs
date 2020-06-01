@@ -42,6 +42,17 @@ namespace Course.Api.Services
             string classId, int classSemester, int classYear, int studyMaterialId);
         #endregion
 
+        #region StudyMaterials/Attachments
+        public Task<List<StudyMaterialAttachmentReadDto>> GetStudyMaterialAttachmentsAsync(string classCourseId,
+           string classId, int classSemester, int classYear, int studyMaterialId);
+        public Task<StudyMaterialAttachmentReadDto> GetStudyMaterialAttachmentAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int studyMaterialId, int attachmentId);
+        public Task<StudyMaterialAttachmentReadDto> CreateStudyMaterialAttachmentAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int studyMaterialId, StudyMaterialAttachmentCreateDto dto);
+        public Task<StudyMaterialAttachmentReadDto> DeleteStudyMaterialAttachmentAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int studyMaterialId, int attachmentId);
+        #endregion
+
         #region Enrollments
         public Task<List<EnrollmentReadDto>> GetEnrollmentsAsync(string classCourseId,
             string classId, int classSemester, int classYear);
@@ -307,6 +318,92 @@ namespace Course.Api.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<StudyMaterialReadDto>(studyMaterial);
+        }
+        #endregion
+
+        #region StudyMaterials/Attachments
+        public async Task<List<StudyMaterialAttachmentReadDto>> GetStudyMaterialAttachmentsAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int studyMaterialId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            var studyMaterial = await ValidateExistenceAsync<StudyMaterial>(studyMaterialId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<StudyMaterial>(studyMaterialId);
+
+            await _context.Entry(studyMaterial)
+                .Collection(sm => sm.StudyMaterialAttachments)
+                .Query()
+                .Include(sm => sm.Attachment)
+                .LoadAsync();
+
+            return await _mapper.ProjectTo<StudyMaterialAttachmentReadDto>(
+                studyMaterial.StudyMaterialAttachments
+                .AsQueryable()
+            ).ToListAsyncFallback();
+        }
+
+        public async Task<StudyMaterialAttachmentReadDto> GetStudyMaterialAttachmentAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int studyMaterialId, int attachmentId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateExistenceAsync<StudyMaterial>(studyMaterialId);
+            await ValidateExistenceAsync<Attachment>(attachmentId);
+            var studyMaterialAttachment = await ValidateExistenceAsync<StudyMaterialAttachment>(studyMaterialId, attachmentId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<StudyMaterial>(studyMaterialId);
+            await ValidateForeignKeyAsync<Attachment>(attachmentId);
+
+            await _context.Entry(studyMaterialAttachment)
+                .Reference(sma => sma.Attachment)
+                .LoadAsync();
+
+            return _mapper.Map<StudyMaterialAttachmentReadDto>(studyMaterialAttachment);
+        }
+
+        public async Task<StudyMaterialAttachmentReadDto> CreateStudyMaterialAttachmentAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int studyMaterialId, StudyMaterialAttachmentCreateDto dto)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateExistenceAsync<StudyMaterial>(studyMaterialId);
+            await ValidateExistenceAsync<Attachment>(dto.AttachmentId);
+            await ValidateDuplicationAsync<StudyMaterialAttachment>(studyMaterialId, dto.AttachmentId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+
+            var studyMaterialAttachment = new StudyMaterialAttachment
+            {
+                StudyMaterialId = studyMaterialId,
+                AttachmentId = (int)dto.AttachmentId
+            };
+
+            await _context.AddAsync(studyMaterialAttachment);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<StudyMaterialAttachmentReadDto>(studyMaterialAttachment);
+        }
+
+        public async Task<StudyMaterialAttachmentReadDto> DeleteStudyMaterialAttachmentAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int studyMaterialId, int attachmentId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateExistenceAsync<StudyMaterial>(studyMaterialId);
+            await ValidateExistenceAsync<Attachment>(attachmentId);
+            var studyMaterialAttachment = await ValidateExistenceAsync<StudyMaterialAttachment>(studyMaterialId, attachmentId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<StudyMaterial>(studyMaterialId);
+            await ValidateForeignKeyAsync<Attachment>(attachmentId);
+
+            _context.Remove(studyMaterialAttachment);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<StudyMaterialAttachmentReadDto>(studyMaterialAttachment);
         }
         #endregion
 

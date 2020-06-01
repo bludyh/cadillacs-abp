@@ -118,7 +118,7 @@ namespace Course.Api.Controllers
 
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Study-Materials/5
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials/{studyMaterialId}")]
-        public async Task<ActionResult<StudyMaterialReadDto>> GetStudyMaterials(
+        public async Task<ActionResult<StudyMaterialReadDto>> GetStudyMaterial(
             string classCourseId,
             string classId,
             int classSemester,
@@ -174,6 +174,75 @@ namespace Course.Api.Controllers
         {
             return await _courseService.DeleteStudyMaterialAsync(
                 classCourseId, classId, classSemester, classYear, studyMaterialId);
+        }
+        #endregion
+
+        #region StudyMaterial/Attachments
+        // GET: api/Courses/prc1/Classes/e-s71/1/2020/Study-Materials/5/Attachments
+        [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials/{studyMaterialId}/attachments")]
+        public async Task<ActionResult<IEnumerable<StudyMaterialAttachmentReadDto>>> GetStudyMaterialAttachments(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int studyMaterialId)
+        {
+            return await _courseService.GetStudyMaterialAttachmentsAsync(classCourseId, classId, classSemester, classYear, studyMaterialId);
+        }
+
+        // GET: api/Courses/prc1/Classes/e-s71/1/2020/Study-Materials/5/Attachments/5
+        [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials/{studyMaterialId}/attachments/{attachmentId}")]
+        public async Task<ActionResult<StudyMaterialAttachmentReadDto>> GetStudyMaterialAttachment(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int studyMaterialId,
+            int attachmentId)
+        {
+            return await _courseService.GetStudyMaterialAttachmentAsync(classCourseId, classId, classSemester, classYear, studyMaterialId, attachmentId);
+        }
+
+        // POST: api/Courses/prc1/Classes/e-s71/1/2020/Study-Materials/5/Attachments
+        [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials/{studyMaterialId}/attachments")]
+        public async Task<ActionResult<StudyMaterialAttachmentReadDto>> CreateStudyMaterialAttachment(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int studyMaterialId,
+            [FromBody] StudyMaterialAttachmentCreateDto dto)
+        {
+            var studyMaterialAttachment = await _courseService.CreateStudyMaterialAttachmentAsync(
+                classCourseId,
+                classId,
+                classSemester,
+                classYear,
+                studyMaterialId,
+                dto);
+
+            return CreatedAtAction(nameof(GetStudyMaterialAttachments), new
+            {
+                classCourseId,
+                classId,
+                classSemester,
+                classYear,
+                studyMaterialId
+            }, studyMaterialAttachment);
+        }
+
+        // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Study-Materials/5/Attachments
+        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials/{studyMaterialId}/attachments")]
+        public async Task<ActionResult<StudyMaterialAttachmentReadDto>> DeleteStudyMaterialAttachment(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int studyMaterialId,
+            [FromQuery] int attachmentId)
+        {
+            return await _courseService.DeleteStudyMaterialAttachmentAsync(
+                classCourseId, classId, classSemester, classYear, studyMaterialId, attachmentId);
         }
         #endregion
 
