@@ -39,6 +39,26 @@ services:
     environment:
       - DOTNET_ENVIRONMENT=Production
 
+  courseapi:
+    build:
+      context: .
+      dockerfile: Services/Course/Course.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  courseeventhandler:
+    build:
+      context: .
+      dockerfile: Services/Course/Course.EventHandler/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+
   identityapi:
     build:
       context: .

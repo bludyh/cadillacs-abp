@@ -18,6 +18,19 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
+          "Host": "courseapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/course/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Post", "Delete" ],
+      "SwaggerKey": "course"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
           "Host": "identityapi",
           "Port": 80
         }
@@ -61,6 +74,16 @@
           "Name": "Announcement API",
           "Version": "v1",
           "Url": "http://announcementapi/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "course",
+      "Config": [
+        {
+          "Name": "Course API",
+          "Version": "v1",
+          "Url": "http://courseapi/swagger/v1/swagger.json"
         }
       ]
     },

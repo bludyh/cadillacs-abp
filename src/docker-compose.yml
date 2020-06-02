@@ -22,6 +22,18 @@ services:
       - mssql
       - rabbitmq
 
+  courseapi:
+    image: ${DOCKER_REGISTRY:-i360147}/courseapi:${TAG:-latest}
+    depends_on:
+      - mssql
+      - rabbitmq
+
+  courseeventhandler:
+    image: ${DOCKER_REGISTRY:-i360147}/courseeventhandler:${TAG:-latest}
+    depends_on:
+      - mssql
+      - rabbitmq
+
   identityapi:
     image: ${DOCKER_REGISTRY:-i360147}/identityapi:${TAG:-latest}
     depends_on:
@@ -60,3 +72,4 @@ services:
 
   apigateway:
     image: ${DOCKER_REGISTRY:-i360147}/apigateway:${TAG:-latest}
+
