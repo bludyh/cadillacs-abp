@@ -9,8 +9,9 @@ namespace Course.Api.Dtos
 {
     public class AssignmentCreateUpdateDto
     {
-        public AssignmentType Type { get; set; }
         [Required]
+        public string Name { get; set; }
+        public AssignmentType Type { get; set; }
         public string Description { get; set; }
         public DateTime DeadlineDateTime { get; set; }
         [Required]

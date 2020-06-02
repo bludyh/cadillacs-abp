@@ -45,7 +45,7 @@ namespace Course.Api.Controllers
 
         // POST: api/Attachments
         [HttpPost]
-        public async Task<ActionResult<AttachmentReadDto>> PostAttachment(AttachmentCreateUpdateDto dto)
+        public async Task<ActionResult<AttachmentReadDto>> PostAttachment([FromBody] AttachmentCreateUpdateDto dto)
         {
             var attachment = await _attachmentService.CreateAsync(dto);
 

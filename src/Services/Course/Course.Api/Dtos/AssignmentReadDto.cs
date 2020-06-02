@@ -12,6 +12,7 @@ namespace Course.Api.Dtos
 
         public ClassReadDto Class { get; set; }
 
+        public string Name { get; set; }
         public AssignmentType Type { get; set; }
         public string Description { get; set; }
         public DateTime DeadlineDateTime { get; set; }

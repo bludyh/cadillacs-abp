@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Course.Api.Dtos;
+﻿using Course.Api.Dtos;
 using Course.Api.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Course.Api.Controllers
 {
@@ -47,7 +43,7 @@ namespace Course.Api.Controllers
 
         // POST: api/Courses
         [HttpPost]
-        public async Task<ActionResult<CourseReadDto>> PostCourse(CourseCreateDto dto)
+        public async Task<ActionResult<CourseReadDto>> PostCourse([FromBody] CourseCreateDto dto)
         {
             var course = await _courseService.CreateAsync(dto);
 
@@ -73,10 +69,10 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}")]
         public async Task<ActionResult<ClassReadDto>> GetClass(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear)
         {
             return await _courseService.GetClassAsync(classCourseId, classId, classSemester, classYear);
         }
@@ -95,10 +91,10 @@ namespace Course.Api.Controllers
         // DELETE: api/Courses/prc1/Classes/e-s71/1/2020
         [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}")]
         public async Task<ActionResult<ClassReadDto>> DeleteClass(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear)
         {
             return await _courseService.DeleteClassAsync(classCourseId, classId, classSemester, classYear);
         }
@@ -108,32 +104,37 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Study-Materials
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials")]
         public async Task<ActionResult<IEnumerable<StudyMaterialReadDto>>> GetStudyMaterials(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear)
         {
             return await _courseService.GetStudyMaterialsAsync(classCourseId, classId, classSemester, classYear);
         }
 
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Study-Materials/5
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials/{studyMaterialId}")]
-        public async Task<ActionResult<StudyMaterialReadDto>> GetStudyMaterial(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int studyMaterialId)
+        public async Task<ActionResult<StudyMaterialReadDto>> GetStudyMaterials(
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int studyMaterialId)
         {
             return await _courseService.GetStudyMaterialAsync(classCourseId, classId, classSemester, classYear, studyMaterialId);
         }
 
         // PUT: api/Courses/prc1/Classes/e-s71/1/2020/Study-Materials/5
         [HttpPut("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials/{studyMaterialId}")]
-        public async Task<IActionResult> PutStudyMaterial(string classCourseId, string classId, 
-            int classSemester, int classYear, int studyMaterialId, [FromBody] StudyMaterialCreateUpdateDto dto)
+        public async Task<IActionResult> PutStudyMaterial(
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int studyMaterialId,
+            [FromBody] StudyMaterialCreateUpdateDto dto)
         {
-            await _courseService.UpdateStudyMaterialAsync(classCourseId, classId, classSemester, 
+            await _courseService.UpdateStudyMaterialAsync(classCourseId, classId, classSemester,
                 classYear, studyMaterialId, dto);
 
             return NoContent();
@@ -142,20 +143,21 @@ namespace Course.Api.Controllers
         // POST: api/Courses/prc1/Classes/e-s71/1/2020/Study-Materials
         [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials")]
         public async Task<ActionResult<StudyMaterialReadDto>> CreateStudyMaterial(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
             [FromBody] StudyMaterialCreateUpdateDto dto)
         {
             var studyMaterial = await _courseService.CreateStudyMaterialAsync(
                 classCourseId,
                 classId,
                 classSemester,
-                classYear, 
+                classYear,
                 dto);
 
-            return CreatedAtAction(nameof(GetStudyMaterials), new {
+            return CreatedAtAction(nameof(GetStudyMaterials), new
+            {
                 classCourseId,
                 classId,
                 classSemester,
@@ -166,11 +168,11 @@ namespace Course.Api.Controllers
         // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Study-Materials/5
         [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials/{studyMaterialId}")]
         public async Task<ActionResult<StudyMaterialReadDto>> DeleteStudyMaterial(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int studyMaterialId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int studyMaterialId)
         {
             return await _courseService.DeleteStudyMaterialAsync(
                 classCourseId, classId, classSemester, classYear, studyMaterialId);
@@ -181,11 +183,11 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Study-Materials/5/Attachments
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials/{studyMaterialId}/attachments")]
         public async Task<ActionResult<IEnumerable<StudyMaterialAttachmentReadDto>>> GetStudyMaterialAttachments(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int studyMaterialId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int studyMaterialId)
         {
             return await _courseService.GetStudyMaterialAttachmentsAsync(classCourseId, classId, classSemester, classYear, studyMaterialId);
         }
@@ -193,12 +195,12 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Study-Materials/5/Attachments/5
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials/{studyMaterialId}/attachments/{attachmentId}")]
         public async Task<ActionResult<StudyMaterialAttachmentReadDto>> GetStudyMaterialAttachment(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int studyMaterialId,
-            int attachmentId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int studyMaterialId,
+            [FromRoute] int attachmentId)
         {
             return await _courseService.GetStudyMaterialAttachmentAsync(classCourseId, classId, classSemester, classYear, studyMaterialId, attachmentId);
         }
@@ -206,11 +208,11 @@ namespace Course.Api.Controllers
         // POST: api/Courses/prc1/Classes/e-s71/1/2020/Study-Materials/5/Attachments
         [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials/{studyMaterialId}/attachments")]
         public async Task<ActionResult<StudyMaterialAttachmentReadDto>> CreateStudyMaterialAttachment(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int studyMaterialId,
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int studyMaterialId,
             [FromBody] StudyMaterialAttachmentCreateDto dto)
         {
             var studyMaterialAttachment = await _courseService.CreateStudyMaterialAttachmentAsync(
@@ -232,14 +234,14 @@ namespace Course.Api.Controllers
         }
 
         // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Study-Materials/5/Attachments
-        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials/{studyMaterialId}/attachments")]
+        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/study-materials/{studyMaterialId}/attachments/{attachmentId}")]
         public async Task<ActionResult<StudyMaterialAttachmentReadDto>> DeleteStudyMaterialAttachment(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int studyMaterialId,
-            [FromQuery] int attachmentId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int studyMaterialId,
+            [FromRoute] int attachmentId)
         {
             return await _courseService.DeleteStudyMaterialAttachmentAsync(
                 classCourseId, classId, classSemester, classYear, studyMaterialId, attachmentId);
@@ -250,10 +252,10 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Enrollments
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/enrollments")]
         public async Task<ActionResult<IEnumerable<EnrollmentReadDto>>> GetEnrollments(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear)
         {
             return await _courseService.GetEnrollmentsAsync(classCourseId, classId, classSemester, classYear);
         }
@@ -275,10 +277,10 @@ namespace Course.Api.Controllers
         // POST: api/Courses/prc1/Classes/e-s71/1/2020/Enrollments
         [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/enrollments")]
         public async Task<ActionResult<EnrollmentReadDto>> CreateEnrollment(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
             [FromBody] EnrollmentCreateDto dto)
         {
             var enrollment = await _courseService.CreateEnrollmentAsync(
@@ -300,11 +302,11 @@ namespace Course.Api.Controllers
         // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Enrollments/5
         [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/enrollments/{studentId}")]
         public async Task<ActionResult<EnrollmentReadDto>> DeleteEnrollment(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int studentId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int studentId)
         {
             return await _courseService.DeleteEnrollmentAsync(
                 classCourseId, classId, classSemester, classYear, studentId);
@@ -315,10 +317,10 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments")]
         public async Task<ActionResult<IEnumerable<AssignmentReadDto>>> GetAssignments(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear)
         {
             return await _courseService.GetAssignmentsAsync(classCourseId, classId, classSemester, classYear);
         }
@@ -326,19 +328,24 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}")]
         public async Task<ActionResult<AssignmentReadDto>> GetAssignment(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int assignmentId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId)
         {
             return await _courseService.GetAssignmentAsync(classCourseId, classId, classSemester, classYear, assignmentId);
         }
 
         // PUT: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5
         [HttpPut("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}")]
-        public async Task<IActionResult> PutAssignment(string classCourseId, string classId,
-            int classSemester, int classYear, int assignmentId, [FromBody] AssignmentCreateUpdateDto dto)
+        public async Task<IActionResult> PutAssignment(
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId,
+            [FromBody] AssignmentCreateUpdateDto dto)
         {
             await _courseService.UpdateAssignmentAsync(classCourseId, classId, classSemester,
                 classYear, assignmentId, dto);
@@ -349,10 +356,10 @@ namespace Course.Api.Controllers
         // POST: api/Courses/prc1/Classes/e-s71/1/2020/Assignments
         [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments")]
         public async Task<ActionResult<AssignmentReadDto>> CreateAssignment(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
             [FromBody] AssignmentCreateUpdateDto dto)
         {
             var assignment = await _courseService.CreateAssignmentAsync(
@@ -374,11 +381,11 @@ namespace Course.Api.Controllers
         // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5
         [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}")]
         public async Task<ActionResult<AssignmentReadDto>> DeleteAssignment(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int assignmentId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId)
         {
             return await _courseService.DeleteAssignmentAsync(
                 classCourseId, classId, classSemester, classYear, assignmentId);
@@ -389,11 +396,11 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Student-Submissions
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/student-submissions")]
         public async Task<ActionResult<IEnumerable<StudentSubmissionReadDto>>> GetAssignmentStudentSubmissions(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int assignmentId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId)
         {
             return await _courseService.GetAssignmentStudentSubmissionsAsync(classCourseId, classId, classSemester, classYear, assignmentId);
         }
@@ -401,20 +408,26 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Student-Submissions/5
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/student-submissions/{submissionId}")]
         public async Task<ActionResult<StudentSubmissionReadDto>> GetAssignmentStudentSubmission(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int assignmentId,
-            int submissionId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId,
+            [FromRoute] int submissionId)
         {
             return await _courseService.GetAssignmentStudentSubmissionAsync(classCourseId, classId, classSemester, classYear, assignmentId, submissionId);
         }
 
         // PUT: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Student-Submissions/5
         [HttpPut("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/student-submissions/{submissionId}")]
-        public async Task<IActionResult> PutAssignmentStudentSubmission(string classCourseId, string classId,
-            int classSemester, int classYear, int assignmentId, int submissionId, [FromBody] StudentSubmissionCreateUpdateDto dto)
+        public async Task<IActionResult> PutAssignmentStudentSubmission(
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId,
+            [FromRoute] int submissionId,
+            [FromBody] StudentSubmissionCreateUpdateDto dto)
         {
             await _courseService.UpdateAssignmentStudentSubmissionAsync(classCourseId, classId, classSemester,
                 classYear, assignmentId, submissionId, dto);
@@ -425,11 +438,11 @@ namespace Course.Api.Controllers
         // POST: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Student-Submissions
         [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/student-submissions")]
         public async Task<ActionResult<StudentSubmissionReadDto>> CreateAssignmentStudentSubmission(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int assignmentId,
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId,
             [FromBody] StudentSubmissionCreateUpdateDto dto)
         {
             var studentSubmission = await _courseService.CreateAssignmentStudentSubmissionAsync(
@@ -451,14 +464,14 @@ namespace Course.Api.Controllers
         }
 
         // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Student-Submissions/5
-        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/student-submissions")]
+        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/student-submissions/{submissionId}")]
         public async Task<ActionResult<StudentSubmissionReadDto>> DeleteAttachmentStudentSubmission(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int assignmentId,
-            [FromQuery] int submissionId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId,
+            [FromRoute] int submissionId)
         {
             return await _courseService.DeleteAssignmentStudentSubmissionAsync(
                 classCourseId, classId, classSemester, classYear, assignmentId, submissionId);
@@ -469,11 +482,11 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Group-Submissions
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/group-submissions")]
         public async Task<ActionResult<IEnumerable<GroupSubmissionReadDto>>> GetAssignmentGroupSubmissions(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int assignmentId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId)
         {
             return await _courseService.GetAssignmentGroupSubmissionsAsync(classCourseId, classId, classSemester, classYear, assignmentId);
         }
@@ -481,20 +494,26 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Group-Submissions/5
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/group-submissions/{submissionId}")]
         public async Task<ActionResult<GroupSubmissionReadDto>> GetAssignmentGroupSubmission(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int assignmentId,
-            int submissionId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId,
+            [FromRoute] int submissionId)
         {
             return await _courseService.GetAssignmentGroupSubmissionAsync(classCourseId, classId, classSemester, classYear, assignmentId, submissionId);
         }
 
         // PUT: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Group-Submissions/5
         [HttpPut("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/group-submissions/{submissionId}")]
-        public async Task<IActionResult> PutAssignmentGroupSubmission(string classCourseId, string classId,
-            int classSemester, int classYear, int assignmentId, int submissionId, [FromBody] GroupSubmissionCreateUpdateDto dto)
+        public async Task<IActionResult> PutAssignmentGroupSubmission(
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId, 
+            [FromRoute] int submissionId,
+            [FromBody] GroupSubmissionCreateUpdateDto dto)
         {
             await _courseService.UpdateAssignmentGroupSubmissionAsync(classCourseId, classId, classSemester,
                 classYear, assignmentId, submissionId, dto);
@@ -505,11 +524,11 @@ namespace Course.Api.Controllers
         // POST: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Group-Submissions
         [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/group-submissions")]
         public async Task<ActionResult<GroupSubmissionReadDto>> CreateAssignmentGroupSubmission(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int assignmentId,
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId,
             [FromBody] GroupSubmissionCreateUpdateDto dto)
         {
             var groupSubmission = await _courseService.CreateAssignmentGroupSubmissionAsync(
@@ -531,14 +550,14 @@ namespace Course.Api.Controllers
         }
 
         // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Group-Submissions/5
-        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/group-submissions")]
+        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/group-submissions/{submissionId}")]
         public async Task<ActionResult<GroupSubmissionReadDto>> DeleteAttachmentGroupSubmission(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int assignmentId,
-            [FromQuery] int submissionId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId,
+            [FromRoute] int submissionId)
         {
             return await _courseService.DeleteAssignmentGroupSubmissionAsync(
                 classCourseId, classId, classSemester, classYear, assignmentId, submissionId);
@@ -549,11 +568,11 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Attachments
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/attachments")]
         public async Task<ActionResult<IEnumerable<AssignmentAttachmentReadDto>>> GetAssignmentAttachments(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int assignmentId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId)
         {
             return await _courseService.GetAssignmentAttachmentsAsync(classCourseId, classId, classSemester, classYear, assignmentId);
         }
@@ -561,12 +580,12 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Attachments/5
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/attachments/{attachmentId}")]
         public async Task<ActionResult<AssignmentAttachmentReadDto>> GetAssignmentAttachment(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int assignmentId,
-            int attachmentId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId,
+            [FromRoute] int attachmentId)
         {
             return await _courseService.GetAssignmentAttachmentAsync(classCourseId, classId, classSemester, classYear, assignmentId, attachmentId);
         }
@@ -574,11 +593,11 @@ namespace Course.Api.Controllers
         // POST: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Attachments
         [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/attachments")]
         public async Task<ActionResult<AssignmentAttachmentReadDto>> CreateAssignmentAttachment(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int assignmentId,
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId,
             [FromBody] AssignmentAttachmentCreateDto dto)
         {
             var assignmentAttachment = await _courseService.CreateAssignmentAttachmentAsync(
@@ -600,14 +619,14 @@ namespace Course.Api.Controllers
         }
 
         // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Attachments
-        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/attachments")]
+        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/attachments/{attachmentId}")]
         public async Task<ActionResult<AssignmentAttachmentReadDto>> DeleteAttachmentAttachment(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int assignmentId,
-            [FromQuery] int attachmentId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int assignmentId,
+            [FromRoute] int attachmentId)
         {
             return await _courseService.DeleteAssignmentAttachmentAsync(
                 classCourseId, classId, classSemester, classYear, assignmentId, attachmentId);
@@ -618,10 +637,10 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Groups
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/groups")]
         public async Task<ActionResult<IEnumerable<GroupReadDto>>> GetGroups(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear)
         {
             return await _courseService.GetGroupsAsync(classCourseId, classId, classSemester, classYear);
         }
@@ -629,19 +648,24 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Groups/5
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/groups/{groupId}")]
         public async Task<ActionResult<GroupReadDto>> GetGroup(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int groupId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int groupId)
         {
             return await _courseService.GetGroupAsync(classCourseId, classId, classSemester, classYear, groupId);
         }
 
         // PUT: api/Courses/prc1/Classes/e-s71/1/2020/Groups/5
         [HttpPut("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/groups/{groupId}")]
-        public async Task<IActionResult> PutGroup(string classCourseId, string classId,
-            int classSemester, int classYear, int groupId, [FromBody] GroupCreateUpdateDto dto)
+        public async Task<IActionResult> PutGroup(
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int groupId,
+            [FromBody] GroupCreateUpdateDto dto)
         {
             await _courseService.UpdateGroupAsync(classCourseId, classId, classSemester,
                 classYear, groupId, dto);
@@ -652,10 +676,10 @@ namespace Course.Api.Controllers
         // POST: api/Courses/prc1/Classes/e-s71/1/2020/Groups
         [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/groups")]
         public async Task<ActionResult<GroupReadDto>> CreateGroup(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
             [FromBody] GroupCreateUpdateDto dto)
         {
             var group = await _courseService.CreateGroupAsync(
@@ -677,11 +701,11 @@ namespace Course.Api.Controllers
         // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Groups/5
         [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/groups/{groupId}")]
         public async Task<ActionResult<GroupReadDto>> DeleteGroup(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int groupId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int groupId)
         {
             return await _courseService.DeleteGroupAsync(
                 classCourseId, classId, classSemester, classYear, groupId);
@@ -692,11 +716,11 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Groups/{id}/Enrollments
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/groups/{groupId}/enrollments")]
         public async Task<ActionResult<IEnumerable<EnrollmentReadDto>>> GetGroupEnrollments(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int groupId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int groupId)
         {
             return await _courseService.GetGroupEnrollmentsAsync(classCourseId, classId, classSemester, classYear, groupId);
         }
@@ -706,10 +730,10 @@ namespace Course.Api.Controllers
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Lecturers
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/lecturers")]
         public async Task<ActionResult<IEnumerable<LecturerReadDto>>> GetLecturers(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear)
         {
             return await _courseService.GetLecturersAsync(classCourseId, classId, classSemester, classYear);
         }
@@ -717,10 +741,10 @@ namespace Course.Api.Controllers
         // POST: api/Courses/prc1/Classes/e-s71/1/2020/Lecturers
         [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/lecturers")]
         public async Task<ActionResult<LecturerReadDto>> CreateLecturer(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
             [FromBody] ClassLecturerCreateDto dto)
         {
             var lecturer = await _courseService.CreateLecturerAsync(
@@ -742,11 +766,11 @@ namespace Course.Api.Controllers
         // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Lecturers/5
         [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/Lecturers/{teacherId}")]
         public async Task<ActionResult<LecturerReadDto>> DeleteLecturer(
-            string classCourseId,
-            string classId,
-            int classSemester,
-            int classYear,
-            int teacherId)
+            [FromRoute] string classCourseId,
+            [FromRoute] string classId,
+            [FromRoute] int classSemester,
+            [FromRoute] int classYear,
+            [FromRoute] int teacherId)
         {
             return await _courseService.DeleteLecturerAsync(
                 classCourseId, classId, classSemester, classYear, teacherId);
