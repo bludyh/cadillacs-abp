@@ -5,7 +5,6 @@ using Newtonsoft.Json.Linq;
 using Pitstop.Infrastructure.Messaging;
 using StudyProgress.Common.Data;
 using StudyProgress.Common.Models;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -87,6 +86,15 @@ namespace StudyProgress.EventHandler
                     break;
                 case "ClassUpdated":
                     await HandleAsync(messageObject.ToObject<ClassUpdated>());
+                    break;
+                case "EnrollmentCreated":
+                    await HandleAsync(messageObject.ToObject<EnrollmentCreated>());
+                    break;
+                case "EnrollmentDeleted":
+                    await HandleAsync(messageObject.ToObject<EnrollmentDeleted>());
+                    break;
+                case "EnrollmentUpdated":
+                    await HandleAsync(messageObject.ToObject<EnrollmentUpdated>());
                     break;
             }
 
@@ -217,6 +225,38 @@ namespace StudyProgress.EventHandler
             _mapper.Map(e, _class);
 
             _studyProgressContext.Update(_class);
+            await _studyProgressContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        private async Task<bool> HandleAsync(EnrollmentCreated e)
+        {
+            var enrollment = _mapper.Map<Enrollment>(e);
+
+            await _studyProgressContext.AddAsync(enrollment);
+            await _studyProgressContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        private async Task<bool> HandleAsync(EnrollmentDeleted e)
+        {
+            var enrollment = await _studyProgressContext.FindAsync<Enrollment>(e.ClassId, e.ClassSemester, e.ClassYear, e.ClassCourseId, e.StudentId);
+
+            _studyProgressContext.Remove(enrollment);
+            await _studyProgressContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        private async Task<bool> HandleAsync(EnrollmentUpdated e)
+        {
+            var enrollment = await _studyProgressContext.FindAsync<Enrollment>(e.ClassId, e.ClassSemester, e.ClassYear, e.ClassCourseId, e.StudentId);
+
+            _mapper.Map(e, enrollment);
+
+            _studyProgressContext.Update(enrollment);
             await _studyProgressContext.SaveChangesAsync();
 
             return true;

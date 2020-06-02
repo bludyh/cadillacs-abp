@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Common.Events
 {
-    public class EnrollmentCreated : Event
+    public class EnrollmentUpdated : Event
     {
         public int StudentId { get; set; }
         public string ClassId { get; set; }

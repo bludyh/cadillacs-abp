@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Course.Api.Dtos;
 using Course.Common.Models;
+using Infrastructure.Common.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +57,16 @@ namespace Course.Api.Mappings
 
             CreateMap<GroupSubmission, GroupSubmissionReadDto>();
             CreateMap<GroupSubmissionCreateUpdateDto, GroupSubmission>(MemberList.Source);
+
+            CreateMap<Common.Models.Course, CourseCreated>();
+            CreateMap<Common.Models.Course, CourseDeleted>();
+            CreateMap<Common.Models.Course, CourseUpdated>();
+            CreateMap<Class, ClassCreated>()
+                .ForMember(dest => dest.CourseName, opt => opt.MapFrom(src => src.Course.Name));
+            CreateMap<Class, ClassDeleted>();
+            CreateMap<Enrollment, EnrollmentCreated>();
+            CreateMap<Enrollment, EnrollmentDeleted>();
+            CreateMap<Enrollment, EnrollmentUpdated>();
         }
     }
 }

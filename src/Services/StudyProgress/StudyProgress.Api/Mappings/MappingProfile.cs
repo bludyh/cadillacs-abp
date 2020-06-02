@@ -13,15 +13,10 @@ namespace StudyProgress.Api.Mappings
             CreateMap<ProgramUpdateDto, Common.Models.Program>(MemberList.Source);
             CreateMap<ProgramCreateDto, Common.Models.Program>(MemberList.Source);
 
-
             CreateMap<Enrollment, StudentEnrollmentReadDto>();
-            CreateMap<StudentEnrollmentCreateDto, Enrollment>(MemberList.Source);
-
 
             CreateMap<Class, ClassReadDto>();
             CreateMap<Course, CourseReadDto>();
-
-            CreateMap<Student, StudentReadDto>();
 
             CreateMap<School, SchoolReadDto>();
 
@@ -29,8 +24,6 @@ namespace StudyProgress.Api.Mappings
             CreateMap<Common.Models.Program, ProgramCreated>();
             CreateMap<Common.Models.Program, ProgramDeleted>();
             CreateMap<Common.Models.Program, ProgramUpdated>();
-            CreateMap<Enrollment, EnrollmentCreated>();
-            CreateMap<Enrollment, EnrollmentDeleted>();
         }
     }
 }
