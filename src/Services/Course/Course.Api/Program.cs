@@ -11,39 +11,7 @@ namespace Course.Api
     {
         public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
-
-            using var scope = host.Services.CreateScope();
-            var services = scope.ServiceProvider;
-            var env = services.GetRequiredService<IWebHostEnvironment>();
-            if (env.IsDevelopment())
-            {
-                CreateDb(host);
-
-                // TODO: Add Seed.
-            }
-
-            host.Run();
-        }
-
-        private static void CreateDb(IHost host)
-        {
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-
-                try
-                {
-                    var context = services.GetRequiredService<CourseContext>();
-                    context.Database.EnsureDeleted();
-                    context.Database.EnsureCreated();
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred creating the DB.");
-                }
-            }
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
