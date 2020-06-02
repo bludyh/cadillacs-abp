@@ -24,6 +24,8 @@ namespace Identity.Api.Mappings
             CreateMap<EmployeeUpdateDto, Employee>(MemberList.Source);
             CreateMap<EmployeeCreateDto, Employee>(MemberList.Source);
 
+            CreateMap<EmployeeCreateDto, Teacher>(MemberList.Source);
+
             CreateMap<Common.Models.Program, ProgramReadDto>();
 
             CreateMap<Room, RoomReadDto>();

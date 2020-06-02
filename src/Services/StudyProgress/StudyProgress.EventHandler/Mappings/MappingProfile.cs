@@ -16,6 +16,8 @@ namespace StudyProgress.EventHandler.Mappings
             CreateMap<CourseUpdated, Course>();
             CreateMap<ClassCreated, Class>();
             CreateMap<ClassUpdated, Class>();
+            CreateMap<EnrollmentCreated, Enrollment>();
+            CreateMap<EnrollmentUpdated, Enrollment>();
         }
     }
 }

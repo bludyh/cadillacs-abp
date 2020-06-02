@@ -37,7 +37,7 @@ namespace Course.Api
             services.AddScoped<IAttachmentService, AttachmentService>();
 
             // Add MessagePublisher
-            //services.UseRabbitMQMessagePublisher(Configuration);
+            services.UseRabbitMQMessagePublisher(Configuration);
 
             // CORS
             services.AddCors();

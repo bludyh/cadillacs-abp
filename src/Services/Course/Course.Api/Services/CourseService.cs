@@ -3,8 +3,10 @@ using Course.Api.Dtos;
 using Course.Common.Data;
 using Course.Common.Models;
 using Infrastructure.Common;
+using Infrastructure.Common.Events;
 using Infrastructure.Common.Services;
 using Microsoft.EntityFrameworkCore;
+using Pitstop.Infrastructure.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -145,10 +147,12 @@ namespace Course.Api.Services
     public class CourseService<T> : ServiceBase, ICourseService where T : Common.Models.Course
     {
         private readonly IMapper _mapper;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public CourseService(CourseContext context, IMapper mapper) : base(context)
+        public CourseService(CourseContext context, IMapper mapper, IMessagePublisher messagePublisher) : base(context)
         {
             _mapper = mapper;
+            _messagePublisher = messagePublisher;
         }
 
         #region Courses
@@ -171,6 +175,10 @@ namespace Course.Api.Services
             _mapper.Map(dto, course);
             _context.Update(course);
             await _context.SaveChangesAsync();
+
+            // Publish event
+            var e = _mapper.Map<CourseUpdated>(course);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
         }
 
         public async Task<CourseReadDto> CreateAsync(CourseCreateDto dto)
@@ -182,6 +190,10 @@ namespace Course.Api.Services
             await _context.AddAsync(course);
             await _context.SaveChangesAsync();
 
+            // Publish event
+            var e = _mapper.Map<CourseCreated>(course);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
+
             return _mapper.Map<CourseReadDto>(course);
         }
 
@@ -191,6 +203,10 @@ namespace Course.Api.Services
 
             _context.Remove(course);
             await _context.SaveChangesAsync();
+
+            // Publish event
+            var e = _mapper.Map<CourseDeleted>(course);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
 
             return _mapper.Map<CourseReadDto>(course);
         }
@@ -237,6 +253,10 @@ namespace Course.Api.Services
             await _context.AddAsync(inputClass);
             await _context.SaveChangesAsync();
 
+            // Publish event
+            var e = _mapper.Map<ClassCreated>(inputClass);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
+
             await _context.Entry(inputClass)
                 .Reference(c => c.Course)
                 .LoadAsync();
@@ -255,6 +275,10 @@ namespace Course.Api.Services
 
             _context.Remove(inputClass);
             await _context.SaveChangesAsync();
+
+            // Publish event
+            var e = _mapper.Map<ClassDeleted>(inputClass);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
 
             return _mapper.Map<ClassReadDto>(inputClass);
         }
@@ -472,6 +496,10 @@ namespace Course.Api.Services
             _mapper.Map(dto, enrollment);
             _context.Update(enrollment);
             await _context.SaveChangesAsync();
+
+            // Publish event
+            var e = _mapper.Map<EnrollmentUpdated>(enrollment);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
         }
 
         public async Task<EnrollmentReadDto> CreateEnrollmentAsync(string classCourseId,
@@ -495,6 +523,10 @@ namespace Course.Api.Services
 
             await _context.AddAsync(enrollment);
             await _context.SaveChangesAsync();
+
+            // Publish event
+            var e = _mapper.Map<EnrollmentCreated>(enrollment);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
 
             return _mapper.Map<EnrollmentReadDto>(enrollment);
         }
@@ -525,6 +557,10 @@ namespace Course.Api.Services
 
             _context.Remove(enrollment);
             await _context.SaveChangesAsync();
+
+            // Publish event
+            var e = _mapper.Map<EnrollmentDeleted>(enrollment);
+            await _messagePublisher.PublishMessageAsync(e.MessageType, e, "");
 
             return _mapper.Map<EnrollmentReadDto>(enrollment);
         }

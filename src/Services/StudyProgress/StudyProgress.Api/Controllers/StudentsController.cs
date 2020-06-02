@@ -18,8 +18,6 @@ namespace StudyProgress.Api.Controllers
             _studentService = studentService;
         }
 
-
-
         // Enrollments
 
         [HttpGet("{id}/enrollments")]
@@ -28,23 +26,5 @@ namespace StudyProgress.Api.Controllers
             return await _studentService.GetEnrollmentsAsync(id);
         }
 
-        [HttpPost("{id}/enrollments")]
-        public async Task<ActionResult<StudentEnrollmentReadDto>> AddEnrollment([FromRoute] int id, [FromBody] StudentEnrollmentCreateDto dto)
-        {
-            var enrollment = await _studentService.AddEnrollmentAsync(id, dto);
-
-            return CreatedAtAction(nameof(GetEnrollments), new { id }, enrollment);
-        }
-
-        [HttpDelete("{id}/enrollments")]
-        public async Task<ActionResult<StudentEnrollmentReadDto>> RemoveEnrollment(
-            [FromRoute] int id,
-            [FromQuery, Required] string classId,
-            [FromQuery, Required] int classSemester,
-            [FromQuery, Required] int classYear,
-            [FromQuery, Required] string classCourseId)
-        {
-            return await _studentService.RemoveEnrollmentAsync(id, classId, classSemester, classYear, classCourseId);
-        }
     }
 }
