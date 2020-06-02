@@ -48,7 +48,7 @@ namespace StudyProgress.Api
             // Swagger
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("studyprogress", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Study Progress API" });
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Study Progress API", Version = "v1" });
             });
 
             services.AddSwaggerGenNewtonsoftSupport();
@@ -69,7 +69,7 @@ namespace StudyProgress.Api
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/studyprogress/swagger.json", "Study Progress API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Study Progress API v1");
             });
 
             app.UseRouting();

@@ -1,0 +1,19 @@
+<h5>TODAY</h5>
+<h6 class="text-muted">Thursday, May 7th</h6>
+<div class="container-fluid">
+    
+    <table class="table mt-3">
+        <tbody>
+            <tr class="row" *ngFor="let activity of activities">
+                <td class="col-2 font-weight-bold">
+                    {{activity.Time}}
+                </td>
+                <td class="col-9">
+                    {{activity.Name}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+

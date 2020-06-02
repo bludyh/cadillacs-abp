@@ -9,6 +9,7 @@ namespace Infrastructure.Common.Events
         public int ClassSemester { get; set; }
         public int ClassYear { get; set; }
         public string ClassCourseId { get; set; }
+        public int GroupId { get; set; }
         public double FinalGrade { get; set; }
     }
 }

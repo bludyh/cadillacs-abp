@@ -1,0 +1,27 @@
+.row-height{
+    height: 4rem;
+  }
+  
+  .button-height{
+    height: 1.3rem;
+    font-size: 0.7em;
+  }
+  
+  .button-header-size{
+    width: 5em;
+  }
+  
+  .showHour{
+    margin-left: -1.3rem;
+    margin-top: -0.9rem;
+  }
+  
+  .grid-height{
+    height: 5rem;
+  }
+  
+  .hour{
+    margin-top: -0.9rem;
+    margin-left: -2.2rem;
+  }
+  

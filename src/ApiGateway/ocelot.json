@@ -5,12 +5,52 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
+          "Host": "announcementapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/announcement/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Post", "Delete" ],
+      "SwaggerKey": "announcement"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "courseapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/course/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Post", "Delete" ],
+      "SwaggerKey": "course"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
           "Host": "identityapi",
           "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/api/identity/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Put", "Post", "Delete" ]
+      "UpstreamHttpMethod": [ "Get", "Put", "Post", "Delete" ],
+      "SwaggerKey": "identity"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "scheduleapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/schedule/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Post", "Delete" ],
+      "SwaggerKey": "schedule"
     },
     {
       "DownstreamPathTemplate": "/api/{everything}",
@@ -22,7 +62,60 @@
         }
       ],
       "UpstreamPathTemplate": "/api/studyprogress/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Put", "Post", "Delete" ]
+      "UpstreamHttpMethod": [ "Get", "Put", "Post", "Delete" ],
+      "SwaggerKey": "studyprogress"
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "announcement",
+      "Config": [
+        {
+          "Name": "Announcement API",
+          "Version": "v1",
+          "Url": "http://announcementapi/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "course",
+      "Config": [
+        {
+          "Name": "Course API",
+          "Version": "v1",
+          "Url": "http://courseapi/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "identity",
+      "Config": [
+        {
+          "Name": "Identity API",
+          "Version": "v1",
+          "Url": "http://identityapi/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "schedule",
+      "Config": [
+        {
+          "Name": "Schedule API",
+          "Version": "v1",
+          "Url": "http://scheduleapi/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "studyprogress",
+      "Config": [
+        {
+          "Name": "Study Progress API",
+          "Version": "v1",
+          "Url": "http://studyprogressapi/swagger/v1/swagger.json"
+        }
+      ]
     }
   ],
   "GlobalConfiguration": {}

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Announcement } from 'src/app/models/announcement';
+import { AnnouncementService } from 'src/app/announcement.service';
 
 @Component({
   selector: 'app-notification-bar',
@@ -7,9 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NotificationBarComponent implements OnInit {
 
-  constructor() { }
+  @Input() isExpanded:boolean;
+  announcements:Announcement[]=[];
+
+  constructor(private announcementService:AnnouncementService) { }
 
   ngOnInit(): void {
+    this.getAnnouncements();
   }
 
+  getAnnouncements(){
+    this.announcementService.getAnnouncements().subscribe(
+      (announces:Announcement[])=>{
+        this.announcements=announces;
+      }
+    )
+  }
 }

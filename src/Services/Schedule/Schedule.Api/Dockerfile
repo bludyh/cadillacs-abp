@@ -3,7 +3,6 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
 FROM base AS production
 WORKDIR /app
@@ -13,6 +12,8 @@ ENTRYPOINT ["dotnet", "Schedule.Api.dll"]
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["Services/Schedule/Schedule.Api/Schedule.Api.csproj", "Services/Schedule/Schedule.Api/"]
+COPY ["Services/Schedule/Schedule.Common/Schedule.Common.csproj", "Services/Schedule/Schedule.Common/"]
+COPY ["Infrastructure/Infrastructure.Common/Infrastructure.Common.csproj", "Infrastructure/Infrastructure.Common/"]
 RUN dotnet restore "Services/Schedule/Schedule.Api/Schedule.Api.csproj"
 COPY . .
 WORKDIR "/src/Services/Schedule/Schedule.Api"

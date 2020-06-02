@@ -3,7 +3,6 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
 FROM base AS production
 WORKDIR /app
@@ -13,6 +12,8 @@ ENTRYPOINT ["dotnet", "Announcement.Api.dll"]
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["Services/Announcement/Announcement.Api/Announcement.Api.csproj", "Services/Announcement/Announcement.Api/"]
+COPY ["Services/Announcement/Announcement.Common/Announcement.Common.csproj", "Services/Announcement/Announcement.Common/"]
+COPY ["Infrastructure/Infrastructure.Common/Infrastructure.Common.csproj", "Infrastructure/Infrastructure.Common/"]
 RUN dotnet restore "Services/Announcement/Announcement.Api/Announcement.Api.csproj"
 COPY . .
 WORKDIR "/src/Services/Announcement/Announcement.Api"

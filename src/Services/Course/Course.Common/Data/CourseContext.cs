@@ -23,10 +23,7 @@ namespace Course.Common.Data
                 .HasForeignKey(cl => cl.CourseId);
 
             modelBuilder.Entity<Enrollment>().HasKey(e =>
-                new { e.ClassId, e.ClassSemester, e.ClassYear, e.ClassCourseId, e.StudentId });
-
-            modelBuilder.Entity<ClassSchedule>().HasKey(cs =>
-                new { cs.StartTime, cs.ClassId, cs.ClassSemester, cs.ClassYear, cs.ClassCourseId });
+                new { e.StudentId, e.ClassId, e.ClassSemester, e.ClassYear, e.ClassCourseId });
 
             modelBuilder.Entity<Assignment>(a =>
             {
@@ -34,14 +31,16 @@ namespace Course.Common.Data
                     .HasConversion(new EnumToStringConverter<AssignmentType>());
             });
 
+            modelBuilder.Entity<Student>()
+                .Property(e => e.Id)
+                .ValueGeneratedNever();
+
+            modelBuilder.Entity<Teacher>()
+                .Property(e => e.Id)
+                .ValueGeneratedNever();
+
             modelBuilder.Entity<Lecturer>().HasKey(l =>
                 new { l.TeacherId, l.ClassId, l.ClassSemester, l.ClassYear, l.ClassCourseId });
-
-            modelBuilder.Entity<StudentEvaluation>().HasKey(se =>
-                new { se.StudentId, se.TeacherId, se.AssignmentId, se.AttachmentId, se.EvaluationId });
-
-            modelBuilder.Entity<GroupEvaluation>().HasKey(ge =>
-                new { ge.GroupId, ge.TeacherId, ge.AssignmentId, ge.AttachmentId, ge.EvaluationId });
 
             modelBuilder.Entity<StudyMaterialAttachment>().HasKey(sma =>
                new { sma.StudyMaterialId, sma.AttachmentId });
@@ -53,19 +52,19 @@ namespace Course.Common.Data
         //entities
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<AssignmentAttachment> AssignmentAttachments { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Class> Classes { get; set; }
-        public DbSet<ClassSchedule> ClassSchedules { get; set; }
         public DbSet<Models.Course> Courses { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
-        public DbSet<Evaluation> Evaluations { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Group> Groups { get; set; }
-        public DbSet<GroupEvaluation> GroupEvaluations { get; set; }
         public DbSet<Lecturer> Lecturers { get; set; }
         public DbSet<Student> Students { get; set; }
-        public DbSet<StudentEvaluation> StudentEvaluations { get; set; }
         public DbSet<StudyMaterial> StudyMaterials { get; set; }
         public DbSet<StudyMaterialAttachment> StudyMaterialAttachments { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Submission> Submissions { get; set; }
+        public DbSet<StudentSubmission> StudentSubmissions { get; set; }
+        public DbSet<GroupSubmission> GroupSubmissions { get; set; }
     }
 }

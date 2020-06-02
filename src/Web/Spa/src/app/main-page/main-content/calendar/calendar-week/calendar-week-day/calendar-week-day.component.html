@@ -1,0 +1,11 @@
+<div class="col border-top px-0">
+    <h6>{{day}}</h6>
+  </div>
+  <div *ngFor="let hour of hours">
+    <div class="col border-top grid-height" >
+      <p *ngIf="isFirstdayOfWeek" class="hour">{{hour}}</p>
+    </div>
+  </div>
+  
+  
+  

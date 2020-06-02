@@ -1,0 +1,19 @@
+<div class="container-fluid">
+    <table class="table">
+        <thead>
+            <tr class="row">
+                <th class="col-2">Time</th>
+                <th class="col-3">Sender</th>
+                <th class="col-6">Subject</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="row" *ngFor="let email of emails">
+                <td class="col-2 font-weight-bold">{{email.Time}}</td>
+                <td class="col-3">{{email.Sender}}</td>
+                <td class="col-6"><a href="" [class]="getEmailStatusColor(email.Status)">{{email.Subject}}</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

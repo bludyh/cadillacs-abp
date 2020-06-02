@@ -13,6 +13,24 @@ import { SubmissionsComponent } from './main-page/main-content/submissions/submi
 import { ProgressComponent } from './main-page/main-content/progress/progress.component';
 import { CalendarComponent } from './main-page/main-content/calendar/calendar.component';
 import { FunctionItemComponent } from './main-page/side-bar/function-item/function-item.component';
+import { CourseComponent } from './main-page/main-content/courses/course/course.component';
+import { ProgressObjectComponent } from './main-page/main-content/progress/progress-object/progress-object.component';
+import { CalendarDayComponent } from './main-page/main-content/calendar/calendar-day/calendar-day.component';
+import { CalendarMonthComponent } from './main-page/main-content/calendar/calendar-month/calendar-month.component';
+import { CalendarWeekComponent } from './main-page/main-content/calendar/calendar-week/calendar-week.component';
+import { CalendarDayHourComponent } from './main-page/main-content/calendar/calendar-day/calendar-day-hour/calendar-day-hour.component';
+import { CalendarWeekDayComponent } from './main-page/main-content/calendar/calendar-week/calendar-week-day/calendar-week-day.component';
+import { CalendarWeekWeekComponent } from './main-page/main-content/calendar/calendar-week/calendar-week-week/calendar-week-week.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CalendarMonthDayComponent } from './main-page/main-content/calendar/calendar-month/calendar-month-day/calendar-month-day.component';
+import {HttpClientModule} from '@angular/common/http';
+import { ActivitiesComponent } from './main-page/main-content/dashboard/activities/activities.component';
+import { ActivityComponent } from './main-page/main-content/dashboard/activities/activity/activity.component';
+import { EmailsComponent } from './main-page/main-content/dashboard/emails/emails.component';
+import { EmailComponent } from './main-page/main-content/dashboard/emails/email/email.component';
+import { NotificationComponent } from './main-page/notification-bar/notification/notification.component';
+import { EnrollCourseComponent } from './main-page/main-content/courses/enroll-course/enroll-course.component';
+import { FoundCourseComponent } from './main-page/main-content/courses/enroll-course/found-course/found-course.component';
 
 @NgModule({
   declarations: [
@@ -28,9 +46,27 @@ import { FunctionItemComponent } from './main-page/side-bar/function-item/functi
     ProgressComponent,
     CalendarComponent,
     FunctionItemComponent,
+    CourseComponent,
+    ProgressObjectComponent,
+    CalendarDayComponent,
+    CalendarMonthComponent,
+    CalendarWeekComponent,
+    CalendarDayHourComponent,
+    CalendarWeekDayComponent,
+    CalendarWeekWeekComponent,
+    CalendarMonthDayComponent,
+    ActivitiesComponent,
+    ActivityComponent,
+    EmailsComponent,
+    EmailComponent,
+    NotificationComponent,
+    EnrollCourseComponent,
+    FoundCourseComponent,
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    NgbModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

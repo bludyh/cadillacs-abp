@@ -70,11 +70,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Announcement.Common", "Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Course.Common", "Services\Course\Course.Common\Course.Common.csproj", "{060ADF88-B37E-4F02-9C18-E723C81F8A47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Common", "Services\Identity\Identity.Common\Identity.Common.csproj", "{D41C1954-68FD-4A54-8D92-A2C044A1C9B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Common", "Services\Identity\Identity.Common\Identity.Common.csproj", "{D41C1954-68FD-4A54-8D92-A2C044A1C9B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedule.Common", "Services\Schedule\Schedule.Common\Schedule.Common.csproj", "{A76F3558-8E61-47EF-8FB2-2B8FB9E153EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schedule.Common", "Services\Schedule\Schedule.Common\Schedule.Common.csproj", "{A76F3558-8E61-47EF-8FB2-2B8FB9E153EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyProgress.Common", "Services\StudyProgress\StudyProgress.Common\StudyProgress.Common.csproj", "{FA2C8B7E-34BE-4A00-B0C9-AAE89F3D4829}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyProgress.Common", "Services\StudyProgress\StudyProgress.Common\StudyProgress.Common.csproj", "{FA2C8B7E-34BE-4A00-B0C9-AAE89F3D4829}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{9D95D614-6FCF-4AA4-81FF-09DCB51242EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -170,6 +172,10 @@ Global
 		{FA2C8B7E-34BE-4A00-B0C9-AAE89F3D4829}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA2C8B7E-34BE-4A00-B0C9-AAE89F3D4829}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA2C8B7E-34BE-4A00-B0C9-AAE89F3D4829}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D95D614-6FCF-4AA4-81FF-09DCB51242EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D95D614-6FCF-4AA4-81FF-09DCB51242EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D95D614-6FCF-4AA4-81FF-09DCB51242EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D95D614-6FCF-4AA4-81FF-09DCB51242EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

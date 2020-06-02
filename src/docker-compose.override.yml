@@ -1,0 +1,137 @@
+version: '3.4'
+
+services:
+
+  mssql:
+    environment:
+      - SA_PASSWORD=@Test123
+      - ACCEPT_EULA=Y
+    ports:
+      - "5433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+
+  rabbitmq:
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmquser
+      - RABBITMQ_DEFAULT_PASS=@Test123
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  announcementapi:
+    build:
+      context: .
+      dockerfile: Services/Announcement/Announcement.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  announcementeventhandler:
+    build:
+      context: .
+      dockerfile: Services/Announcement/Announcement.EventHandler/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+
+  courseapi:
+    build:
+      context: .
+      dockerfile: Services/Course/Course.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  courseeventhandler:
+    build:
+      context: .
+      dockerfile: Services/Course/Course.EventHandler/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+
+  identityapi:
+    build:
+      context: .
+      dockerfile: Services/Identity/Identity.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  identityeventhandler:
+    build:
+      context: .
+      dockerfile: Services/Identity/Identity.EventHandler/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+
+  scheduleapi:
+    build:
+      context: .
+      dockerfile: Services/Schedule/Schedule.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  scheduleeventhandler:
+    build:
+      context: .
+      dockerfile: Services/Schedule/Schedule.EventHandler/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+
+  studyprogressapi:
+    build:
+      context: .
+      dockerfile: Services/StudyProgress/StudyProgress.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  studyprogresseventhandler:
+    build:
+      context: .
+      dockerfile: Services/StudyProgress/StudyProgress.EventHandler/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+
+  apigateway:
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "80:80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+volumes:
+  mssql-data:
+

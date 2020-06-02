@@ -1,7 +1,7 @@
 <div class="container-fluid mt-4">
     <app-dashboard *ngIf="activeFunctions[0]"></app-dashboard>
-    <app-courses *ngIf="activeFunctions[1]"></app-courses>
+    <app-courses *ngIf="activeFunctions[1]" [student]="student"></app-courses>
     <app-submissions *ngIf="activeFunctions[2]"></app-submissions>
-    <app-progress *ngIf="activeFunctions[3]"></app-progress>
+    <app-progress *ngIf="activeFunctions[3]" [student]="student"></app-progress>
     <app-calendar *ngIf="activeFunctions[4]"></app-calendar>
 </div>

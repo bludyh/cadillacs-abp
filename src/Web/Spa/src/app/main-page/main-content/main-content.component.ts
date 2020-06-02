@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Student } from 'src/app/models/student';
 
 @Component({
   selector: 'app-main-content',
@@ -7,6 +8,8 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class MainContentComponent implements OnInit {
 
+  @Input() student : Student = null;
+  
   @Input() activeFunctions:boolean[]=[false,false,false,false,false];
 
   constructor() { }

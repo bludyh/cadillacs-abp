@@ -1,0 +1,7 @@
+<div class="card-body p-2">
+    <h6 class="card-title mb-2">{{announcement.title}}</h6>
+    <p class="card-subtitle text-muted">From: {{announcement.employee.firstName}} {{announcement.employee.initials}}</p>
+    <p class="card-subtitle text-muted">Date: {{announcement.dateTime}}</p>
+    <p [class]="getTruncateClass()">{{announcement.body}}</p>
+    <a href="#" class="card-link float-right" (click)="switchTruncate()">Read {{getReadButtonStatus()}}</a>
+  </div>

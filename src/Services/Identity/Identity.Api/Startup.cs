@@ -59,7 +59,7 @@ namespace Identity.Api
             // Swagger
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("identity", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Identity API" });
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Identity API", Version = "v1" });
             });
 
             services.AddSwaggerGenNewtonsoftSupport();
@@ -80,7 +80,7 @@ namespace Identity.Api
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/identity/swagger.json", "Identity API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity API v1");
             });
 
             app.UseRouting();

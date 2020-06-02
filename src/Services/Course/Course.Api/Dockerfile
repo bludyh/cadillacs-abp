@@ -3,7 +3,6 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
 FROM base AS production
 WORKDIR /app
@@ -13,6 +12,8 @@ ENTRYPOINT ["dotnet", "Course.Api.dll"]
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["Services/Course/Course.Api/Course.Api.csproj", "Services/Course/Course.Api/"]
+COPY ["Infrastructure/Infrastructure.Common/Infrastructure.Common.csproj", "Infrastructure/Infrastructure.Common/"]
+COPY ["Services/Course/Course.Common/Course.Common.csproj", "Services/Course/Course.Common/"]
 RUN dotnet restore "Services/Course/Course.Api/Course.Api.csproj"
 COPY . .
 WORKDIR "/src/Services/Course/Course.Api"
