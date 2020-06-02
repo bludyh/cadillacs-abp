@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Course.Common.Models
 {
@@ -9,12 +10,16 @@ namespace Course.Common.Models
         public string ClassId { get; set; }
         public int ClassSemester { get; set; }
         public int ClassYear { get; set; }
-        public int ClassCourseId { get; set; }
+        public string ClassCourseId { get; set; }
         public Class Class { get; set; }
 
+        public string Name { get; set; }
         public AssignmentType Type { get; set; }
         public string Description { get; set; }
         public DateTime DeadlineDateTime { get; set; }
         public int Weight { get; set; }
+
+        public List<Submission> Submissions { get; set; }
+        public List<AssignmentAttachment> AssignmentAttachments { get; set; }
     }
 }
