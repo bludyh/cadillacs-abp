@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 
 namespace Course.Api.Dtos
 {
-    public class StudentSubmissionReadDto : SubmissionReadDto
+    public class GroupSubmissionReadDto
     {
-        public StudentReadDto Student { get; set; }
     }
 }

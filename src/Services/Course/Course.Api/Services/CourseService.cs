@@ -77,6 +77,19 @@ namespace Course.Api.Services
             string classId, int classSemester, int classYear, int assignmentId);
         #endregion
 
+        #region Assignments/StudentSubmissions
+        public Task<List<StudentSubmissionReadDto>> GetAssignmentStudentSubmissionsAsync(string classCourseId,
+           string classId, int classSemester, int classYear, int assignmentId);
+        public Task<StudentSubmissionReadDto> GetAssignmentStudentSubmissionAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int assignmentId, int submissionId);
+        public Task UpdateAssignmentStudentSubmissionAsync(string classCourseId, string classId, int classSemester,
+            int classYear, int assignmentId, int submissionId, StudentSubmissionCreateUpdateDto dto);
+        public Task<StudentSubmissionReadDto> CreateAssignmentStudentSubmissionAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int assignmentId, StudentSubmissionCreateUpdateDto dto);
+        public Task<StudentSubmissionReadDto> DeleteAssignmentStudentSubmissionAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int assignmentId, int submissionId);
+        #endregion
+
         #region Assignments/Attachments
         public Task<List<AssignmentAttachmentReadDto>> GetAssignmentAttachmentsAsync(string classCourseId,
            string classId, int classSemester, int classYear, int assignmentId);
@@ -85,7 +98,7 @@ namespace Course.Api.Services
         public Task<AssignmentAttachmentReadDto> CreateAssignmentAttachmentAsync(string classCourseId,
             string classId, int classSemester, int classYear, int assignmentId, AssignmentAttachmentCreateDto dto);
         public Task<AssignmentAttachmentReadDto> DeleteAssignmentAttachmentAsync(string classCourseId,
-            string classId, int classSemester, int classYear, int studyMateassignmentIdrialId, int attachmentId);
+            string classId, int classSemester, int classYear, int assignmentId, int attachmentId);
         #endregion
 
         #region Groups
@@ -598,6 +611,122 @@ namespace Course.Api.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<AssignmentReadDto>(assignment);
+        }
+        #endregion
+
+        #region Assignments/StudentSubmissions
+        public async Task<List<StudentSubmissionReadDto>> GetAssignmentStudentSubmissionsAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int assignmentId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            var assignment = await ValidateExistenceAsync<Assignment>(assignmentId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Assignment>(assignmentId);
+
+            await _context.Entry(assignment)
+                .Collection(a => a.Submissions)
+                .Query()
+                .OfType<StudentSubmission>()
+                .Include(s => s.Attachment)
+                .Include(s => s.Student)
+                .LoadAsync();
+
+            return await _mapper.ProjectTo<StudentSubmissionReadDto>(
+                assignment.Submissions.OfType<StudentSubmission>()
+                .AsQueryable()
+            ).ToListAsyncFallback();
+        }
+
+        public async Task<StudentSubmissionReadDto> GetAssignmentStudentSubmissionAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int assignmentId, int submissionId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            var assignment = await ValidateExistenceAsync<Assignment>(assignmentId);
+            var studentSubmission = await ValidateExistenceAsync<StudentSubmission>(submissionId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Assignment>(assignmentId);
+            await ValidateForeignKeyAsync<StudentSubmission>(submissionId);
+
+            await _context.Entry(assignment)
+                .Collection(a => a.Submissions)
+                .Query()
+                .OfType<StudentSubmission>()
+                .Include(ss => ss.Student)
+                .Include(ss => ss.Attachment)
+                .LoadAsync();
+
+            return _mapper.Map<StudentSubmissionReadDto>(studentSubmission);
+        }
+
+        public async Task UpdateAssignmentStudentSubmissionAsync(
+            string classCourseId, string classId, int classSemester,
+            int classYear, int assignmentId, int submissionId, StudentSubmissionCreateUpdateDto dto)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateExistenceAsync<Assignment>(assignmentId);
+            var studentSubmission = await ValidateExistenceAsync<StudentSubmission>(submissionId);
+            await ValidateExistenceAsync<Student>(dto.StudentId);
+            await ValidateExistenceAsync<Attachment>(dto.AttachmentId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Assignment>(assignmentId);
+            await ValidateForeignKeyAsync<StudentSubmission>(submissionId);
+            await ValidateForeignKeyAsync<Student>(dto.StudentId);
+            await ValidateForeignKeyAsync<Attachment>(dto.AttachmentId);
+
+            _mapper.Map(dto, studentSubmission);
+
+            _context.Update(studentSubmission);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<StudentSubmissionReadDto> CreateAssignmentStudentSubmissionAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int assignmentId, StudentSubmissionCreateUpdateDto dto)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateExistenceAsync<Assignment>(assignmentId);
+            await ValidateExistenceAsync<Student>(dto.StudentId);
+            await ValidateExistenceAsync<Attachment>(dto.AttachmentId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Assignment>(assignmentId);
+
+            var studentSubmission = new StudentSubmission
+            {
+                StudentId = dto.StudentId,
+                AssignmentId = assignmentId,
+                AttachmentId = (int)dto.AttachmentId,
+                Grade = dto.Grade
+            };
+
+            await _context.AddAsync(studentSubmission);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<StudentSubmissionReadDto>(studentSubmission);
+        }
+
+        public async Task<StudentSubmissionReadDto> DeleteAssignmentStudentSubmissionAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int assignmentId, int submissionId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateExistenceAsync<Assignment>(assignmentId);
+            var studentSubmission = await ValidateExistenceAsync<StudentSubmission>(submissionId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Assignment>(assignmentId);
+            await ValidateForeignKeyAsync<StudentSubmission>(submissionId);
+
+            _context.Remove(studentSubmission);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<StudentSubmissionReadDto>(studentSubmission);
         }
         #endregion
 
