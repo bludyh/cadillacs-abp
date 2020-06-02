@@ -25,9 +25,6 @@ namespace Course.Common.Data
             modelBuilder.Entity<Enrollment>().HasKey(e =>
                 new { e.StudentId, e.ClassId, e.ClassSemester, e.ClassYear, e.ClassCourseId });
 
-            modelBuilder.Entity<ClassSchedule>().HasKey(cs =>
-                new { cs.TimeSlotId, cs.Date, cs.RoomId, cs.RoomBuildingId });
-
             modelBuilder.Entity<Assignment>(a =>
             {
                 a.Property(a => a.Type)
@@ -57,7 +54,6 @@ namespace Course.Common.Data
         public DbSet<AssignmentAttachment> AssignmentAttachments { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Class> Classes { get; set; }
-        public DbSet<ClassSchedule> ClassSchedules { get; set; }
         public DbSet<Models.Course> Courses { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
@@ -67,7 +63,6 @@ namespace Course.Common.Data
         public DbSet<StudyMaterial> StudyMaterials { get; set; }
         public DbSet<StudyMaterialAttachment> StudyMaterialAttachments { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
-        public DbSet<TimeSlot> TimeSlots { get; set; }
         public DbSet<Submission> Submissions { get; set; }
         public DbSet<StudentSubmission> StudentSubmissions { get; set; }
         public DbSet<GroupSubmission> GroupSubmissions { get; set; }

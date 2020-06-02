@@ -12,7 +12,6 @@ namespace Course.Common.Models
         public Course Course { get; set; }
 
         public List<Enrollment> Enrollments { get; set; }
-        public List<ClassSchedule> ClassSchedules { get; set; }
         public List<StudyMaterial> StudyMaterials { get; set; }
         public List<Assignment> Assignments { get; set; }
         public List<Group> Groups { get; set; }
