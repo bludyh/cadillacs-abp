@@ -90,6 +90,19 @@ namespace Course.Api.Services
             string classId, int classSemester, int classYear, int assignmentId, int submissionId);
         #endregion
 
+        #region Assignments/GroupSubmissions
+        public Task<List<GroupSubmissionReadDto>> GetAssignmentGroupSubmissionsAsync(string classCourseId,
+           string classId, int classSemester, int classYear, int assignmentId);
+        public Task<GroupSubmissionReadDto> GetAssignmentGroupSubmissionAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int assignmentId, int submissionId);
+        public Task UpdateAssignmentGroupSubmissionAsync(string classCourseId, string classId, int classSemester,
+            int classYear, int assignmentId, int submissionId, GroupSubmissionCreateUpdateDto dto);
+        public Task<GroupSubmissionReadDto> CreateAssignmentGroupSubmissionAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int assignmentId, GroupSubmissionCreateUpdateDto dto);
+        public Task<GroupSubmissionReadDto> DeleteAssignmentGroupSubmissionAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int assignmentId, int submissionId);
+        #endregion
+
         #region Assignments/Attachments
         public Task<List<AssignmentAttachmentReadDto>> GetAssignmentAttachmentsAsync(string classCourseId,
            string classId, int classSemester, int classYear, int assignmentId);
@@ -699,7 +712,7 @@ namespace Course.Api.Services
 
             var studentSubmission = new StudentSubmission
             {
-                StudentId = dto.StudentId,
+                StudentId = (int)dto.StudentId,
                 AssignmentId = assignmentId,
                 AttachmentId = (int)dto.AttachmentId,
                 Grade = dto.Grade
@@ -727,6 +740,122 @@ namespace Course.Api.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<StudentSubmissionReadDto>(studentSubmission);
+        }
+        #endregion
+
+        #region Assignments/GroupSubmissions
+        public async Task<List<GroupSubmissionReadDto>> GetAssignmentGroupSubmissionsAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int assignmentId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            var assignment = await ValidateExistenceAsync<Assignment>(assignmentId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Assignment>(assignmentId);
+
+            await _context.Entry(assignment)
+                .Collection(a => a.Submissions)
+                .Query()
+                .OfType<GroupSubmission>()
+                .Include(s => s.Attachment)
+                .Include(s => s.Group)
+                .LoadAsync();
+
+            return await _mapper.ProjectTo<GroupSubmissionReadDto>(
+                assignment.Submissions.OfType<GroupSubmission>()
+                .AsQueryable()
+            ).ToListAsyncFallback();
+        }
+
+        public async Task<GroupSubmissionReadDto> GetAssignmentGroupSubmissionAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int assignmentId, int submissionId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            var assignment = await ValidateExistenceAsync<Assignment>(assignmentId);
+            var groupSubmission = await ValidateExistenceAsync<GroupSubmission>(submissionId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Assignment>(assignmentId);
+            await ValidateForeignKeyAsync<GroupSubmission>(submissionId);
+
+            await _context.Entry(assignment)
+                .Collection(a => a.Submissions)
+                .Query()
+                .OfType<GroupSubmission>()
+                .Include(ss => ss.Group)
+                .Include(ss => ss.Attachment)
+                .LoadAsync();
+
+            return _mapper.Map<GroupSubmissionReadDto>(groupSubmission);
+        }
+
+        public async Task UpdateAssignmentGroupSubmissionAsync(
+            string classCourseId, string classId, int classSemester,
+            int classYear, int assignmentId, int submissionId, GroupSubmissionCreateUpdateDto dto)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateExistenceAsync<Assignment>(assignmentId);
+            var groupSubmission = await ValidateExistenceAsync<GroupSubmission>(submissionId);
+            await ValidateExistenceAsync<Group>(dto.GroupId);
+            await ValidateExistenceAsync<Attachment>(dto.AttachmentId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Assignment>(assignmentId);
+            await ValidateForeignKeyAsync<GroupSubmission>(submissionId);
+            await ValidateForeignKeyAsync<Group>(dto.GroupId);
+            await ValidateForeignKeyAsync<Attachment>(dto.AttachmentId);
+
+            _mapper.Map(dto, groupSubmission);
+
+            _context.Update(groupSubmission);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<GroupSubmissionReadDto> CreateAssignmentGroupSubmissionAsync(string classCourseId,
+            string classId, int classSemester, int classYear, int assignmentId, GroupSubmissionCreateUpdateDto dto)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateExistenceAsync<Assignment>(assignmentId);
+            await ValidateExistenceAsync<Group>(dto.GroupId);
+            await ValidateExistenceAsync<Attachment>(dto.AttachmentId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Assignment>(assignmentId);
+
+            var groupSubmission = new GroupSubmission
+            {
+                GroupId = (int)dto.GroupId,
+                AssignmentId = assignmentId,
+                AttachmentId = (int)dto.AttachmentId,
+                Grade = dto.Grade
+            };
+
+            await _context.AddAsync(groupSubmission);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<GroupSubmissionReadDto>(groupSubmission);
+        }
+
+        public async Task<GroupSubmissionReadDto> DeleteAssignmentGroupSubmissionAsync(
+            string classCourseId, string classId, int classSemester, int classYear, int assignmentId, int submissionId)
+        {
+            await ValidateExistenceAsync<T>(classCourseId);
+            await ValidateExistenceAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateExistenceAsync<Assignment>(assignmentId);
+            var groupSubmission = await ValidateExistenceAsync<GroupSubmission>(submissionId);
+            await ValidateForeignKeyAsync<T>(classCourseId);
+            await ValidateForeignKeyAsync<Class>(classId, classSemester, classYear, classCourseId);
+            await ValidateForeignKeyAsync<Assignment>(assignmentId);
+            await ValidateForeignKeyAsync<GroupSubmission>(submissionId);
+
+            _context.Remove(groupSubmission);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<GroupSubmissionReadDto>(groupSubmission);
         }
         #endregion
 

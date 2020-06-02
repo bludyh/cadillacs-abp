@@ -50,8 +50,12 @@ namespace Course.Api.Mappings
             CreateMap<AssignmentAttachmentCreateDto, AssignmentAttachment>(MemberList.Source);
 
             CreateMap<Submission, SubmissionReadDto>();
+
             CreateMap<StudentSubmission, StudentSubmissionReadDto>();
             CreateMap<StudentSubmissionCreateUpdateDto, StudentSubmission>(MemberList.Source);
+
+            CreateMap<GroupSubmission, GroupSubmissionReadDto>();
+            CreateMap<GroupSubmissionCreateUpdateDto, GroupSubmission>(MemberList.Source);
         }
     }
 }

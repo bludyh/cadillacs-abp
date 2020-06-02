@@ -465,6 +465,86 @@ namespace Course.Api.Controllers
         }
         #endregion
 
+        #region Assignments/GroupSubmissions
+        // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Group-Submissions
+        [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/group-submissions")]
+        public async Task<ActionResult<IEnumerable<GroupSubmissionReadDto>>> GetAssignmentGroupSubmissions(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int assignmentId)
+        {
+            return await _courseService.GetAssignmentGroupSubmissionsAsync(classCourseId, classId, classSemester, classYear, assignmentId);
+        }
+
+        // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Group-Submissions/5
+        [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/group-submissions/{submissionId}")]
+        public async Task<ActionResult<GroupSubmissionReadDto>> GetAssignmentGroupSubmission(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int assignmentId,
+            int submissionId)
+        {
+            return await _courseService.GetAssignmentGroupSubmissionAsync(classCourseId, classId, classSemester, classYear, assignmentId, submissionId);
+        }
+
+        // PUT: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Group-Submissions/5
+        [HttpPut("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/group-submissions/{submissionId}")]
+        public async Task<IActionResult> PutAssignmentGroupSubmission(string classCourseId, string classId,
+            int classSemester, int classYear, int assignmentId, int submissionId, [FromBody] GroupSubmissionCreateUpdateDto dto)
+        {
+            await _courseService.UpdateAssignmentGroupSubmissionAsync(classCourseId, classId, classSemester,
+                classYear, assignmentId, submissionId, dto);
+
+            return NoContent();
+        }
+
+        // POST: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Group-Submissions
+        [HttpPost("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/group-submissions")]
+        public async Task<ActionResult<GroupSubmissionReadDto>> CreateAssignmentGroupSubmission(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int assignmentId,
+            [FromBody] GroupSubmissionCreateUpdateDto dto)
+        {
+            var groupSubmission = await _courseService.CreateAssignmentGroupSubmissionAsync(
+                classCourseId,
+                classId,
+                classSemester,
+                classYear,
+                assignmentId,
+                dto);
+
+            return CreatedAtAction(nameof(GetAssignmentGroupSubmissions), new
+            {
+                classCourseId,
+                classId,
+                classSemester,
+                classYear,
+                assignmentId
+            }, groupSubmission);
+        }
+
+        // DELETE: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Group-Submissions/5
+        [HttpDelete("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/group-submissions")]
+        public async Task<ActionResult<GroupSubmissionReadDto>> DeleteAttachmentGroupSubmission(
+            string classCourseId,
+            string classId,
+            int classSemester,
+            int classYear,
+            int assignmentId,
+            [FromQuery] int submissionId)
+        {
+            return await _courseService.DeleteAssignmentGroupSubmissionAsync(
+                classCourseId, classId, classSemester, classYear, assignmentId, submissionId);
+        }
+        #endregion
+
         #region Assignments/Attachments
         // GET: api/Courses/prc1/Classes/e-s71/1/2020/Assignments/5/Attachments
         [HttpGet("{classCourseId}/classes/{classId}/{classSemester}/{classYear}/assignments/{assignmentId}/attachments")]

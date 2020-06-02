@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Course.Api.Dtos
 {
-    public class StudentSubmissionCreateUpdateDto
+    public class GroupSubmissionCreateUpdateDto
     {
         [Required]
-        public int? StudentId { get; set; }
+        public int? GroupId { get; set; }
         [Required]
         public int? AssignmentId { get; set; }
         [Required]
