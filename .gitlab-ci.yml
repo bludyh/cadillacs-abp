@@ -90,7 +90,7 @@ test_services:
                 - $SCHEDULE_UNITTESTS_DIR/$TEST_RESULTS
                 - $STUDYPROGRESS_UNITTESTS_DIR/$TEST_RESULTS
 
-publish_images:
+publish_services:
     stage: publish
     image:
         name: gcr.io/kaniko-project/executor:debug
@@ -104,13 +104,36 @@ publish_images:
         - tar -xzvf services.tar.gz
         - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(echo -n $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" > /kaniko/.docker/config.json
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$APIGATEWAY_DIR/Dockerfile --destination i360147/apigateway --target production
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_API_DIR/Dockerfile --destination i360147/identityapi --target production
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_EVENTHANDLER_DIR/Dockerfile --destination i360147/identityeventhandler --target production
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$COURSE_API_DIR/Dockerfile --destination i360147/courseapi --target production
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$COURSE_EVENTHANDLER_DIR/Dockerfile --destination i360147/courseeventhandler --target production
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$STUDYPROGRESS_API_DIR/Dockerfile --destination i360147/studyprogressapi --target production
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$STUDYPROGRESS_EVENTHANDLER_DIR/Dockerfile --destination i360147/studyprogresseventhandler --target production
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$SCHEDULE_API_DIR/Dockerfile --destination i360147/scheduleapi --target production
-        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$SCHEDULE_EVENTHANDLER_DIR/Dockerfile --destination i360147/scheduleeventhandler --target production
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$ANNOUNCEMENT_API_DIR/Dockerfile --destination i360147/announcementapi --target production
         - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$ANNOUNCEMENT_EVENTHANDLER_DIR/Dockerfile --destination i360147/announcementeventhandler --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$COURSE_API_DIR/Dockerfile --destination i360147/courseapi --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$COURSE_EVENTHANDLER_DIR/Dockerfile --destination i360147/courseeventhandler --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_API_DIR/Dockerfile --destination i360147/identityapi --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$IDENTITY_EVENTHANDLER_DIR/Dockerfile --destination i360147/identityeventhandler --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$SCHEDULE_API_DIR/Dockerfile --destination i360147/scheduleapi --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$SCHEDULE_EVENTHANDLER_DIR/Dockerfile --destination i360147/scheduleeventhandler --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$STUDYPROGRESS_API_DIR/Dockerfile --destination i360147/studyprogressapi --target production
+        - /kaniko/executor --context $CI_PROJECT_DIR/src/ --dockerfile $CI_PROJECT_DIR/$STUDYPROGRESS_EVENTHANDLER_DIR/Dockerfile --destination i360147/studyprogresseventhandler --target production
+
+deploy_services:
+    stage: deploy
+    image: diemscott/rancher-cli-k8s:latest
+    only:
+        refs:
+            - master
+    variables:
+        GIT_STRATEGY: none
+    script:
+        - rancher login $RANCHER_SERVER_URL -t $RANCHER_API_TOKEN
+        - rancher kubectl --namespace=cadillacs-abp patch deployment apigateway -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+        - rancher kubectl --namespace=cadillacs-abp patch deployment announcementapi -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+        - rancher kubectl --namespace=cadillacs-abp patch deployment announcementeventhandler -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+        - rancher kubectl --namespace=cadillacs-abp patch deployment courseapi -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+        - rancher kubectl --namespace=cadillacs-abp patch deployment courseeventhandler -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+        - rancher kubectl --namespace=cadillacs-abp patch deployment identityapi -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+        - rancher kubectl --namespace=cadillacs-abp patch deployment identityeventhandler -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+        - rancher kubectl --namespace=cadillacs-abp patch deployment scheduleapi -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+        - rancher kubectl --namespace=cadillacs-abp patch deployment scheduleeventhandler -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+        - rancher kubectl --namespace=cadillacs-abp patch deployment studyprogressapi -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+        - rancher kubectl --namespace=cadillacs-abp patch deployment studyprogresseventhandler -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
+
