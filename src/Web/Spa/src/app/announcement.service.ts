@@ -8,7 +8,7 @@ import { Announcement } from './models/announcement';
 })
 export class AnnouncementService {
 
-  private REST_API_SERVER="http://localhost/api/announcement";
+  private REST_API_SERVER="http://cadillacs-abp.kn01.fhict.nl/api/announcement";
 
   constructor(private httpClient:HttpClient) { }
 
