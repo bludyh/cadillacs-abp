@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Student } from '../models/student';
-import { IdentityService } from '../identity.service';
+import { IdentityService } from '../services/identity.service';
 
 @Component({
   selector: 'app-main-page',

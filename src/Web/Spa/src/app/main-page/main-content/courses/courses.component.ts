@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Course } from 'src/app/models/course';
 import { Student } from 'src/app/models/student';
-import { StudyProgressService } from 'src/app/study-progress.service';
+import { StudyProgressService } from 'src/app/services/study-progress.service';
 import { Enrollment } from 'src/app/models/enrollment';
 
 @Component({
@@ -23,7 +23,8 @@ export class CoursesComponent implements OnInit {
   constructor(private studyProgressService:StudyProgressService) { }
 
   ngOnInit(): void {
-    this.getEnrollments(this.student.id);
+    this.getEnrollments(1000033);
+    //this.getEnrollments(this.student.id);
   }
 
   getEnrollments(studentID:number){

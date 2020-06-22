@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Student } from './models/student';
-import { Enrollment } from './models/enrollment';
+import { Student } from '../models/student';
+import { Enrollment } from '../models/enrollment';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class StudyProgressService {
 
-  private REST_API_SERVER="http://localhost/api/studyprogress";
+  private REST_API_SERVER="http://cadillacs-abp.kn01.fhict.nl/api/studyprogress";
 
   constructor(private httpClient:HttpClient) { }
 

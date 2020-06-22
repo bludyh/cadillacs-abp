@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Announcement } from 'src/app/models/announcement';
-import { AnnouncementService } from 'src/app/announcement.service';
+import { AnnouncementService } from 'src/app/services/announcement.service';
 
 @Component({
   selector: 'app-notification-bar',
