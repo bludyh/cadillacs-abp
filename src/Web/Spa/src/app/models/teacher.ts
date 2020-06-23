@@ -1,4 +1,15 @@
+import { School } from './school';
+import { Room } from './room';
+
 export class Teacher {
-    FirstName: string;
-    LastName: string;
+    id:number;
+    pcn:string;
+    firstName:string;
+    lastName:string;
+    initials:string;
+    email:string;
+    phoneNumber:string;
+    accountStatus:string;
+    school:School;
+    room:Room;
   }
