@@ -7,12 +7,7 @@ export class Class{
     startDate:Date;
     endDate:Date;
     course:Course;
-}
-
-export class ShortClass{
-    id:string;
-    semester:number;
-    year:number;
     courseID:string;
     courseName:string;
 }
+

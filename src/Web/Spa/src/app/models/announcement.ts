@@ -1,5 +1,5 @@
 import { ShortEmployee } from './employee';
-import { ShortClass } from './class';
+import { Class } from './class';
 
 
 export class Announcement{
@@ -12,5 +12,5 @@ export class Announcement{
 
 export class ClassAnnouncement{
     announcement:Announcement;
-    class:ShortClass;
+    class:Class;
 }

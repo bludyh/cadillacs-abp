@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Student } from '../models/student';
 import { Enrollment } from '../models/enrollment';
 import { Observable } from 'rxjs';
-import { Program, DetailProgram } from './models/program';
+import { Program } from './models/program';
 import { Course } from './models/course';
 
 @Injectable({
@@ -17,8 +17,8 @@ export class StudyProgressService {
 
   //Zone COURSES
   //Courses - GET
-  public getProgramsOfCourse(courseID:string):Observable<DetailProgram[]>{
-    return this.httpClient.get<DetailProgram[]>(`${this.REST_API_SERVER}/Courses/${courseID}/programs`);
+  public getProgramsOfCourse(courseID:string):Observable<Program[]>{
+    return this.httpClient.get<Program[]>(`${this.REST_API_SERVER}/Courses/${courseID}/programs`);
   }
 
   public getRequiredCoursesOfCourse(courseID:string):Observable<Course[]>{
@@ -37,12 +37,12 @@ export class StudyProgressService {
 
   //Zone PROGRAMS
   //Programs - GET
-  public getPrograms():Observable<DetailProgram[]>{
-    return this.httpClient.get<DetailProgram[]>(`${this.REST_API_SERVER}/Programs`);
+  public getPrograms():Observable<Program[]>{
+    return this.httpClient.get<Program[]>(`${this.REST_API_SERVER}/Programs`);
   }
 
-  public getProgram(programID):Observable<DetailProgram>{
-    return this.httpClient.get<DetailProgram>(`${this.REST_API_SERVER}/Programs/${programID}`);
+  public getProgram(programID):Observable<Program>{
+    return this.httpClient.get<Program>(`${this.REST_API_SERVER}/Programs/${programID}`);
   }
 
   public getCoursesInProgram(programID):Observable<Course[]>{
