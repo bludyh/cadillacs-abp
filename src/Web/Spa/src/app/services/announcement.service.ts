@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-<<<<<<< HEAD:src/Web/Spa/src/app/services/announcement.service.ts
-import { Announcement } from '../models/announcement';
-=======
-import { Announcement, ClassAnnouncement } from './models/announcement';
->>>>>>> develop:src/Web/Spa/src/app/announcement.service.ts
+import { Announcement, ClassAnnouncement } from '../models/announcement';
 
 @Injectable({
   providedIn: 'root'
