@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Attachment } from '../models/attachment';
 import { Course } from '../models/course';
@@ -12,6 +12,10 @@ import { StudyMaterial } from '../models/studyMaterial';
 export class CourseService {
 
   private REST_API_SERVER="http://cadillacs-abp.kn01.fhict.nl/api/course";
+
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
 
   constructor(private httpClient:HttpClient) { }
 
@@ -26,6 +30,9 @@ export class CourseService {
   }
 
   //Attachments - PUT
+  public updateAttachment(attachment:Attachment):Observable<any> {
+    return this.httpClient.put(`${this.REST_API_SERVER}/Attachments/${attachment.id}`, attachment, this.httpOptions)
+  }
 
   //Attachments - POST
 
@@ -62,6 +69,9 @@ export class CourseService {
   }
 
   //Courses - PUT
+  public updateCourse(course:Course):Observable<any> {
+    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${course.id}`, course, this.httpOptions)
+  }
 
   //Courses - POST
 
@@ -73,8 +83,6 @@ export class CourseService {
   
   //Zone TEACHERS
   //Teachers - GET
-
-  //Teachers - PUT
 
   //Teachers - POST
 
