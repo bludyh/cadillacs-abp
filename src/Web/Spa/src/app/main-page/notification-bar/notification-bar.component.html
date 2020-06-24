@@ -1,6 +1,6 @@
 <div class="container">
     <h3 class="mt-4 mb-3"> Announcement</h3>
     <div class="card mt-2" *ngFor="let announcement of announcements">
-      <app-notification [announcement]="announcement"></app-notification>
+      <app-notification (click)="clickTest()" [announcement]="announcement"></app-notification>
     </div>
 </div>

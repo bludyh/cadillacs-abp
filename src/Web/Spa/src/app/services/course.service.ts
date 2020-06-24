@@ -152,7 +152,13 @@ export class CourseService {
   }
 
   //Courses - POST
-
+  public postEnrollment(classCourseID:string, classID:string, classSemester:number, classYear:number):Observable<any> {
+    return this.httpClient.post(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/enrollments`,
+    {
+      "studentId":1000033
+    }
+    ,this.httpOptions);       
+  }
   //Courses - DELETE
 
   //End Zone COURSES

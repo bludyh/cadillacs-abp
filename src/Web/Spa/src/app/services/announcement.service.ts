@@ -11,7 +11,9 @@ export class AnnouncementService {
   private REST_API_SERVER="http://cadillacs-abp.kn01.fhict.nl/api/announcement";
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({
+       'Content-Type': 'application/json'
+      })
   };
 
   constructor(private httpClient:HttpClient) { }
@@ -38,7 +40,13 @@ export class AnnouncementService {
   }
 
   //Announcements - POST
-
+  public postAnnoucement(announcement:Announcement){
+    this.httpClient.post(`${this.REST_API_SERVER}/Announcements`,{
+      "title":`"${announcement.title}"`,
+      "body":`"${announcement.body}"`,
+      "employeeID":1000021
+    },this.httpOptions);       
+  }
   //Announcements - DELETE
 
   //End Zone ANNOUNCEMENTS
