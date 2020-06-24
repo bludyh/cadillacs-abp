@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Announcement, ClassAnnouncement } from '../models/announcement';
 
@@ -9,6 +9,10 @@ import { Announcement, ClassAnnouncement } from '../models/announcement';
 export class AnnouncementService {
 
   private REST_API_SERVER="http://cadillacs-abp.kn01.fhict.nl/api/announcement";
+
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
 
   constructor(private httpClient:HttpClient) { }
 
@@ -23,6 +27,15 @@ export class AnnouncementService {
   }
 
   //Announcements - PUT
+  public updateAnnouncement(announcement:Announcement):Observable<any> {
+    return this.httpClient.put(`${this.REST_API_SERVER}/Announcements/${announcement.id}`, 
+      {
+        "employeeId": announcement.employee.id, 
+        "title": announcement.title, 
+        "body": announcement.body
+      }, 
+      this.httpOptions)
+  }
 
   //Announcements - POST
 
@@ -41,7 +54,6 @@ export class AnnouncementService {
   public getClassAnnouncement(classCourseID:string,classID:string,classSemester:number,classYear:number,announcementID:number):Observable<ClassAnnouncement>{
     return this.httpClient.get<ClassAnnouncement>(`${this.REST_API_SERVER}/courses/${classCourseID}/Classes/${classID}/${classSemester}/${classYear}/announcements/${announcementID}`);
   }
-  //Classes - PUT
 
   //Classes - POST
 
