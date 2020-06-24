@@ -40,8 +40,8 @@ assignmentsCourse1: Assignment[]= [];
   }
   public date:Date;
 
-  assignment= new Assignment("Animal Shelter",this.date,this.myCourse.Name,"For this assignemnt must must be able to show competence in c code");
-  assignment1= new Assignment("Big project",this.date,this.myCourse1.Name,"For this assignemnt must must be able to show competence in c code");
+  // assignment= new Assignment("Animal Shelter",this.date,this.myCourse.Name,"For this assignemnt must must be able to show competence in c code");
+  // assignment1= new Assignment("Big project",this.date,this.myCourse1.Name,"For this assignemnt must must be able to show competence in c code");
 
  
   myCourses:myCourse[] = [this.myCourse, this.myCourse1]
@@ -58,8 +58,8 @@ assignmentsCourse1: Assignment[]= [];
   }
 
   ngOnInit(): void {
-    this.addAssignment(this.myCourse1, this.assignment);
-    this.addAssignment(this.myCourse1, this.assignment1);
+    // this.addAssignment(this.myCourse1, this.assignment);
+    // this.addAssignment(this.myCourse1, this.assignment1);
   }
 
   
