@@ -12,7 +12,7 @@
                 <label for="searchCourse">Search</label>
                 <input type="text" class="form-control" placeholder="Enter Course ID or Course Name ...">
             </div>
-            <div *ngFor="let course of courses">
+            <div *ngFor="let course of availableCourses">
                 <app-found-course [course]="course"></app-found-course>
             </div>
         </form>

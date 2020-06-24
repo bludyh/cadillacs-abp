@@ -7,4 +7,7 @@ export class Class{
     startDate:Date;
     endDate:Date;
     course:Course;
+    courseID:string;
+    courseName:string;
 }
+

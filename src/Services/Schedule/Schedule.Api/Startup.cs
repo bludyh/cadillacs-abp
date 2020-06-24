@@ -54,7 +54,11 @@ namespace Schedule.Api
             }
 
             // CORS
-            app.UseCors(options => options.AllowAnyOrigin());
+            app.UseCors(options => options
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
 
             // Swagger
             app.UseSwagger();

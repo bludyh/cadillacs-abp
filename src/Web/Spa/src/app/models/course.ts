@@ -8,3 +8,4 @@ export class Course{
     // imgSrc:string="https://i.imgur.com/AyVaERv.png";
     
 }
+

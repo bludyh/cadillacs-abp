@@ -1,7 +1,7 @@
 import { Component, OnInit,Input } from '@angular/core';
 import { Progress } from 'src/app/models/progress';
 import { Enrollment } from 'src/app/models/enrollment';
-import { StudyProgressService } from 'src/app/study-progress.service';
+import { StudyProgressService } from 'src/app/services/study-progress.service';
 import { Student } from 'src/app/models/student';
 
 @Component({
