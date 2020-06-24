@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Student } from '../models/student';
 import { Enrollment } from '../models/enrollment';
 import { Observable } from 'rxjs';
@@ -13,6 +13,10 @@ export class StudyProgressService {
 
   private REST_API_SERVER="http://cadillacs-abp.kn01.fhict.nl/api/studyprogress";
 
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+
   constructor(private httpClient:HttpClient) { }
 
   //Zone COURSES
@@ -24,8 +28,6 @@ export class StudyProgressService {
   public getRequiredCoursesOfCourse(courseID:string):Observable<Course[]>{
     return this.httpClient.get<Course[]>(`${this.REST_API_SERVER}/Courses/${courseID}/requirements`);
   }
-  
-  //Courses - PUT
 
   //Courses - POST
 
@@ -50,6 +52,15 @@ export class StudyProgressService {
   }
 
   //Programs - PUT
+  public updateProgram(program:Program):Observable<any> {
+    return this.httpClient.put(`${this.REST_API_SERVER}/Programs/${program.id}`, 
+      {
+        "name": program.name,
+        "description": program.description,
+        "totalCredit": program.totalCredit
+      }, 
+      this.httpOptions)
+  }
 
   //Programs - POST
 
@@ -64,7 +75,6 @@ export class StudyProgressService {
   public getEnrollments(studentID:number):Observable<Enrollment[]>{
     return this.httpClient.get<Enrollment[]>(`${this.REST_API_SERVER}/Students/${studentID}/enrollments`);
   }
-  
   //End Zone STUDENTS
 
   //*****************//
