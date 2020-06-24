@@ -1,5 +1,6 @@
 import { School } from './school';
 import { Room } from './room';
+import { Building } from './building';
 
 export class Teacher {
     id:number;
@@ -12,4 +13,5 @@ export class Teacher {
     accountStatus:string;
     school:School;
     room:Room;
+    building:Building;
   }

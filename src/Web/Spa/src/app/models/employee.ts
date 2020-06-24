@@ -1,5 +1,6 @@
 import { School } from './school';
 import { Room } from './room';
+import { Building } from './building';
 
 export class Employee{
     id:number;
@@ -12,6 +13,7 @@ export class Employee{
     accountStatus:string;
     school:School;
     room:Room;
+    building:Building;
 }
 
 export class ShortEmployee{
