@@ -66,8 +66,7 @@ namespace StudyProgress.Api
             app.UseCors(options => options
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
+                .AllowAnyHeader());
 
             // Swagger
             app.UseSwagger();
