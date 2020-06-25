@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, OnInit, Input, Output,EventEmitter  } from '@angular/core';
 import { Course } from 'src/app/models/course';
 import { Student } from 'src/app/models/student';
 import { CourseService } from 'src/app/services/course.service';
@@ -14,6 +14,7 @@ import { Class } from 'src/app/models/class';
 export class EnrollCourseComponent implements OnInit {
 
   @Input() courses:Course[]=[];
+  @Output() enrollDoneEvent=new EventEmitter<void>();
   classesBasket:Class[]=[];
 
   availableCourses:Course[]=[];
@@ -71,5 +72,6 @@ export class EnrollCourseComponent implements OnInit {
       this.courseService.postEnrollment(ec.course.id,ec.id,ec.semester,ec.year,1000033);
     });
     this.classesBasket=[];
+    this.enrollDoneEvent.emit();
   }
 }

@@ -33,6 +33,11 @@ import { NotificationComponent } from './main-page/notification-bar/notification
 import { EnrollCourseComponent } from './main-page/main-content/courses/enroll-course/enroll-course.component';
 import { FoundCourseComponent } from './main-page/main-content/courses/enroll-course/found-course/found-course.component';
 import { StudentProfileComponent } from './main-page/main-content/student-profile/student-profile.component';
+import { MainPageTeacherComponent } from './main-page-teacher/main-page-teacher.component';
+import { SideBarTeacherComponent } from './main-page-teacher/side-bar-teacher/side-bar-teacher.component';
+import { NotificationBarTeacherComponent } from './main-page-teacher/notification-bar-teacher/notification-bar-teacher.component';
+import { NavigationBarTeacherComponent } from './main-page-teacher/navigation-bar-teacher/navigation-bar-teacher.component';
+import { MainContentTeacherComponent } from './main-page-teacher/main-content-teacher/main-content-teacher.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +70,11 @@ import { StudentProfileComponent } from './main-page/main-content/student-profil
     EnrollCourseComponent,
     FoundCourseComponent,
     StudentProfileComponent,
+    MainPageTeacherComponent,
+    SideBarTeacherComponent,
+    NotificationBarTeacherComponent,
+    NavigationBarTeacherComponent,
+    MainContentTeacherComponent,
   ],
   imports: [
     BrowserModule,
