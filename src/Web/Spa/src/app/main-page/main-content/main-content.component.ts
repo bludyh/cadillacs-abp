@@ -10,7 +10,7 @@ export class MainContentComponent implements OnInit {
 
   @Input() student : Student = null;
   
-  @Input() activeFunctions:boolean[]=[false,false,false,false,false];
+  @Input() activeFunctions:boolean[]=[false,false,false,false,false,false];
 
   constructor() { }
 

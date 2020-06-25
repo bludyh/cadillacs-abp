@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Student } from 'src/app/models/student';
 
 
@@ -8,7 +8,7 @@ import { Student } from 'src/app/models/student';
   styleUrls: ['./navigation-bar.component.css']
 })
 export class NavigationBarComponent implements OnInit {
-
+  @Output() setActiveFuncChange:EventEmitter<number>=new EventEmitter();
   constructor() {
     
    }
@@ -22,5 +22,8 @@ export class NavigationBarComponent implements OnInit {
      return "";
    }
 
+   activateFunc(){
+    this.setActiveFuncChange.emit(5);
+  }
 
 }

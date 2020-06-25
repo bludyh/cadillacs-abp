@@ -1,7 +1,7 @@
 <div class="container-fluid d-flex h-100 flex-column">
     <div class="row">
         <div class="col-xl-12 p-0 ">
-            <app-navigation-bar [student]="student"></app-navigation-bar>
+            <app-navigation-bar [student]="student" (setActiveFuncChange)="activateFunction($event)"></app-navigation-bar>
         </div>
     </div>
     <div class="row flex-fill d-flex">
@@ -12,7 +12,7 @@
             <app-main-content [activeFunctions]="activeFuncs" [student]="student"></app-main-content>
         </div>
         <div class="col-xl-2 p-0 bg-light">
-            <app-notification-bar [isExpanded]="mouseOverNotification"></app-notification-bar>
+            <app-notification-bar [isExpanded]="mouseOverNotification" ></app-notification-bar>
         </div>
     </div>
 </div>

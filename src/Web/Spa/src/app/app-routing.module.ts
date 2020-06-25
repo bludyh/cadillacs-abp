@@ -10,7 +10,8 @@ const routes: Routes = [
     {path: 'student/Courses' , component: MainPageComponent},
     {path: 'student/Submissions' , component: MainPageComponent},
     {path: 'student/Progress' , component: MainPageComponent},
-    {path: 'student/Calendar' , component: MainPageComponent}
+    {path: 'student/Calendar' , component: MainPageComponent},
+    {path: 'student/Profile' , component: MainPageComponent}
 ];
 
 @NgModule({
