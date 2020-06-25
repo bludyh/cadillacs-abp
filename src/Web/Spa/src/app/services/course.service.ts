@@ -41,8 +41,8 @@ export class CourseService {
   public updateAttachment(attachment:Attachment):Observable<any> {
     return this.httpClient.put(`${this.REST_API_SERVER}/Attachments/${attachment.id}`,
       {
-        "name": attachment.name,
-        "path": attachment.path
+        "name": `"${attachment.name}"`,
+        "path": `"${attachment.path}"`
       },
       this.httpOptions)
   }
@@ -51,8 +51,8 @@ export class CourseService {
   public postAttachment(attachment:Attachment) {
     this.httpClient.post(`${this.REST_API_SERVER}/Attachments`,
       {
-        "name": attachment.name,
-        "path": attachment.path
+        "name": `"${attachment.name}"`,
+        "path": `"${attachment.path}"`
       }
       ,this.httpOptions).subscribe(
       data => {
@@ -178,9 +178,9 @@ export class CourseService {
   public postCourse(classCourseID:string, name:string, description:number, credit:number) {
     this.httpClient.post(`${this.REST_API_SERVER}/Courses`,
       {
-        "id": classCourseID,
-        "name": name,
-        "description": description,
+        "id": `"${classCourseID}"`,
+        "name": `"${name}"`,
+        "description": `"${description}"`,
         "credit": credit
       }
       ,this.httpOptions).subscribe(
@@ -196,7 +196,7 @@ export class CourseService {
   public postClass(theClass:Class) {
     this.httpClient.post(`${this.REST_API_SERVER}/Courses/${theClass.course.id}/classes`,
       {
-        "id": theClass.course.id,
+        "id": `"${theClass.course.id}"`,
         "semester": theClass.semester,
         "year": theClass.year
       }
@@ -213,9 +213,9 @@ export class CourseService {
   public postStudyMaterial(theClass:Class, studyMaterial:StudyMaterial) {
     this.httpClient.post(`${this.REST_API_SERVER}/Courses/${theClass.course.id}/classes/${theClass.id}/${theClass.semester}/${theClass.year}/study-materials`,
       {
-        "name": studyMaterial.name,
-        "description": studyMaterial.description,
-        "week": studyMaterial.week
+        "name": `"${studyMaterial.name}"`,
+        "description": `"${studyMaterial.description}"`,
+        "week": `"${studyMaterial.week}"`
       }
       ,this.httpOptions).subscribe(
       data => {
@@ -247,6 +247,25 @@ export class CourseService {
       {
         "studentId":studentID,
         "groupId":1
+      }
+      ,this.httpOptions).subscribe(
+      data => {
+
+      },
+      error => {
+        console.log("Error", error);
+      }
+    );
+  }
+
+  public postCourseAssignment(theClass:Class, assignment:Assignment) {
+    this.httpClient.post(`${this.REST_API_SERVER}/Courses/${theClass.course.id}/classes/${theClass.id}/${theClass.semester}/${theClass.year}/assignments`,
+      {
+        "name": `"${assignment.name}"`,
+        "type": assignment.type,
+        "description": `"${assignment.description}"`,
+        "deadlineDateTime": `"${assignment.deadlineDateTime}"`,
+        "weight": 0
       }
       ,this.httpOptions).subscribe(
       data => {
@@ -312,7 +331,7 @@ export class CourseService {
   public postGroup(theClass:Class, group:Group) {
     this.httpClient.post(`${this.REST_API_SERVER}/Courses/${theClass.course.id}/classes/${theClass.id}/${theClass.semester}/${theClass.year}/groups`,
       {
-        "name": group.name,
+        "name": `"${group.name}"`,
         "maxSize": group.maxSize
       }
       ,this.httpOptions).subscribe(
@@ -429,10 +448,10 @@ export class CourseService {
   public postTeacherLecturer(aClass:Class, lecturer:Lecturer) {
     this.httpClient.post(`${this.REST_API_SERVER}/Teachers/${lecturer.teacher.id}/lecturers`,
       {
-        "classId": aClass.id,
+        "classId": `"${aClass.id}"`,
         "classSemester": aClass.semester,
         "classYear": aClass.year,
-        "classCourseId": aClass.courseID
+        "classCourseId": `"${aClass.courseID}"`
       }
       ,this.httpOptions).subscribe(
       data => {

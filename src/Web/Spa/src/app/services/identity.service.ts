@@ -11,6 +11,7 @@ import { School } from '../models/school';
 import { Employee } from '../models/employee';
 import { Program } from '../models/program';
 import { Teacher } from '../models/teacher';
+import {Attachment} from "../models/attachment";
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class IdentityService {
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
-  
+
   constructor(private httpClient:HttpClient) { }
 
   //Zone BUILDINGS
@@ -48,6 +49,44 @@ export class IdentityService {
   }
 
   //Buildings - POST
+  public ppstBuilding(building:Building) {
+    this.httpClient.post(`${this.REST_API_SERVER}/Buildings`,
+      `"${building.id}"`
+      ,this.httpOptions).subscribe(
+      data => {
+
+      },
+      error => {
+        console.log("Error", error);
+      }
+    );
+  }
+
+  public ppstBuildingRoom(building:Building) {
+    this.httpClient.post(`${this.REST_API_SERVER}/Buildings/${building.id}/rooms`,
+      `"${building.id}"`
+      ,this.httpOptions).subscribe(
+      data => {
+
+      },
+      error => {
+        console.log("Error", error);
+      }
+    );
+  }
+
+  public postBuildingSchool(building:Building) {
+    this.httpClient.post(`${this.REST_API_SERVER}/Buildings/${building.id}/schools`,
+      `"${building.id}"`
+      ,this.httpOptions).subscribe(
+      data => {
+
+      },
+      error => {
+        console.log("Error", error);
+      }
+    );
+  }
 
   //Buildings - DELETE
   public deleteBuilding(building:Building | string): Observable<Building>{
@@ -91,19 +130,39 @@ export class IdentityService {
   }
 
   //Employees - POST
+  public postEmployees(employee:Employee) {
+    this.httpClient.post(`${this.REST_API_SERVER}/Employees`,
+      {
+        "firstName": `"${employee.firstName}"`,
+        "lastName": `"${employee.lastName}"`,
+        "initials": `"${employee.initials}"`,
+        "email": `"${employee.email}"`,
+        "phoneNumber": `"${employee.phoneNumber}"`,
+        "schoolId": "string",
+        "roomId": "string",
+        "buildingId": "string"}
+      ,this.httpOptions).subscribe(
+      data => {
+
+      },
+      error => {
+        console.log("Error", error);
+      }
+    );
+  }
 
   //Employees - PUT
   public updateEmployee(employee:Employee):Observable<any> {
-    return this.httpClient.put(`${this.REST_API_SERVER}/Employees/${employee.id}`, 
+    return this.httpClient.put(`${this.REST_API_SERVER}/Employees/${employee.id}`,
       {
-        "firstName": employee.firstName, 
-        "lastName": employee.lastName, 
-        "initials": employee.initials, 
-        "phoneNumber": employee.phoneNumber, 
-        "schoolId": employee.school.id, 
-        "roomId": employee.room.id, 
+        "firstName": employee.firstName,
+        "lastName": employee.lastName,
+        "initials": employee.initials,
+        "phoneNumber": employee.phoneNumber,
+        "schoolId": employee.school.id,
+        "roomId": employee.room.id,
         "buildingId": employee.building.id
-      }, 
+      },
       this.httpOptions)
   }
 
@@ -169,15 +228,15 @@ export class IdentityService {
 
   //Schools - PUT
   public updateSchool(school:School):Observable<any> {
-    return this.httpClient.put(`${this.REST_API_SERVER}/Schools/${school.id}`, 
+    return this.httpClient.put(`${this.REST_API_SERVER}/Schools/${school.id}`,
       {
-        "name": school.name, 
-        "streetName": school.streetName, 
-        "houseNumber": school.houseNumber, 
-        "postalCode": school.postalCode, 
-        "city": school.city, 
+        "name": school.name,
+        "streetName": school.streetName,
+        "houseNumber": school.houseNumber,
+        "postalCode": school.postalCode,
+        "city": school.city,
         "country": school.country
-      }, 
+      },
       this.httpOptions)
   }
 
@@ -221,19 +280,19 @@ export class IdentityService {
 
   //Students - PUT
   public updateStudent(student:Student):Observable<any> {
-    return this.httpClient.put(`${this.REST_API_SERVER}/Students/${student.id}`, 
+    return this.httpClient.put(`${this.REST_API_SERVER}/Students/${student.id}`,
       {
-        "firstName": student.firstName, 
-        "lastName": student.lastName, 
-        "initials": student.initials, 
-        "phoneNumber": student.phoneNumber, 
-        "streetName": student.streetName, 
-        "houseNumber": student.houseNumber, 
-        "postalCode": student.postalCode, 
-        "city": student.city, 
-        "country": student.country, 
+        "firstName": student.firstName,
+        "lastName": student.lastName,
+        "initials": student.initials,
+        "phoneNumber": student.phoneNumber,
+        "streetName": student.streetName,
+        "houseNumber": student.houseNumber,
+        "postalCode": student.postalCode,
+        "city": student.city,
+        "country": student.country,
         "programId": student.program.id
-      }, 
+      },
       this.httpOptions)
   }
 
@@ -287,16 +346,16 @@ export class IdentityService {
 
   //Teachers - PUT
   public updateTeacher(teacher:Teacher):Observable<any> {
-    return this.httpClient.put(`${this.REST_API_SERVER}/Teachers/${teacher.id}`, 
+    return this.httpClient.put(`${this.REST_API_SERVER}/Teachers/${teacher.id}`,
       {
-        "firstName": teacher.firstName, 
-        "lastName": teacher.lastName, 
-        "initials": teacher.initials, 
-        "phoneNumber": teacher.phoneNumber, 
-        "schoolId": teacher.school.id, 
-        "roomId": teacher.room.id, 
+        "firstName": teacher.firstName,
+        "lastName": teacher.lastName,
+        "initials": teacher.initials,
+        "phoneNumber": teacher.phoneNumber,
+        "schoolId": teacher.school.id,
+        "roomId": teacher.room.id,
         "buildingId": teacher.building.id
-      }, 
+      },
       this.httpOptions)
   }
 
