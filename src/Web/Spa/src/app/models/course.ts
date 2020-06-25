@@ -5,7 +5,9 @@ export class Course{
     description:string;
     credit:number;
 
+
+
     // imgSrc:string="https://i.imgur.com/AyVaERv.png";
-    
+
 }
 

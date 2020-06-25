@@ -10,6 +10,7 @@ import { StudyMaterial } from '../models/studyMaterial';
 import { StudentSubmission } from '../models/studentSubmission';
 import { GroupSubmission } from '../models/groupSubmission';
 import { Group } from '../models/group';
+import {count} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -36,15 +37,16 @@ export class CourseService {
 
   //Attachments - PUT
   public updateAttachment(attachment:Attachment):Observable<any> {
-    return this.httpClient.put(`${this.REST_API_SERVER}/Attachments/${attachment.id}`, 
+    return this.httpClient.put(`${this.REST_API_SERVER}/Attachments/${attachment.id}`,
       {
         "name": attachment.name,
         "path": attachment.path
-      }, 
+      },
       this.httpOptions)
   }
 
   //Attachments - POST
+
 
   //Attachments - DELETE
 
@@ -80,91 +82,101 @@ export class CourseService {
 
   //Courses - PUT
   public updateCourse(course:Course):Observable<any> {
-    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${course.id}`, 
+    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${course.id}`,
       {
         "name": course.name,
         "description": course.description,
         "credit": course.credit
-      }, 
+      },
       this.httpOptions)
   }
 
   public updateStudyMaterialOfCourse(classCourseID:string, classID:string, classSemester:number, classYear:number, studyMaterial:StudyMaterial):Observable<any> {
-    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/study-materials/${studyMaterial.id}`, 
+    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/study-materials/${studyMaterial.id}`,
       {
         "name": studyMaterial.name,
         "description": studyMaterial.description,
         "week": studyMaterial.week
-      }, 
+      },
       this.httpOptions)
   }
 
   public updateEnrollmentOfCourse(classCourseID:string, classID:string, classSemester:number, classYear:number, enrollment:Enrollment):Observable<any> {
-    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/enrollments/${enrollment.student.id}`, 
+    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/enrollments/${enrollment.student.id}`,
       {
         "groupId": enrollment.group.id,
         "finalGrade": enrollment.finalGrade
-      }, 
+      },
       this.httpOptions)
   }
 
   public updateAssignmentOfCourse(classCourseID:string, classID:string, classSemester:number, classYear:number, assignment:Assignment):Observable<any> {
-    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/assignments/${assignment.id}`, 
+    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/assignments/${assignment.id}`,
       {
         "name": assignment.name,
         "type": assignment.type,
-        "description": assignment.description, 
-        "deadlineDateTime": assignment.deadlineDateTime, 
+        "description": assignment.description,
+        "deadlineDateTime": assignment.deadlineDateTime,
         "weight": assignment.weight
-      }, 
+      },
       this.httpOptions)
   }
 
   public updateStudentSubmissionOfCourse(classCourseID:string, classID:string, classSemester:number, classYear:number, assignmentID:number, studentSubmission:StudentSubmission):Observable<any> {
-    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/assignments/${assignmentID}/student-submissions/${studentSubmission.id}`, 
+    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/assignments/${assignmentID}/student-submissions/${studentSubmission.id}`,
       {
-        "studentId": studentSubmission.student.id, 
-        "assignmentId": studentSubmission.assignment.id, 
-        "attachmentId": studentSubmission.attachment.id, 
+        "studentId": studentSubmission.student.id,
+        "assignmentId": studentSubmission.assignment.id,
+        "attachmentId": studentSubmission.attachment.id,
         "grade": studentSubmission.grade
-      }, 
+      },
       this.httpOptions)
   }
 
   public updateGroupSubmissionOfCourse(classCourseID:string, classID:string, classSemester:number, classYear:number, assignmentID:number, groupSubmission:GroupSubmission):Observable<any> {
-    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/assignments/${assignmentID}/group-submissions/${groupSubmission.id}`, 
+    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/assignments/${assignmentID}/group-submissions/${groupSubmission.id}`,
       {
-        "groupId": groupSubmission.group.id, 
-        "assignmentId": groupSubmission.assignment.id, 
-        "attachmentId": groupSubmission.attachment.id, 
+        "groupId": groupSubmission.group.id,
+        "assignmentId": groupSubmission.assignment.id,
+        "attachmentId": groupSubmission.attachment.id,
         "grade": groupSubmission.grade
-      }, 
+      },
       this.httpOptions)
   }
 
   public updateGroupOfCourse(classCourseID:string, classID:string, classSemester:number, classYear:number, group:Group):Observable<any> {
-    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/groups/${group.id}`, 
+    return this.httpClient.put(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/groups/${group.id}`,
       {
-        "name": group.name, 
+        "name": group.name,
         "maxSize": group.maxSize
-      }, 
+      },
       this.httpOptions)
   }
 
   //Courses - POST
+  public postCourse(courseID:string, courseName:string, description:string, credit: number):Observable<any>{
+    return this.httpClient.post(`${this.REST_API_SERVER}/Courses`,{
+      "id": courseID,
+      "name": courseName,
+      "description":description,
+      "credit": credit
+    },this.httpOptions)
+  }
+
+
   public postEnrollment(classCourseID:string, classID:string, classSemester:number, classYear:number):Observable<any> {
     return this.httpClient.post(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/enrollments`,
     {
       "studentId":1000033
     }
-    ,this.httpOptions);       
+    ,this.httpOptions);
   }
   //Courses - DELETE
 
   //End Zone COURSES
 
   //*****************//
-  
+
   //Zone TEACHERS
   //Teachers - GET
 

@@ -31,7 +31,7 @@
             </div>
           </div>
           <!--        <p class="ml-3 mt-2">JAN 2019 <i class="fas fa-chevron-down"></i></p>-->
-  
+
         </div>
       </div>
       <div class="col-lg-6 center-block"> <!--right header-->
@@ -45,8 +45,11 @@
       </div>
     </div>
   </div>
-  
+
   <app-calendar-month *ngIf="activeCalendarStatus[0]"></app-calendar-month>
   <app-calendar-week *ngIf="activeCalendarStatus[1]" [weekDifferent]="weekChangeValue"></app-calendar-week>
   <app-calendar-day *ngIf="activeCalendarStatus[2]" [dayChange]="dayChangeValue"></app-calendar-day>
-  
+
+  <button (click)="showScheduleTest()">Test GET</button>
+<button (click)="postSchedule()">Test POST</button>
+

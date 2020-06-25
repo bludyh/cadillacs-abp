@@ -26,6 +26,8 @@ export class NotificationBarComponent implements OnInit {
     )
   }
 
+
+
   clickTest(){
     let announcement:Announcement={id:999,title:"test post",body:"test",dateTime:new Date("2020-17-02"),employee:null};
     this.announcementService.postAnnoucement(announcement);
