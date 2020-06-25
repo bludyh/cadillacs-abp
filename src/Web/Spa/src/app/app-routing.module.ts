@@ -3,14 +3,20 @@ import { Routes, RouterModule } from '@angular/router';
 import { MainPageComponent } from './main-page/main-page.component';
 import { CoursesComponent } from './main-page/main-content/courses/courses.component';
 import { MainContentComponent } from './main-page/main-content/main-content.component';
+import { DashboardComponent } from './main-page/main-content/dashboard/dashboard.component';
+import { SubmissionsComponent } from './main-page/main-content/submissions/submissions.component';
+import { ProgressComponent } from './main-page/main-content/progress/progress.component';
+import { CalendarComponent } from './main-page/main-content/calendar/calendar.component';
+import { StudentProfileComponent } from './main-page/main-content/student-profile/student-profile.component';
 
 const routes: Routes = [
-    {path: 'student' , component: MainPageComponent},
-    {path: 'student/Dashboard' , component: MainPageComponent},
-    {path: 'student/Courses' , component: MainPageComponent},
-    {path: 'student/Submissions' , component: MainPageComponent},
-    {path: 'student/Progress' , component: MainPageComponent},
-    {path: 'student/Calendar' , component: MainPageComponent}
+    {path: 'student' , component: DashboardComponent},
+    {path: 'student/Dashboard' , component: DashboardComponent},
+    {path: 'student/Courses' , component: CoursesComponent},
+    {path: 'student/Submissions' , component: SubmissionsComponent},
+    {path: 'student/Progress' , component: ProgressComponent},
+    {path: 'student/Calendar' , component: CalendarComponent},
+    {path: 'student/Profile' , component: StudentProfileComponent}
 ];
 
 @NgModule({

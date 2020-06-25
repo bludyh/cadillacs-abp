@@ -14,7 +14,7 @@ export class MainPageComponent implements OnInit {
   student : Student = null;
   mouseOverNotification:boolean=false;
 
-  activeFuncs:boolean[]=[true,false,false,false,false];
+  activeFuncs:boolean[]=[true,false,false,false,false,false];
 
   constructor(private identityStudentsService:IdentityService,private route:ActivatedRoute) {
     

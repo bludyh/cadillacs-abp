@@ -32,6 +32,7 @@ import { EmailComponent } from './main-page/main-content/dashboard/emails/email/
 import { NotificationComponent } from './main-page/notification-bar/notification/notification.component';
 import { EnrollCourseComponent } from './main-page/main-content/courses/enroll-course/enroll-course.component';
 import { FoundCourseComponent } from './main-page/main-content/courses/enroll-course/found-course/found-course.component';
+import { StudentProfileComponent } from './main-page/main-content/student-profile/student-profile.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { FoundCourseComponent } from './main-page/main-content/courses/enroll-co
     NotificationComponent,
     EnrollCourseComponent,
     FoundCourseComponent,
+    StudentProfileComponent,
   ],
   imports: [
     BrowserModule,
