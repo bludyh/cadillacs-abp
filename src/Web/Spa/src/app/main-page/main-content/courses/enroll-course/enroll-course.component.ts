@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { Course } from 'src/app/models/course';
 import { Student } from 'src/app/models/student';
 import { CourseService } from 'src/app/services/course.service';
@@ -14,29 +14,31 @@ import { Class } from 'src/app/models/class';
 export class EnrollCourseComponent implements OnInit {
 
   @Input() courses:Course[]=[];
+  classesBasket:Class[]=[];
 
   availableCourses:Course[]=[];
   availableClassesOfCourses:Class[]=[];
 
   constructor(private courseService:CourseService) { 
-    this.getCourses();
+    
   }
 
   ngOnInit(): void {
-    
+    this.getCourses();
   }
+
 
   getCourses(){
     this.courseService.getCourses().subscribe(
       (inCourses:Course[]) => {
-        console.log(this.courses);
+        let courses:Course[]=this.courses;
         // Gets all courses that the student is not enrolled in.
-        this.availableCourses = inCourses.filter(c => !this.courses.find(({ id }) => c.id === id));
-        console.log(this.availableCourses);
+        this.availableCourses = inCourses.filter(c => !courses.find(({ id }) => c.id === id));
         //call getClasses
         this.getClassesInCourse(this.availableCourses);
       }
     )
+
   }
 
   getClassesInCourse(avaiCourses:Course[]){
@@ -49,5 +51,25 @@ export class EnrollCourseComponent implements OnInit {
         }
       )
     });
+  }
+
+  addClass($event){
+    this.classesBasket.push($event);
+    console.log(this.classesBasket);
+  }
+  
+  removeClass($event){
+    let index:number=this.classesBasket.indexOf($event);
+    this.classesBasket.splice(index,1);
+    console.log(this.classesBasket);
+  }
+
+  enrollClass(){
+    let classes:Class[]=this.classesBasket;
+    classes.forEach(ec => {
+      console.log(ec);
+      this.courseService.postEnrollment(ec.course.id,ec.id,ec.semester,ec.year,1000033);
+    });
+    this.classesBasket=[];
   }
 }

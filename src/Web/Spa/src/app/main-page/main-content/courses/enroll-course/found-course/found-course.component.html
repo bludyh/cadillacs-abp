@@ -1,5 +1,5 @@
 <div class="input-group mb-2 d-flex align-items-center ml-5">
-    <input type="checkbox">
+    <input type="checkbox" [checked]="isChecked" (change)="checkedChange()">
     <label class="ml-2 mb-0 text-uppercase font-weight-bold" for="courseID">{{classOfCourse.course.id}}</label>
     <label class="ml-1 mb-0" for="courseName"> - {{classOfCourse.course.name}}</label>
     <label class="ml-1 mb-0 font-italic" for="courseCredit">, Credit: {{classOfCourse.course.credit}} ECs</label>

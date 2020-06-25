@@ -13,12 +13,12 @@
                 <input type="text" class="form-control" placeholder="Enter Course ID or Course Name ...">
             </div>
             <div *ngFor="let classOfCourse of availableClassesOfCourses">
-                <app-found-course [classOfCourse]="classOfCourse"></app-found-course>
+                <app-found-course [classOfCourse]="classOfCourse" (addClassEvent)="addClass($event)" (removeClassEvent)="removeClass($event)"></app-found-course>
             </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success">Enroll</button>
+        <button type="button" class="btn btn-success" (click)="enrollClass()">Enroll</button>
       </div>
     </div>
 </div>

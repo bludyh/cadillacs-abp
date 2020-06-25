@@ -10,7 +10,7 @@ import { Schedule } from '../models/schedule';
 @Injectable({
   providedIn: 'root'
 })
-export class CourseService {
+export class ScheduleService {
 
   private REST_API_SERVER="http://cadillacs-abp.kn01.fhict.nl/api/schedule";
 

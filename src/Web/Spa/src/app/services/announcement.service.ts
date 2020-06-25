@@ -45,7 +45,14 @@ export class AnnouncementService {
       "title":`"${announcement.title}"`,
       "body":`"${announcement.body}"`,
       "employeeID":1000021
-    },this.httpOptions);       
+    },this.httpOptions).subscribe(
+      data => {
+          
+      },
+      error => {
+          console.log("Error", error);
+      }
+    );              
   }
   //Announcements - DELETE
 
