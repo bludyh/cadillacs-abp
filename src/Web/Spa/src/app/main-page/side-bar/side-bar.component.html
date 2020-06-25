@@ -1,5 +1,5 @@
 <ul class="nav mt-4 d-block" >
   <li class="nav-item" *ngFor="let function of functions;index as i">
-    <a class="nav-link text-white font-weight-normal" (click)="activateFunc(i)"><i class="{{function.ICON}}"></i> {{function.Name}}</a>
+    <a class="nav-link text-white font-weight-normal"  [routerLink]="['/student/',function.Name]" (click)="activateFunc(i)"><i (click)="activateFunc(i)" class="{{function.ICON}}"></i> {{function.Name}}</a>
   </li>
 </ul>

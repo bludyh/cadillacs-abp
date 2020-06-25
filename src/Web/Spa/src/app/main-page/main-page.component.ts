@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Student } from '../models/student';
 import { IdentityService } from '../services/identity.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -15,7 +16,7 @@ export class MainPageComponent implements OnInit {
 
   activeFuncs:boolean[]=[true,false,false,false,false];
 
-  constructor(private identityStudentsService:IdentityService) {
+  constructor(private identityStudentsService:IdentityService,private route:ActivatedRoute) {
     
    }
 
