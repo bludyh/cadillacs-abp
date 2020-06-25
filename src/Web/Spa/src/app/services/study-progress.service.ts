@@ -88,7 +88,7 @@ export class StudyProgressService {
     const programId = typeof program === 'string' ? program : program.id;
     const id = typeof course === 'string' ? course : course.id;
 
-    return this.httpClient.delete<Course>(`${this.REST_API_SERVER}/Programs/${id}/courses/${id}`, this.httpOptions);
+    return this.httpClient.delete<Course>(`${this.REST_API_SERVER}/Programs/${programId}/courses/${id}`, this.httpOptions);
   }
 
   //End Zone PROGRAMS
