@@ -1,4 +1,57 @@
 
-<div class="container-fluid mh-100 mw-100">
-    <h1> ok roi nha</h1>
+<div class="container-fluid mh-100 mw-100 mt-5">
+    <div class="row ">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 border border-dark rounded p-5">
+            <div class="profile-head">
+                <h5>
+                    {{student.firstName}} {{student.lastName}}, {{student.initials}}
+                </h5>
+                <h6>
+                    Program: Student Program
+                </h6>
+                <p class="proile-rating" *ngIf="mentor">Mentor : <span>{{mentor.teacher.firstName}} {{mentor.teacher.lastName}}, {{mentor.teacher.initials}}</span></p>
+            </div>
+            <form>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Student ID</label>
+                  <div class="col-sm-10">
+                    <label class="font-weight-bold mb-0 pt-2">{{student.id}}</label>
+                  </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Student DOB</label>
+                    <div class="col-sm-10">
+                      <label class="font-weight-bold mb-0 pt-2">{{student.dateOfBirth}}</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Nationality</label>
+                    <div class="col-sm-10">
+                      <label class="font-weight-bold mb-0 pt-2">{{student.nationality}}</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Student Email</label>
+                    <div class="col-sm-10">
+                      <label class="font-weight-bold mb-0 pt-2">{{student.email}}</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Phone Number</label>
+                    <div class="col-sm-10">
+                      <label class="font-weight-bold mb-0 pt-2">{{student.phoneNumber}}</label>
+                    </div>
+                  </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Student Address</label>
+                    <div class="col-sm-10">
+                      <label class="font-weight-bold mb-0 pt-2">{{student.streetName}} {{student.houseNumber}}, {{student.postalCode}}, {{student.city}}, {{student.country}}</label>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
 </div>
