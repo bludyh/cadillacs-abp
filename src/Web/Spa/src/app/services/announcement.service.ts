@@ -40,7 +40,7 @@ export class AnnouncementService {
   }
 
   //Announcements - POST
-  public postAnnoucement(announcement:Announcement){
+  public postAnnouncement(announcement:Announcement){
     this.httpClient.post(`${this.REST_API_SERVER}/Announcements`,{
       "title":`"${announcement.title}"`,
       "body":`"${announcement.body}"`,
@@ -54,7 +54,13 @@ export class AnnouncementService {
       }
     );              
   }
+
   //Announcements - DELETE
+  public deleteAnnouncement(announcement:Announcement | number): Observable<Announcement>{
+    const id = typeof announcement === 'number' ? announcement : announcement.id;
+
+    return this.httpClient.delete<Announcement>(`${this.REST_API_SERVER}/Announcements/${id}`, this.httpOptions);
+  }
 
   //End Zone ANNOUNCEMENTS
 
@@ -73,6 +79,12 @@ export class AnnouncementService {
   //Classes - POST
 
   //Classes - DELETE
+  public deleteClassAnnouncement(classCourseID:string, classID:string, classSemester:number, classYear:number, announcement:Announcement | number): Observable<ClassAnnouncement>{
+    const id = typeof announcement === 'number' ? announcement : announcement.id;
+
+    return this.httpClient.delete<ClassAnnouncement>(`${this.REST_API_SERVER}/courses/${classCourseID}/Classes/${classID}/${classSemester}/${classYear}/announcements/${id}`, 
+      this.httpOptions);
+  }
 
   //End Zone CLASSES
 

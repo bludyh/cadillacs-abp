@@ -14,4 +14,4 @@ export class Teacher {
     school:School;
     room:Room;
     building:Building;
-  }
+}

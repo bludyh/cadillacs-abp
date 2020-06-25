@@ -50,6 +50,25 @@ export class IdentityService {
   //Buildings - POST
 
   //Buildings - DELETE
+  public deleteBuilding(building:Building | string): Observable<Building>{
+    const id = typeof building === 'string' ? building : building.id;
+
+    return this.httpClient.delete<Building>(`${this.REST_API_SERVER}/Buildings/${id}`, this.httpOptions);
+  }
+
+  public deleteBuildingRoom(building:Building | string, room:Room | string): Observable<Room>{
+    const buildingId = typeof building === 'string' ? building : building.id;
+    const id = typeof room === 'string' ? room : room.id;
+
+    return this.httpClient.delete<Room>(`${this.REST_API_SERVER}/Buildings/${buildingId}/rooms/${id}`, this.httpOptions);
+  }
+
+  public deleteBuildingSchool(building:Building | string, school:School | string): Observable<School>{
+    const buildingId = typeof building === 'string' ? building : building.id;
+    const id = typeof school === 'string' ? school : school.id;
+
+    return this.httpClient.delete<School>(`${this.REST_API_SERVER}/Buildings/${buildingId}/schools/${id}`, this.httpOptions);
+  }
 
   //*****************//
 
@@ -89,6 +108,25 @@ export class IdentityService {
   }
 
   //Employees - DELETE
+  public deleteEmployee(employee:Employee | number): Observable<Employee>{
+    const id = typeof employee === 'number' ? employee : employee.id;
+
+    return this.httpClient.delete<Employee>(`${this.REST_API_SERVER}/Employees/${id}`, this.httpOptions);
+  }
+
+  public deleteEmployeeRole(employee:Employee | number, role:Role | string): Observable<Role>{
+    const employeeId = typeof employee === 'number' ? employee : employee.id;
+    const id = typeof role === 'string' ? role : role.name;
+
+    return this.httpClient.delete<Role>(`${this.REST_API_SERVER}/Employees/${employeeId}/roles/${id}`, this.httpOptions);
+  }
+
+  public deleteEmployeeProgram(employee:Employee | number, program:Program | string): Observable<Program>{
+    const employeeId = typeof employee === 'number' ? employee : employee.id;
+    const id = typeof program === 'string' ? program : program.id;
+
+    return this.httpClient.delete<Program>(`${this.REST_API_SERVER}/Employees/${employeeId}/programs/${id}`, this.httpOptions);
+  }
 
   //End Zone EMPLOYEES
 
@@ -102,6 +140,12 @@ export class IdentityService {
   //Programs - POST
 
   //Programs - DELETE
+  public deleteProgramEmployee(program:Program | string, employee:Employee | number): Observable<Employee>{
+    const programId = typeof program === 'string' ? program : program.id;
+    const id = typeof employee === 'number' ? employee : employee.id;
+
+    return this.httpClient.delete<Employee>(`${this.REST_API_SERVER}/Programs/${programId}/employees/${id}`, this.httpOptions);
+  }
 
   //End Zone PROGRAMS
 
@@ -138,6 +182,18 @@ export class IdentityService {
   }
 
   //Schools - DELETE
+  public deleteSchool(school:School | string): Observable<School>{
+    const id = typeof school === 'string' ? school : school.id;
+
+    return this.httpClient.delete<School>(`${this.REST_API_SERVER}/Schools/${id}`, this.httpOptions);
+  }
+
+  public deleteSchoolBuilding(school:School | string, building:Building | string): Observable<Building>{
+    const schoolId = typeof school === 'string' ? school : school.id;
+    const id = typeof building === 'string' ? building : building.id;
+
+    return this.httpClient.delete<Building>(`${this.REST_API_SERVER}/Schools/${schoolId}/buildings/${id}`, this.httpOptions);
+  }
 
   //End Zone SCHOOLS
 
@@ -182,6 +238,24 @@ export class IdentityService {
   }
 
   //Students - DELETE
+  public deleteStudent(student:Student | number): Observable<Student>{
+    const id = typeof student === 'number' ? student : student.id;
+
+    return this.httpClient.delete<Student>(`${this.REST_API_SERVER}/Students/${id}`, this.httpOptions);
+  }
+
+  public deleteStudentRole(student:Student | number, role:Role | string): Observable<Role>{
+    const studentId = typeof student === 'number' ? student : student.id;
+    const id = typeof role === 'string' ? role : role.name;
+
+    return this.httpClient.delete<Role>(`${this.REST_API_SERVER}/Students/${studentId}/roles/${id}`, this.httpOptions);
+  }
+
+  public deleteStudentMentor(student:Student | number, teacherId:number, mentorType:string): Observable<any>{
+    const studentId = typeof student === 'number' ? student : student.id;
+
+    return this.httpClient.delete<any>(`${this.REST_API_SERVER}/Students/${studentId}/mentors?teacherId=${teacherId}&mentorType=${mentorType}`, this.httpOptions);
+  }
 
   //End Zone STUDENTS
 
@@ -227,6 +301,31 @@ export class IdentityService {
   }
 
   //Teachers - DELETE
+  public deleteTeacher(teacher:Teacher | number): Observable<Teacher>{
+    const id = typeof teacher === 'number' ? teacher : teacher.id;
+
+    return this.httpClient.delete<Teacher>(`${this.REST_API_SERVER}/Teachers/${id}`, this.httpOptions);
+  }
+
+  public deleteTeacherRole(teacher:Teacher | number, role:Role | string): Observable<Role>{
+    const teacherId = typeof teacher === 'number' ? teacher : teacher.id;
+    const id = typeof role === 'string' ? role : role.name;
+
+    return this.httpClient.delete<Role>(`${this.REST_API_SERVER}/Teachers/${teacherId}/roles/${id}`, this.httpOptions);
+  }
+
+  public deleteTeacherProgram(teacher:Teacher | number, program:Program | string): Observable<Program>{
+    const teacherId = typeof teacher === 'number' ? teacher : teacher.id;
+    const id = typeof program === 'string' ? program : program.id;
+
+    return this.httpClient.delete<Program>(`${this.REST_API_SERVER}/Teachers/${teacherId}/programs/${id}`, this.httpOptions);
+  }
+
+  public deleteTeacherMentor(teacher:Teacher | number, studentId:number, mentorType:string): Observable<any>{
+    const teacherId = typeof teacher === 'number' ? teacher : teacher.id;
+
+    return this.httpClient.delete<any>(`${this.REST_API_SERVER}/Teachers/${teacherId}/mentors?studentId=${studentId}&mentorType=${mentorType}`, this.httpOptions);
+  }
 
   //End Zone TEACHERS
 

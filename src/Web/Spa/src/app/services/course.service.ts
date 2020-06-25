@@ -10,6 +10,9 @@ import { StudyMaterial } from '../models/studyMaterial';
 import { StudentSubmission } from '../models/studentSubmission';
 import { GroupSubmission } from '../models/groupSubmission';
 import { Group } from '../models/group';
+import { Student } from '../models/student';
+import { Teacher } from '../models/teacher';
+import { Lecturer } from '../models/lecturer';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +50,11 @@ export class CourseService {
   //Attachments - POST
 
   //Attachments - DELETE
+  public deleteAttachment(attachment:Attachment | number): Observable<Attachment>{
+    const id = typeof attachment === 'number' ? attachment : attachment.id;
+
+    return this.httpClient.delete<Attachment>(`${this.REST_API_SERVER}/Attachments/${id}`, this.httpOptions);
+  }
 
   //End Zone ATTACHMENTS
 
@@ -168,7 +176,85 @@ export class CourseService {
     );       
   }
   //Courses - DELETE
+  public deleteCourse(course:Course | number): Observable<Course>{
+    const id = typeof course === 'number' ? course : course.id;
 
+    return this.httpClient.delete<Course>(`${this.REST_API_SERVER}/Courses/${id}`, this.httpOptions);
+  }
+
+  public deleteClass(classCourseID:string, classID:string, classSemester:number, classYear:number): Observable<Class>{
+    return this.httpClient.delete<Class>(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}`, 
+      this.httpOptions);
+  }
+
+  public deleteStudyMaterial(classCourseID:string, classID:string, classSemester:number, classYear:number, studyMaterial:StudyMaterial | number): Observable<StudyMaterial> {
+    const id = typeof studyMaterial === 'number' ? studyMaterial : studyMaterial.id;
+    
+    return this.httpClient.delete<StudyMaterial>(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/study-materials/${id}`, 
+      this.httpOptions);
+  }
+
+  public deleteAttachmentOfStudyMaterial(classCourseID:string, classID:string, classSemester:number, classYear:number, studyMaterial:StudyMaterial | number, attachment:Attachment | number): Observable<Attachment> {
+    const studyMaterialId = typeof studyMaterial === 'number' ? studyMaterial : studyMaterial.id;
+    const id = typeof attachment === 'number' ? attachment : attachment.id;
+    
+    return this.httpClient.delete<Attachment>(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/study-materials/${studyMaterialId}/attachments/${id}`, 
+      this.httpOptions);
+  }
+
+  public deleteEnrollment(classCourseID:string, classID:string, classSemester:number, classYear:number, student:Student | number): Observable<Enrollment> {
+    const id = typeof student === 'number' ? student : student.id;
+    
+    return this.httpClient.delete<Enrollment>(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/enrollments/${id}`, 
+      this.httpOptions);
+  }
+
+  public deleteAssignment(classCourseID:string, classID:string, classSemester:number, classYear:number, assignment:Assignment | number): Observable<Assignment> {
+    const id = typeof assignment === 'number' ? assignment : assignment.id;
+    
+    return this.httpClient.delete<Assignment>(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/assignments/${id}`, 
+      this.httpOptions);
+  }
+
+  public deleteStudentSubmissionForAssignment(classCourseID:string, classID:string, classSemester:number, classYear:number, 
+    assignment:Assignment | number, studentSubmission:StudentSubmission | number): Observable<StudentSubmission> {
+    const assignmentId = typeof assignment === 'number' ? assignment : assignment.id;
+    const id = typeof studentSubmission === 'number' ? studentSubmission : studentSubmission.id;
+    
+    return this.httpClient.delete<StudentSubmission>(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/assignments/${assignmentId}/student-submissions/${id}`, 
+      this.httpOptions);
+  }
+
+  public deleteGroupSubmissionForAssignment(classCourseID:string, classID:string, classSemester:number, classYear:number, 
+    assignment:Assignment | number, groupSubmission:GroupSubmission | number): Observable<GroupSubmission> {
+    const assignmentId = typeof assignment === 'number' ? assignment : assignment.id;
+    const id = typeof groupSubmission === 'number' ? groupSubmission : groupSubmission.id;
+    
+    return this.httpClient.delete<GroupSubmission>(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/assignments/${assignmentId}/group-submissions/${id}`, 
+      this.httpOptions);
+  }
+
+  public deleteAttachmentOfAssignment(classCourseID:string, classID:string, classSemester:number, classYear:number, assignment:Assignment | number, attachment:Attachment | number): Observable<Attachment> {
+    const assignmentId = typeof assignment === 'number' ? assignment : assignment.id;
+    const id = typeof attachment === 'number' ? attachment : attachment.id;
+    
+    return this.httpClient.delete<Attachment>(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/assignments/${assignmentId}/attachments/${id}`, 
+      this.httpOptions);
+  }
+
+  public deleteGroup(classCourseID:string, classID:string, classSemester:number, classYear:number, group:Group | number): Observable<Group> {
+    const id = typeof group === 'number' ? group : group.id;
+    
+    return this.httpClient.delete<Group>(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/groups/${id}`, 
+      this.httpOptions);
+  }
+
+  public deleteLecturerFromCourse(classCourseID:string, classID:string, classSemester:number, classYear:number, teacher:Teacher | number): Observable<Lecturer> {
+    const id = typeof teacher === 'number' ? teacher : teacher.id;
+    
+    return this.httpClient.delete<Lecturer>(`${this.REST_API_SERVER}/Courses/${classCourseID}/classes/${classID}/${classSemester}/${classYear}/lecturers/${id}`, 
+      this.httpOptions);
+  }
   //End Zone COURSES
 
   //*****************//
@@ -179,6 +265,12 @@ export class CourseService {
   //Teachers - POST
 
   //Teachers - DELETE
+  public deleteLecturerFromTeacher(teacher:Teacher | number, classCourseID:string, classID:string, classSemester:number, classYear:number): Observable<Lecturer> {
+    const id = typeof teacher === 'number' ? teacher : teacher.id;
+    
+    return this.httpClient.delete<Lecturer>(`${this.REST_API_SERVER}/Teachers/${id}/lecturers?classId=${classID}&classSemester=${classSemester}&classYear=${classYear}&classCourseId=${classCourseID}`, 
+      this.httpOptions);
+  }
 
   //End Zone TEACHERS
 
