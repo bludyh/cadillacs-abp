@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Announcement, ClassAnnouncement } from '../models/announcement';
+import {Class} from "../models/class";
 
 @Injectable({
   providedIn: 'root'
@@ -30,12 +31,12 @@ export class AnnouncementService {
 
   //Announcements - PUT
   public updateAnnouncement(announcement:Announcement):Observable<any> {
-    return this.httpClient.put(`${this.REST_API_SERVER}/Announcements/${announcement.id}`, 
+    return this.httpClient.put(`${this.REST_API_SERVER}/Announcements/${announcement.id}`,
       {
-        "employeeId": announcement.employee.id, 
-        "title": announcement.title, 
+        "employeeId": announcement.employee.id,
+        "title": announcement.title,
         "body": announcement.body
-      }, 
+      },
       this.httpOptions)
   }
 
@@ -47,12 +48,12 @@ export class AnnouncementService {
       "employeeID":1000021
     },this.httpOptions).subscribe(
       data => {
-          
+
       },
       error => {
           console.log("Error", error);
       }
-    );              
+    );
   }
 
   //Announcements - DELETE
@@ -77,12 +78,23 @@ export class AnnouncementService {
   }
 
   //Classes - POST
+  public postAnnouncementClass(aClass:Class){
+    this.httpClient.post(`${this.REST_API_SERVER}/Announcements/courses/${aClass.course.id},${aClass.id}/${aClass.semester}/${aClass.year}/announcements`,{
+    },this.httpOptions).subscribe(
+      data => {
+
+      },
+      error => {
+        console.log("Error", error);
+      }
+    );
+  }
 
   //Classes - DELETE
   public deleteClassAnnouncement(classCourseID:string, classID:string, classSemester:number, classYear:number, announcement:Announcement | number): Observable<ClassAnnouncement>{
     const id = typeof announcement === 'number' ? announcement : announcement.id;
 
-    return this.httpClient.delete<ClassAnnouncement>(`${this.REST_API_SERVER}/courses/${classCourseID}/Classes/${classID}/${classSemester}/${classYear}/announcements/${id}`, 
+    return this.httpClient.delete<ClassAnnouncement>(`${this.REST_API_SERVER}/courses/${classCourseID}/Classes/${classID}/${classSemester}/${classYear}/announcements/${id}`,
       this.httpOptions);
   }
 
