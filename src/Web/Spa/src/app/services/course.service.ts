@@ -48,6 +48,21 @@ export class CourseService {
   }
 
   //Attachments - POST
+  public postAttachment(attachment:Attachment) {
+    this.httpClient.post(`${this.REST_API_SERVER}/Attachments`,
+      {
+        "name": attachment.name,
+        "path": attachment.path
+      }
+      ,this.httpOptions).subscribe(
+      data => {
+
+      },
+      error => {
+        console.log("Error", error);
+      }
+    );
+  }
 
   //Attachments - DELETE
   public deleteAttachment(attachment:Attachment | number): Observable<Attachment>{
@@ -411,6 +426,22 @@ export class CourseService {
   //Teachers - GET
 
   //Teachers - POST
+  public postTeacherLecturer(aClass:Class, lecturer:Lecturer) {
+    this.httpClient.post(`${this.REST_API_SERVER}/Teachers/${lecturer.teacher.id}/lecturers`,
+      {
+        "classId": aClass.id,
+        "classSemester": aClass.semester,
+        "classYear": aClass.year,
+        "classCourseId": aClass.courseID
+      }
+      ,this.httpOptions).subscribe(
+      data => {
+      },
+      error => {
+        console.log("Error", error);
+      }
+    );
+  }
 
   //Teachers - DELETE
   public deleteLecturerFromTeacher(teacher:Teacher | number, classCourseID:string, classID:string, classSemester:number, classYear:number): Observable<Lecturer> {
