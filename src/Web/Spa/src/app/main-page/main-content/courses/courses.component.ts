@@ -45,6 +45,6 @@ export class CoursesComponent implements OnInit {
 
   refreshEnrolledCourses(){
     this.enrollments=[];
-    this.getEnrollments(1000033);
+    this.getEnrollments(this.student.id);
   }
 }

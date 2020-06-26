@@ -4,6 +4,7 @@ import { Student } from 'src/app/models/student';
 import { CourseService } from 'src/app/services/course.service';
 import { Enrollment } from 'src/app/models/enrollment';
 import { Class } from 'src/app/models/class';
+import { IncomingMessage } from 'http';
 
 @Component({
   selector: 'app-enroll-course',
@@ -12,7 +13,7 @@ import { Class } from 'src/app/models/class';
   providers:[CourseService]
 })
 export class EnrollCourseComponent implements OnInit {
-
+  @Input() student:Student;
   @Input() courses:Course[]=[];
   @Output() enrollDoneEvent=new EventEmitter<void>();
   classesBasket:Class[]=[];
@@ -69,7 +70,7 @@ export class EnrollCourseComponent implements OnInit {
     let classes:Class[]=this.classesBasket;
     classes.forEach(ec => {
       console.log(ec);
-      this.courseService.postEnrollment(ec.course.id,ec.id,ec.semester,ec.year,1000033);
+      this.courseService.postEnrollment(ec.course.id,ec.id,ec.semester,ec.year,this.student.id);
     });
     this.classesBasket=[];
     this.enrollDoneEvent.emit();
