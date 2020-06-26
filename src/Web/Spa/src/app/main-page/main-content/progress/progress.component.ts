@@ -25,13 +25,15 @@ export class ProgressComponent implements OnInit {
 
   ngOnInit(): void {
     this.getEnrollments(this.student.id);
-    this.getProgresses();
+    
   }
 
   getEnrollments(studentID:number){
     this.studyProgressService.getEnrollments(studentID).subscribe(
       (enrolls:Enrollment[])=>{
         this.enrollments=enrolls;
+        console.log(this.enrollments);
+        this.getProgresses();
       }
     )
   }

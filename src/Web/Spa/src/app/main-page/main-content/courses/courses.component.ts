@@ -23,7 +23,7 @@ export class CoursesComponent implements OnInit {
   constructor(private studyProgressService:StudyProgressService) { }
 
   ngOnInit(): void {
-    this.getEnrollments(1000033);
+    this.getEnrollments(this.student.id);
     //this.getEnrollments(this.student.id);
   }
 

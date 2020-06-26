@@ -21,7 +21,7 @@ export class MainPageComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.getStudent(1000033);//the student ID will be assigned after authentication
+    this.getStudent(1000030);//the student ID will be assigned after authentication
   }
 
   activateFunction(index:number){
